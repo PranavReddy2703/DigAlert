@@ -12,10 +12,16 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Note: Ensure the Vercel URL below perfectly matches your live site (no trailing slash)
+origins = [
+    "http://localhost:5173",
+    "https://dig-alert.vercel.app"
+]
+
 # Set up CORS middleware to communicate with the Vite React application
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, specify the active React client URL
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -26,6 +32,7 @@ app.include_router(auth.router)
 app.include_router(permits.router)
 app.include_router(complaints.router)
 app.include_router(analytics.router)
+
 
 @app.get("/")
 def read_root():
