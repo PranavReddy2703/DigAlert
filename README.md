@@ -1,8 +1,8 @@
-# TrenchSync
+# DigAlert
 
 > **Coordinate before you cut.**
 
-TrenchSync is a civic-tech platform that prevents redundant road digging in Hyderabad by enabling utility agencies to register dig permits, detect clashes before work begins, and coordinate shared trenches — saving GHMC crores in avoidable road re-lay costs.
+DigAlert is a civic-tech platform that prevents redundant road digging in Hyderabad by enabling utility agencies to register dig permits, detect clashes before work begins, and coordinate shared trenches — saving GHMC crores in avoidable road re-lay costs.
 
 ---
 
