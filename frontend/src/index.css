@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-darkBg text-gray-100 font-sans antialiased overflow-x-hidden;
+  }
+}
+
+/* Glassmorphism card utilities */
+.glass-panel {
+  background: rgba(13, 20, 35, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-hover {
+  @apply transition-all duration-300;
+}
+.glass-panel-hover:hover {
+  background: rgba(17, 27, 47, 0.7);
+  border-color: rgba(0, 242, 254, 0.35);
+  box-shadow: 0 8px 32px 0 rgba(0, 242, 254, 0.08);
+}
+
+/* Neon accent glows */
+.aqua-glow {
+  box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
+  border-color: rgba(0, 242, 254, 0.4);
+}
+
+.emerald-glow {
+  box-shadow: 0 0 15px rgba(5, 240, 164, 0.25);
+  border-color: rgba(5, 240, 164, 0.4);
+}
+
+.red-glow {
+  box-shadow: 0 0 15px rgba(255, 51, 102, 0.25);
+  border-color: rgba(255, 51, 102, 0.4);
+}
+
+/* Leaflet Dark Mode CSS Hack */
+.leaflet-container {
+  background: #0f172a !important;
+  font-family: 'Inter', sans-serif !important;
+  /* Dark mode filter trick */
+  filter: invert(90%) hue-rotate(180deg) brightness(95%) contrast(95%);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: #0f172a !important;
+  color: #f8fafc !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+.leaflet-popup-tip {
+  background: #0f172a !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Smooth custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b111e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00F2FE;
+}
+
+/* Custom animated gradient backgrounds */
+.animated-gradient {
+  background: linear-gradient(-45deg, #0b111e, #111a2e, #06373a, #0b111e);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
