@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import digalertLogo from '../assets/digalert_logo.png';
@@ -10,16 +10,20 @@ import {
   ClipboardCheck, 
   AlertOctagon, 
   LogOut, 
-  User as UserIcon
+  User as UserIcon,
+  Menu,
+  X
 } from 'lucide-react';
 
 const Layout = ({ children }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
+    setIsSidebarOpen(false);
     navigate('/login');
   };
 
@@ -62,8 +66,18 @@ const Layout = ({ children }) => {
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC]">
+      {/* Sidebar Overlay for Mobile */}
+      {isSidebarOpen && (
+        <div 
+          onClick={() => setIsSidebarOpen(false)}
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 md:hidden transition-all duration-300"
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="fixed bottom-0 left-0 top-0 z-30 w-64 bg-white border-r border-[#E2E8F0] p-4 transition-transform duration-300 md:translate-x-0">
+      <aside className={`fixed bottom-0 left-0 top-0 z-50 w-64 bg-white border-r border-[#E2E8F0] p-4 transition-transform duration-300 md:translate-x-0 ease-in-out ${
+        isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}>
         {/* Logo */}
         <div className="mb-8 flex items-center gap-3 px-2">
           <img 
@@ -85,7 +99,10 @@ const Layout = ({ children }) => {
             return (
               <button
                 key={link.path}
-                onClick={() => navigate(link.path)}
+                onClick={() => {
+                  navigate(link.path);
+                  setIsSidebarOpen(false);
+                }}
                 className={`flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
                   isActive
                     ? 'bg-[#F0FDFA] text-[#0F766E] border-l-[3px] border-[#0F766E] font-semibold'
@@ -123,7 +140,10 @@ const Layout = ({ children }) => {
             </div>
           ) : (
             <button
-              onClick={() => navigate('/login')}
+              onClick={() => {
+                navigate('/login');
+                setIsSidebarOpen(false);
+              }}
               className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0F766E] hover:bg-[#115E59] px-4 py-3 text-sm font-bold text-white shadow-sm transition duration-200"
             >
               <UserIcon className="h-4 w-4" />
@@ -134,9 +154,27 @@ const Layout = ({ children }) => {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 pl-64 min-h-screen flex flex-col">
-        {/* Top Header */}
-        <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[#E2E8F0] bg-white px-6">
+      <div className="flex-1 md:pl-64 pl-0 min-h-screen flex flex-col">
+        {/* Mobile top header with hamburger menu trigger */}
+        <header className="sticky top-0 z-20 flex md:hidden h-14 items-center justify-between border-b border-[#E2E8F0] bg-white px-4">
+          <div className="flex items-center gap-2.5">
+            <img src={digalertLogo} alt="DigAlert Logo" className="h-8 w-8 object-contain rounded-lg shadow-sm" />
+            <div>
+              <h1 className="text-sm font-bold text-[#0F172A]">DigAlert</h1>
+              <p className="text-[8px] uppercase tracking-widest text-[#0F766E] font-bold">Civic Platform</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-800 transition active:scale-95 shadow-sm"
+            aria-label="Toggle navigation menu"
+          >
+            {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </header>
+
+        {/* Desktop Top Header */}
+        <header className="sticky top-0 z-20 hidden md:flex h-14 items-center justify-between border-b border-[#E2E8F0] bg-white px-6">
           <div className="flex items-center gap-3">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#16A34A] opacity-75"></span>
