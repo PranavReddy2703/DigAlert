@@ -14,7 +14,8 @@ const FileComplaint = () => {
   const [description, setDescription] = useState('');
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [photoUrl, setPhotoUrl] = useState('');
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState('');
   
   const [permits, setPermits] = useState([]);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -46,6 +47,26 @@ const FileComplaint = () => {
     setError('');
   };
 
+  const handlePhotoChange = (e) => {
+    const file = e.target.files?.[0] || null;
+    setPhotoFile(file);
+
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setPhotoPreview(previewUrl);
+    } else {
+      setPhotoPreview('');
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (photoPreview) {
+        URL.revokeObjectURL(photoPreview);
+      }
+    };
+  }, [photoPreview]);
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -57,14 +78,17 @@ const FileComplaint = () => {
 
     setLoading(true);
     try {
-      const response = await complaintsAPI.create({
-        citizen_name: citizenName || 'Anonymous',
-        complaint_type: complaintType,
-        description,
-        latitude,
-        longitude,
-        photo_url: photoUrl || 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&w=600&q=80' // default mock photo if none provided
-      });
+      const formData = new FormData();
+      formData.append('citizen_name', citizenName || 'Anonymous');
+      formData.append('complaint_type', complaintType);
+      formData.append('description', description);
+      formData.append('latitude', String(latitude));
+      formData.append('longitude', String(longitude));
+      if (photoFile) {
+        formData.append('photo', photoFile);
+      }
+
+      const response = await complaintsAPI.create(formData);
       
       setTrackingId(response.id);
       setIsSuccess(true);
@@ -205,17 +229,22 @@ const FileComplaint = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Site Photo URL (Optional)</label>
-              <div className="relative">
-                <Camera className="absolute left-3.5 top-3 h-4 w-4 text-gray-500" />
-                <input
-                  type="text"
-                  placeholder="Paste a photo web link or use default mock"
-                  value={photoUrl}
-                  onChange={(e) => setPhotoUrl(e.target.value)}
-                  className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 pl-10 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300"
-                />
-              </div>
+              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Upload Site Photo (Optional)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoChange}
+                className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300"
+              />
+              {photoPreview && (
+                <div className="mt-3 rounded-2xl overflow-hidden border border-gray-800">
+                  <img
+                    src={photoPreview}
+                    alt="Selected site proof"
+                    className="w-full h-32 object-cover"
+                  />
+                </div>
+              )}
             </div>
 
             <button

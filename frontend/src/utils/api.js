@@ -4,9 +4,6 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 });
 
 // Automatically inject JWT token into request headers if available
@@ -87,6 +84,11 @@ export const complaintsAPI = {
     return response.data;
   },
   create: async (complaintData) => {
+    if (complaintData instanceof FormData) {
+      const response = await api.post('/api/complaints/upload', complaintData);
+      return response.data;
+    }
+
     const response = await api.post('/api/complaints', complaintData);
     return response.data;
   },
