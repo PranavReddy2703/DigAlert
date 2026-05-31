@@ -56,7 +56,7 @@ const PublicMap = () => {
         <div className="flex gap-2">
           <button
             onClick={() => navigate('/citizen/report')}
-            className="rounded-xl bg-gradient-to-r from-red-600 to-alertRed px-4 py-2.5 text-xs font-bold text-white hover:opacity-90 shadow-redGlow transition duration-300"
+            className="rounded-xl bg-red-600 hover:bg-red-700 px-4 py-2.5 text-xs font-bold text-white transition duration-300"
           >
             Report Hazard / Complaint
           </button>
