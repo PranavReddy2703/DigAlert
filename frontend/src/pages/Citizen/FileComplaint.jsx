@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import HyderabadMap from '../../components/HyderabadMap';
 import { complaintsAPI, permitsAPI } from '../../utils/api';
-import { MapPin, AlertCircle, Camera, CheckCircle } from 'lucide-react';
+import { MapPin, AlertCircle, Camera, CheckCircle, Upload } from 'lucide-react';
 
 const FileComplaint = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const fileInputRef = useRef(null);
   
   // States
   const [citizenName, setCitizenName] = useState('');
@@ -230,12 +231,33 @@ const FileComplaint = () => {
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-1.5">Upload Site Photo (Optional)</label>
+
+              {/* Hidden native input */}
               <input
+                ref={fileInputRef}
                 type="file"
                 accept="image/*"
                 onChange={handlePhotoChange}
-                className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-2.5 text-xs text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition"
+                className="hidden"
               />
+
+              {/* Styled green button */}
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#10B981] to-[#059669] hover:from-[#059669] hover:to-[#047857] active:scale-95 px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-emerald-500/20 hover:shadow-lg hover:shadow-emerald-500/30 transition-all duration-300 transform hover:-translate-y-0.5"
+                >
+                  <Camera className="h-3.5 w-3.5" />
+                  {photoFile ? 'Change Photo' : 'Upload Site Photo'}
+                </button>
+                {photoFile && (
+                  <span className="text-[11px] text-[#0F766E] font-semibold bg-[#F0FDF4] border border-[#BBF7D0] px-2.5 py-1 rounded-full truncate max-w-[160px]">
+                    {photoFile.name}
+                  </span>
+                )}
+              </div>
+
               {photoPreview && (
                 <div className="mt-3 rounded-2xl overflow-hidden border border-[#E2E8F0]">
                   <img

@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { complaintsAPI } from '../../utils/api';
-import { AlertCircle, User, CheckCircle, ShieldAlert, Camera, MapPin, RefreshCw } from 'lucide-react';
+import { AlertCircle, User, CheckCircle, ShieldAlert, Camera, MapPin, RefreshCw, XCircle } from 'lucide-react';
 
 const ComplaintsList = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [successId, setSuccessId] = useState(null);
+
+  const showError = (msg) => {
+    setErrorMsg(msg);
+    setTimeout(() => setErrorMsg(null), 4000);
+  };
 
   const loadComplaints = async () => {
     setLoading(true);
@@ -14,6 +21,7 @@ const ComplaintsList = () => {
       setComplaints(data);
     } catch (err) {
       console.error("Failed to load complaints list", err);
+      showError("Failed to load complaints. Is the backend running?");
     } finally {
       setLoading(false);
     }
@@ -27,9 +35,19 @@ const ComplaintsList = () => {
     setUpdatingId(id);
     try {
       await complaintsAPI.update(id, { status });
+      setSuccessId(id);
+      setTimeout(() => setSuccessId(null), 2000);
       await loadComplaints();
     } catch (err) {
       console.error("Failed to update status", err);
+      const detail = err?.response?.data?.detail;
+      if (err?.response?.status === 401) {
+        showError("Session expired. Please log out and log in again.");
+      } else if (err?.response?.status === 403) {
+        showError(detail || "You don't have permission to close this ticket.");
+      } else {
+        showError(detail || "Failed to close ticket. Please try again.");
+      }
     } finally {
       setUpdatingId(null);
     }
@@ -42,6 +60,12 @@ const ComplaintsList = () => {
       await loadComplaints();
     } catch (err) {
       console.error("Failed to assign agency", err);
+      const detail = err?.response?.data?.detail;
+      if (err?.response?.status === 401) {
+        showError("Session expired. Please log out and log in again.");
+      } else {
+        showError(detail || "Failed to assign agency. Please try again.");
+      }
     } finally {
       setUpdatingId(null);
     }
@@ -63,6 +87,14 @@ const ComplaintsList = () => {
           Refresh Queue
         </button>
       </div>
+
+      {/* Error Banner */}
+      {errorMsg && (
+        <div className="flex items-center gap-3 bg-[#FEF2F2] border border-[#FECACA] rounded-xl px-4 py-3">
+          <XCircle className="h-4 w-4 text-[#DC2626] shrink-0" />
+          <span className="text-xs font-semibold text-[#DC2626]">{errorMsg}</span>
+        </div>
+      )}
 
       {/* Grid List */}
       {loading ? (
@@ -163,9 +195,15 @@ const ComplaintsList = () => {
                     <button
                       onClick={() => handleUpdateStatus(complaint.id, 'RESOLVED')}
                       disabled={updatingId === complaint.id || complaint.status === 'RESOLVED'}
-                      className="w-full rounded-lg bg-[#F0FDF4] hover:bg-[#DCFCE7] border border-[#BBF7D0] py-2 text-[10px] font-bold text-[#16A34A] transition duration-200"
+                      className={`w-full rounded-lg border py-2 text-[10px] font-bold transition duration-200 ${
+                        complaint.status === 'RESOLVED'
+                          ? 'bg-[#F8FAFC] border-[#E2E8F0] text-[#94A3B8] cursor-not-allowed'
+                          : updatingId === complaint.id
+                          ? 'bg-[#F0FDF4] border-[#BBF7D0] text-[#16A34A] opacity-60 cursor-wait'
+                          : 'bg-[#F0FDF4] hover:bg-[#DCFCE7] border-[#BBF7D0] text-[#16A34A] cursor-pointer'
+                      }`}
                     >
-                      Verify & Resolve
+                      {updatingId === complaint.id ? 'Updating...' : complaint.status === 'RESOLVED' ? '✓ Resolved' : 'Verify & Resolve'}
                     </button>
                   </div>
                 </div>

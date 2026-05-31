@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import digalertLogo from '../assets/digalert_logo.png';
 import { 
   LayoutDashboard, 
   Map, 
@@ -65,9 +66,11 @@ const Layout = ({ children }) => {
       <aside className="fixed bottom-0 left-0 top-0 z-30 w-64 bg-white border-r border-[#E2E8F0] p-4 transition-transform duration-300 md:translate-x-0">
         {/* Logo */}
         <div className="mb-8 flex items-center gap-3 px-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-[#0F766E] to-[#059669] text-white font-extrabold shadow-sm text-sm">
-            DA
-          </div>
+          <img 
+            src={digalertLogo} 
+            alt="DigAlert Logo" 
+            className="h-10 w-10 object-contain rounded-xl shadow-sm"
+          />
           <div>
             <h1 className="text-lg font-bold tracking-wide text-[#0F172A]">DigAlert</h1>
             <p className="text-[10px] uppercase tracking-widest text-[#0F766E] font-semibold">Hyderabad Civic Platform</p>

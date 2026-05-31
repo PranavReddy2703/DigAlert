@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HyderabadMap from '../../components/HyderabadMap';
 import { permitsAPI, complaintsAPI } from '../../utils/api';
+import { useAuth } from '../../context/AuthContext';
 import { Calendar, Layers, MapPin, Eye, AlertTriangle } from 'lucide-react';
+
 
 const PublicMap = () => {
   const [permits, setPermits] = useState([]);
@@ -13,6 +15,10 @@ const PublicMap = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { user } = useAuth();
+  // Only unauthenticated citizens or those without a staff role can file/track complaints
+  const isCitizenUser = !user || (user.role !== 'ADMIN' && user.role !== 'UTILITY');
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,20 +59,23 @@ const PublicMap = () => {
           <h2 className="text-2xl font-bold text-[#0F172A] tracking-wide">Hyderabad Road Work Grid</h2>
           <p className="text-[#64748B] text-sm mt-1">Real-time public portal tracking GHMC road cutting permissions and citizen reports.</p>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => navigate('/citizen/report')}
-            className="rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition duration-200"
-          >
-            Report Hazard / Complaint
-          </button>
-          <button
-            onClick={() => navigate('/citizen/track')}
-            className="rounded-xl bg-white hover:bg-[#F8FAFC] border border-[#E2E8F0] px-4 py-2.5 text-xs font-bold text-[#64748B] hover:text-[#0F172A] transition duration-200"
-          >
-            Track My Complaint
-          </button>
-        </div>
+        {isCitizenUser && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => navigate('/citizen/report')}
+              className="rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition duration-200"
+            >
+              Report Hazard / Complaint
+            </button>
+            <button
+              onClick={() => navigate('/citizen/track')}
+              className="rounded-xl bg-white hover:bg-[#F8FAFC] border border-[#E2E8F0] px-4 py-2.5 text-xs font-bold text-[#64748B] hover:text-[#0F172A] transition duration-200"
+            >
+              Track My Complaint
+            </button>
+          </div>
+        )}
+
       </div>
 
       {/* Filters & Map Container Grid */}
@@ -185,12 +194,14 @@ const PublicMap = () => {
               </div>
 
               <div className="space-y-2 pt-4">
-                <button
-                  onClick={() => navigate('/citizen/report', { state: { permitId: selectedPermit.id } })}
-                  className="w-full rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] py-2.5 text-xs font-bold text-white shadow-sm transition duration-200"
-                >
-                  File Complaint Against This Site
-                </button>
+                {isCitizenUser && (
+                  <button
+                    onClick={() => navigate('/citizen/report', { state: { permitId: selectedPermit.id } })}
+                    className="w-full rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] py-2.5 text-xs font-bold text-white shadow-sm transition duration-200"
+                  >
+                    File Complaint Against This Site
+                  </button>
+                )}
                 <button
                   onClick={() => setSelectedPermit(null)}
                   className="w-full rounded-xl bg-white hover:bg-[#F8FAFC] border border-[#E2E8F0] py-2 text-xs font-bold text-[#94A3B8] hover:text-[#0F172A] transition duration-200"
@@ -237,12 +248,14 @@ const PublicMap = () => {
               </div>
 
               <div className="space-y-2 pt-4">
-                <button
-                  onClick={() => navigate('/citizen/track', { state: { complaintId: selectedComplaint.id } })}
-                  className="w-full rounded-xl bg-[#0F766E] hover:bg-[#115E59] py-2.5 text-xs font-bold text-white shadow-sm transition duration-200"
-                >
-                  Track Resolution Progress
-                </button>
+                {isCitizenUser && (
+                  <button
+                    onClick={() => navigate('/citizen/track', { state: { complaintId: selectedComplaint.id } })}
+                    className="w-full rounded-xl bg-[#0F766E] hover:bg-[#115E59] py-2.5 text-xs font-bold text-white shadow-sm transition duration-200"
+                  >
+                    Track Resolution Progress
+                  </button>
+                )}
                 <button
                   onClick={() => setSelectedComplaint(null)}
                   className="w-full rounded-xl bg-white hover:bg-[#F8FAFC] border border-[#E2E8F0] py-2 text-xs font-bold text-[#94A3B8] hover:text-[#0F172A] transition duration-200"
