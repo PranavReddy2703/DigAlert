@@ -70,12 +70,12 @@ const Layout = ({ children }) => {
       {isSidebarOpen && (
         <div 
           onClick={() => setIsSidebarOpen(false)}
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 md:hidden transition-all duration-300"
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[9998] md:hidden transition-all duration-300"
         />
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed bottom-0 left-0 top-0 z-50 w-64 bg-white border-r border-[#E2E8F0] p-4 transition-transform duration-300 md:translate-x-0 ease-in-out ${
+      <aside className={`fixed bottom-0 left-0 top-0 z-[9999] w-64 bg-white border-r border-[#E2E8F0] p-4 transition-transform duration-300 md:translate-x-0 ease-in-out ${
         isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         {/* Logo */}
@@ -156,7 +156,7 @@ const Layout = ({ children }) => {
       {/* Main Content Area */}
       <div className="flex-1 md:pl-64 pl-0 min-h-screen flex flex-col">
         {/* Mobile top header with hamburger menu trigger */}
-        <header className="sticky top-0 z-20 flex md:hidden h-14 items-center justify-between border-b border-[#E2E8F0] bg-white px-4">
+        <header className="sticky top-0 z-[9990] flex md:hidden h-14 items-center justify-between border-b border-[#E2E8F0] bg-white px-4">
           <div className="flex items-center gap-2.5">
             <img src={digalertLogo} alt="DigAlert Logo" className="h-8 w-8 object-contain rounded-lg shadow-sm" />
             <div>
