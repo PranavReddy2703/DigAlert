@@ -39,102 +39,120 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-darkBg animated-gradient px-4">
-      <div className="w-full max-w-md glass-panel rounded-2xl p-8 border border-gray-800 shadow-glass">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
 
-        {/* Logo */}
-        <div className="mb-8 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-primaryAqua to-primaryEmerald text-black font-extrabold shadow-aquaGlow">
+      <div className="w-full max-w-md">
+
+        {/* Header */}
+
+        <div className="text-center mb-8">
+          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-700 text-white font-bold text-lg shadow-sm">
             DA
           </div>
 
-          <h2 className="text-2xl font-bold tracking-tight text-white">
-            DigAlert Hyderabad
-          </h2>
+          <h1 className="text-3xl font-bold text-slate-900">
+            DigAlert
+          </h1>
 
-          <p className="mt-1.5 text-xs tracking-wider uppercase text-primaryAqua font-semibold">
-            Excavation Coordination Control
+          <p className="mt-2 text-sm text-slate-600">
+            Smart Permit Intelligence for Safer Cities
           </p>
         </div>
 
-        {/* Error Box */}
-        {error && (
-          <div className="mb-6 flex items-start gap-2.5 rounded-xl border border-red-900/40 bg-red-950/20 p-4 text-xs font-semibold text-alertRed">
-            <AlertTriangle className="h-4 w-4 shrink-0" />
-            <p>{error}</p>
+        {/* Login Card */}
+
+        <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold text-slate-900">
+              Sign In
+            </h2>
+
+            <p className="text-sm text-slate-500 mt-1">
+              Access the DigAlert platform
+            </p>
           </div>
-        )}
 
-        {/* Login Form */}
-        <form onSubmit={handleFormSubmit} className="space-y-4">
-
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">
-              Username
-            </label>
-
-            <div className="relative">
-              <User className="absolute left-3.5 top-3.5 h-4 w-4 text-gray-500" />
-
-              <input
-                type="text"
-                placeholder="Enter username"
-                required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-3 pl-10 text-sm text-white focus:outline-none focus:border-primaryAqua"
-              />
+          {error && (
+            <div className="mb-5 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0" />
+              <p>{error}</p>
             </div>
-          </div>
+          )}
 
-          <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">
-              Password
-            </label>
+          <form onSubmit={handleFormSubmit} className="space-y-5">
 
-            <div className="relative">
-              <KeyRound className="absolute left-3.5 top-3.5 h-4 w-4 text-gray-500" />
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Username
+              </label>
 
-              <input
-                type="password"
-                placeholder="••••••••"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-3 pl-10 text-sm text-white focus:outline-none focus:border-primaryAqua"
-              />
+              <div className="relative">
+                <User className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
+
+                <input
+                  type="text"
+                  required
+                  placeholder="Enter username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pl-10 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Login Button */}
-          <button
-            type="submit"
-            className="w-full rounded-xl bg-gradient-to-r from-primaryAqua to-primaryEmerald py-3 text-sm font-bold text-black hover:opacity-90 transition-all"
-          >
-            Sign In
-          </button>
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                Password
+              </label>
 
-          {/* Citizen Complaint Button */}
-          <button
-            type="button"
-            onClick={() => navigate('/citizen/report')}
-            className="w-full rounded-xl border border-primaryAqua py-3 text-sm font-bold text-primaryAqua hover:bg-primaryAqua hover:text-black transition-all duration-300"
-          >
-            Raise Complaint as Citizen
-          </button>
+              <div className="relative">
+                <KeyRound className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
 
-          {/* Citizen Tracking Button */}
-          <button
-            type="button"
-            onClick={() => navigate('/citizen/track')}
-            className="w-full rounded-xl border border-gray-700 py-3 text-sm font-bold text-gray-300 hover:bg-gray-800 transition-all duration-300"
-          >
-            Track Existing Complaint
-          </button>
+                <input
+                  type="password"
+                  required
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pl-10 text-sm text-slate-900 focus:border-teal-700 focus:outline-none"
+                />
+              </div>
+            </div>
 
-        </form>
+            <button
+              type="submit"
+              className="w-full rounded-xl bg-teal-700 py-3 text-sm font-semibold text-white transition hover:bg-teal-800"
+            >
+              Sign In
+            </button>
+
+            <div className="pt-2 border-t border-slate-200 space-y-3">
+
+              <button
+                type="button"
+                onClick={() => navigate('/citizen/report')}
+                className="w-full rounded-xl border border-slate-300 bg-white py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
+              >
+                Report a Civic Issue
+              </button>
+
+              <button
+                type="button"
+                onClick={() => navigate('/citizen/track')}
+                className="w-full rounded-xl border border-slate-300 bg-white py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 transition"
+              >
+                Track Existing Complaint
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
 
       </div>
+
     </div>
   );
 };

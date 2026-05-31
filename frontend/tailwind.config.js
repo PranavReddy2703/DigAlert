@@ -1,29 +1,45 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
+  content:[
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  theme: {
-    extend: {
-      colors: {
-        darkBg: "#0B111E",
-        darkCard: "rgba(17, 24, 39, 0.65)",
-        primaryAqua: "#00F2FE",
-        primaryEmerald: "#05F0A4",
-        alertRed: "#FF3366",
-        warningYellow: "#FFD000"
+  theme:{
+    extend:{
+      colors:{
+        darkBg:"#F8FAFC",
+
+        darkCard:"#FFFFFF",
+
+        primaryAqua:"#0F766E",
+
+        primaryEmerald:"#16A34A",
+
+        alertRed:"#DC2626",
+
+        warningYellow:"#D97706",
+
+        slateBorder:"#E2E8F0",
+
+        slateText:"#0F172A",
+
+        slateMuted:"#64748B"
       },
-      fontFamily: {
-        sans: ["Outfit", "Inter", "sans-serif"]
+
+      fontFamily:{
+        sans:["Inter","sans-serif"]
       },
-      boxShadow: {
-        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
-        aquaGlow: "0 0 15px rgba(0, 242, 254, 0.45)",
-        emeraldGlow: "0 0 15px rgba(5, 240, 164, 0.45)",
-        redGlow: "0 0 15px rgba(255, 51, 102, 0.45)",
+
+      boxShadow:{
+        glass:"0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(15,23,42,.06)",
+
+        aquaGlow:"0 2px 8px rgba(15,23,42,.08)",
+
+        emeraldGlow:"0 2px 8px rgba(15,23,42,.08)",
+
+        redGlow:"0 2px 8px rgba(15,23,42,.08)"
       }
-    },
+    }
   },
-  plugins: [],
+  plugins:[]
 }

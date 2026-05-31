@@ -250,7 +250,7 @@ const FileComplaint = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-gradient-to-r from-red-600 to-alertRed py-3 text-xs font-bold text-white hover:opacity-90 shadow-redGlow transition duration-300 flex items-center justify-center gap-2"
+              className="w-full rounded-xl bg-red-600 hover:bg-red-700 py-3 text-xs font-bold text-white transition duration-300 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-t-transparent border-white"></div>
