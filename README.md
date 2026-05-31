@@ -91,21 +91,6 @@ Three stakeholders are served by one unified platform:
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Screenshots
-
-| Screen | Preview |
-|---|---|
-| Landing Page | ![Landing](docs/screenshots/landing.png) |
-| Submit Permit | ![Permit Submit](docs/screenshots/permit-submit.png) |
-| Clash Alert | ![Clash Alert](docs/screenshots/clash-alert.png) |
-| Dashboard | ![Dashboard](docs/screenshots/dashboard.png) |
-| Permit Registry | ![Permit Registry](docs/screenshots/permit-registry.png) |
-| Complaint Portal | ![Complaint Portal](docs/screenshots/complaint-portal.png) |
-| Complaint Registry | ![Complaint Registry](docs/screenshots/complaint-registry.png) |
-| About | ![About](docs/screenshots/about.png) |
-
----
-
 ## Setup Instructions
 
 ### Prerequisites
