@@ -35,10 +35,9 @@ Three stakeholders are served by one unified platform:
 - **Premium Dark/Light Themes** — Glassmorphism design system; WCAG AA accessible; fully responsive
 - **Zero-Config SQLite Default** — Runs out of the box; switch to PostgreSQL via a single env var
 
----
-
 ## Architecture
 
+```text
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │                              DigAlert Platform                               │
 │                                                                              │
@@ -54,7 +53,6 @@ Three stakeholders are served by one unified platform:
 │                               │                                              │
 │                ┌──────────────▼──────────────┐                               │
 │                │   React 18 + Vite Frontend  │                               │
-│                │                             │                               │
 │                │ TypeScript · Tailwind       │                               │
 │                │ Framer Motion · React Router│                               │
 │                │ TanStack Query · Recharts   │                               │
@@ -64,7 +62,6 @@ Three stakeholders are served by one unified platform:
 │                               ▼                                              │
 │                ┌─────────────────────────────┐                               │
 │                │       FastAPI Backend       │                               │
-│                │                             │                               │
 │                │ /api/auth                   │                               │
 │                │ /api/permits                │                               │
 │                │ /api/clashes                │                               │
@@ -75,7 +72,7 @@ Three stakeholders are served by one unified platform:
 │                │ ┌─────────────────────────┐ │                               │
 │                │ │ Clash Detection Engine  │ │                               │
 │                │ │ • Haversine(lat, lon)   │ │                               │
-│                │ │ • 150 m spatial radius  │ │                               │
+│                │ │ • 150m spatial radius   │ │                               │
 │                │ │ • Same-segment match    │ │                               │
 │                │ │ • Date overlap window   │ │                               │
 │                │ │ • Severity assessment   │ │                               │
@@ -86,15 +83,13 @@ Three stakeholders are served by one unified platform:
 │                               ▼                                              │
 │                ┌─────────────────────────────┐                               │
 │                │     Database (SQLite/PG)    │                               │
-│                │                             │                               │
 │                │ Users · Permits             │                               │
 │                │ Complaints · Clashes        │                               │
 │                │ CoDigRecs                   │                               │
 │                │ Notifications · AuditLog    │                               │
 │                └─────────────────────────────┘                               │
 └──────────────────────────────────────────────────────────────────────────────┘
-
----
+```
 
 ## Screenshots
 
