@@ -21,7 +21,7 @@ class ComplaintCreate(BaseModel):
     photo_url: Optional[str] = None
 
 class ComplaintUpdate(BaseModel):
-    status: str  # OPEN, ASSIGNED, RESOLVED
+    status: Optional[str] = None  # OPEN, ASSIGNED, RESOLVED
     agency_assigned: Optional[str] = None
 
 class ComplaintResponse(BaseModel):
@@ -35,7 +35,7 @@ class ComplaintResponse(BaseModel):
     photo_url: Optional[str]
     status: str
     agency_assigned: Optional[str]
-    created_at: datetime.datetime
+    created_at: datetime.datetime  
 
     class Config:
         from_attributes = True
@@ -121,6 +121,13 @@ def update_complaint(
     if not complaint:
         raise HTTPException(status_code=404, detail="Complaint not found")
         
+    # Only ADMIN and UTILITY are permitted to modify safety tickets
+    if current_user.role not in ["ADMIN", "UTILITY"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only GHMC administrators or utility agencies can update complaints."
+        )
+
     # GHMC Admin can change anything. Utility agency can resolve complaints assigned to them.
     if current_user.role == "UTILITY":
         if complaint.agency_assigned != current_user.agency_name:
@@ -129,11 +136,19 @@ def update_complaint(
                 detail="You can only resolve complaints assigned to your specific agency."
             )
             
-    complaint.status = data.status
-    if data.agency_assigned:
-        complaint.agency_assigned = data.agency_assigned
-        if complaint.status == "OPEN":
-            complaint.status = "ASSIGNED"
+    if data.status is not None:
+        complaint.status = data.status
+        
+    if data.agency_assigned is not None:
+        assigned_val = data.agency_assigned.strip()
+        if assigned_val == "":
+            complaint.agency_assigned = None
+            if complaint.status == "ASSIGNED":
+                complaint.status = "OPEN"
+        else:
+            complaint.agency_assigned = assigned_val
+            if complaint.status == "OPEN":
+                complaint.status = "ASSIGNED"
             
     db.commit()
     db.refresh(complaint)

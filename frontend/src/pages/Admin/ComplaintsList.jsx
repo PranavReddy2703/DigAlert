@@ -6,6 +6,7 @@ const ComplaintsList = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const loadComplaints = async () => {
     setLoading(true);
@@ -25,11 +26,14 @@ const ComplaintsList = () => {
 
   const handleUpdateStatus = async (id, status) => {
     setUpdatingId(id);
+    setErrors(prev => ({ ...prev, [id]: null }));
     try {
       await complaintsAPI.update(id, { status });
       await loadComplaints();
     } catch (err) {
       console.error("Failed to update status", err);
+      const errMsg = err.response?.data?.detail || "Failed to update complaint status.";
+      setErrors(prev => ({ ...prev, [id]: typeof errMsg === 'string' ? errMsg : JSON.stringify(errMsg) }));
     } finally {
       setUpdatingId(null);
     }
@@ -37,11 +41,14 @@ const ComplaintsList = () => {
 
   const handleAssignAgency = async (id, agency) => {
     setUpdatingId(id);
+    setErrors(prev => ({ ...prev, [id]: null }));
     try {
       await complaintsAPI.update(id, { agency_assigned: agency });
       await loadComplaints();
     } catch (err) {
       console.error("Failed to assign agency", err);
+      const errMsg = err.response?.data?.detail || "Failed to assign agency.";
+      setErrors(prev => ({ ...prev, [id]: typeof errMsg === 'string' ? errMsg : JSON.stringify(errMsg) }));
     } finally {
       setUpdatingId(null);
     }
@@ -141,6 +148,12 @@ const ComplaintsList = () => {
 
               {/* Action Allocations Bar */}
               <div className="space-y-3 pt-4 border-t border-gray-800/80">
+                {errors[complaint.id] && (
+                  <div className="rounded-lg bg-red-950/20 border border-red-900/35 p-2.5 text-[10px] font-semibold text-alertRed flex items-center gap-1.5 animate-pulse">
+                    <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+                    <span>{errors[complaint.id]}</span>
+                  </div>
+                )}
                 <div className="grid grid-cols-2 gap-3 items-center">
                   <div>
                     <label className="block text-[8px] font-bold uppercase tracking-wider text-gray-500 mb-1">Assign Operator</label>
