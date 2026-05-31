@@ -1,233 +1,337 @@
-# DigAlert
+# DigAlert — Smart Permit Intelligence for Safer Cities
 
-> **Coordinate before you cut.**
-
-DigAlert is a civic-tech platform that prevents redundant road digging in Hyderabad by enabling utility agencies to register dig permits, detect clashes before work begins, and coordinate shared trenches — saving GHMC crores in avoidable road re-lay costs.
+> **Premium CivicTech platform** that prevents repeated road excavations by coordinating utility agencies before digging — powered by spatial clash detection, co-dig recommendations, and real-time citizen complaint tracking.
 
 ---
 
 ## The Problem
 
-Hyderabad's roads are dug up repeatedly by multiple utility agencies — HMWSSB, TSSPDCL, Jio, BSNL, GAIL — each operating without knowledge of the others' plans. A road freshly re-laid by GHMC is broken open weeks later by a different utility. There is no cross-agency system to prevent this, no public visibility into who is digging where, and no way for citizens to report unattended or abandoned dig sites causing hazards.
+Hyderabad's roads are dug up repeatedly — sometimes the same stretch within weeks — because water, electricity, gas, telecom, and fiber agencies plan their excavations independently. Each agency submits a permit, digs, repairs the road, and leaves. Weeks later, the next agency arrives and digs up the same patch. The result: perpetual road damage, wasted public funds, traffic disruption, and frustrated citizens.
+
+## The Solution
+
+DigAlert introduces **Smart Permit Intelligence**: when a utility agency submits a new excavation permit, the system instantly checks whether any other agency is planning work on the same road segment or within 150 metres during an overlapping date window. If a clash is found, both agencies are notified and offered a **co-dig recommendation** — a shared excavation window that eliminates duplicate work and saves lakhs of rupees per operation.
+
+Three stakeholders are served by one unified platform:
+
+| Stakeholder | What they get |
+|---|---|
+| **Citizens** | Report open trenches, water leaks, unsafe excavations via mobile-friendly form; track status |
+| **Utility Agencies** | Submit permits; receive instant clash alerts + co-dig proposals; accept or dismiss |
+| **GHMC Administrators** | Full permit + complaint registries; clash resolution dashboard; analytics + CSV exports |
 
 ---
 
-## What TrenchSync Does
+## Key Features
 
-| Feature | Description |
+- **Instant Clash Detection** — Haversine spatial check (150 m radius) + same-road-segment match + date-window overlap, all within the permit submission request
+- **Co-Dig Recommendations** — Automatically proposed shared excavation windows with estimated INR savings
+- **Interactive Map** — OSM-powered permit + complaint + clash visualization with colored markers and popups
+- **Citizen Complaint Portal** — Category-driven reports with photo upload support and live status tracking
+- **Real-Time Notifications** — In-app notification feed for clashes, co-dig proposals, permit updates, and system events
+- **Analytics Dashboard** — Monthly trends, savings summary, status breakdowns, and recent activity feed (Recharts)
+- **CSV Export** — One-click export of permits and complaints for offline analysis
+- **JWT Authentication** — Role-based access (citizen / utility / admin) with persistent sessions
+- **Premium Dark/Light Themes** — Glassmorphism design system; WCAG AA accessible; fully responsive
+- **Zero-Config SQLite Default** — Runs out of the box; switch to PostgreSQL via a single env var
+
+---
+
+## Architecture
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              DigAlert Platform                               │
+│                                                                              │
+│  ┌──────────────┐    ┌──────────────────┐    ┌────────────────────┐          │
+│  │   Citizens   │    │ Utility Agencies │    │    GHMC Admins     │          │
+│  │              │    │                  │    │                    │          │
+│  │ • File report│    │ • Submit permit  │    │ • View dashboards  │          │
+│  │ • Track case │    │ • View clash     │    │ • Resolve clashes  │          │
+│  │ • View map   │    │ • Accept co-dig  │    │ • Export data      │          │
+│  └──────┬───────┘    └────────┬─────────┘    └─────────┬──────────┘          │
+│         │                     │                        │                     │
+│         └─────────────────────┼────────────────────────┘                     │
+│                               │                                              │
+│                ┌──────────────▼──────────────┐                               │
+│                │   React 18 + Vite Frontend  │                               │
+│                │                             │                               │
+│                │ TypeScript · Tailwind       │                               │
+│                │ Framer Motion · React Router│                               │
+│                │ TanStack Query · Recharts   │                               │
+│                │ Leaflet                     │                               │
+│                └──────────────┬──────────────┘                               │
+│                               │ REST API (JSON)                              │
+│                               ▼                                              │
+│                ┌─────────────────────────────┐                               │
+│                │       FastAPI Backend       │                               │
+│                │                             │                               │
+│                │ /api/auth                   │                               │
+│                │ /api/permits                │                               │
+│                │ /api/clashes                │                               │
+│                │ /api/complaints             │                               │
+│                │ /api/analytics              │                               │
+│                │ /api/notifications          │                               │
+│                │                             │                               │
+│                │ ┌─────────────────────────┐ │                               │
+│                │ │ Clash Detection Engine  │ │                               │
+│                │ │ • Haversine(lat, lon)   │ │                               │
+│                │ │ • 150 m spatial radius  │ │                               │
+│                │ │ • Same-segment match    │ │                               │
+│                │ │ • Date overlap window   │ │                               │
+│                │ │ • Severity assessment   │ │                               │
+│                │ │ • Co-dig generation     │ │                               │
+│                │ └─────────────────────────┘ │                               │
+│                └──────────────┬──────────────┘                               │
+│                               │ SQLAlchemy 2.0                               │
+│                               ▼                                              │
+│                ┌─────────────────────────────┐                               │
+│                │     Database (SQLite/PG)    │                               │
+│                │                             │                               │
+│                │ Users · Permits             │                               │
+│                │ Complaints · Clashes        │                               │
+│                │ CoDigRecs                   │                               │
+│                │ Notifications · AuditLog    │                               │
+│                └─────────────────────────────┘                               │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+---
+
+## Screenshots
+
+| Screen | Preview |
 |---|---|
-| Permit Registry | Any utility submits a dig permit with road segment, dates, depth |
-| Clash Detection | Auto-detects spatial + date overlaps with existing permits |
-| Co-dig Suggestions | Alerts both agencies, proposes shared trench scheduling |
-| Savings Calculator | Computes Rs. saved per co-dig event based on GHMC re-lay rates |
-| GHMC Dashboard | Live map of all active permits + running savings counter |
-| Citizen Reports | Citizens report unattended/hazardous dig sites with photo + location |
+| Landing Page | ![Landing](docs/screenshots/landing.png) |
+| Submit Permit | ![Permit Submit](docs/screenshots/permit-submit.png) |
+| Clash Alert | ![Clash Alert](docs/screenshots/clash-alert.png) |
+| Dashboard | ![Dashboard](docs/screenshots/dashboard.png) |
+| Permit Registry | ![Permit Registry](docs/screenshots/permit-registry.png) |
+| Complaint Portal | ![Complaint Portal](docs/screenshots/complaint-portal.png) |
+| Complaint Registry | ![Complaint Registry](docs/screenshots/complaint-registry.png) |
+| About | ![About](docs/screenshots/about.png) |
+
+---
+
+## Setup Instructions
+
+### Prerequisites
+
+- Python 3.10+
+- Node.js 18+
+- npm 9+
+
+### Backend
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/your-org/digalert.git
+cd digalert
+
+# 2. Create and activate a virtual environment
+cd backend
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+# macOS / Linux
+source venv/bin/activate
+
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. (Optional) Configure environment
+cp .env.example .env
+# Edit .env to set JWT_SECRET and any optional SMTP settings
+
+# 5. Start the API server
+uvicorn main:app --reload
+# API available at http://localhost:8000
+# Interactive docs at http://localhost:8000/docs
+```
+
+**SQLite (zero-config default):** The database file `digalert.db` is created automatically in `backend/` on first run. Sample seed data including deliberate clashes is inserted on startup.
+
+**Switch to PostgreSQL:** Set `DATABASE_URL` in your `.env`:
+```
+DATABASE_URL=postgresql://user:password@localhost:5432/digalert
+```
+No other changes required — all queries use SQLAlchemy ORM.
+
+### Frontend
+
+```bash
+# From the repository root
+cd frontend
+
+# 1. Install dependencies
+npm install
+
+# 2. (Optional) Configure API URL
+cp .env.example .env
+# Edit VITE_API_URL if your backend runs on a non-default port
+
+# 3. Start the dev server
+npm run dev
+# App available at http://localhost:5173
+```
+
+### Environment Variables
+
+**Backend (`backend/.env`):**
+
+| Variable | Default | Description |
+|---|---|---|
+| `DATABASE_URL` | `sqlite:///./digalert.db` | SQLAlchemy database URL |
+| `JWT_SECRET` | `changeme-in-production` | JWT signing secret |
+| `JWT_EXPIRE_MINUTES` | `1440` | Token lifetime (24 hours) |
+| `CORS_ORIGINS` | `http://localhost:5173` | Allowed frontend origins |
+| `SMTP_HOST` | — | Email server host (optional) |
+| `SMTP_PORT` | `587` | Email server port |
+| `SMTP_USER` | — | Email username |
+| `SMTP_PASSWORD` | — | Email password |
+
+**Frontend (`frontend/.env`):**
+
+| Variable | Default | Description |
+|---|---|---|
+| `VITE_API_URL` | `http://localhost:8000` | Backend base URL |
+
+---
+
+## Deployment
+
+### Frontend — Vercel
+
+1. Push the `frontend/` directory (or the full repo) to GitHub.
+2. Import the project on [vercel.com](https://vercel.com).
+3. Set **Root Directory** to `frontend`.
+4. Add environment variable: `VITE_API_URL=https://your-backend.onrender.com`
+5. Deploy — Vercel auto-detects Vite.
+
+### Backend — Render
+
+1. Create a new **Web Service** on [render.com](https://render.com).
+2. Connect your GitHub repo.
+3. Set **Root Directory** to `backend`.
+4. **Build command:** `pip install -r requirements.txt`
+5. **Start command:** `uvicorn main:app --host 0.0.0.0 --port $PORT`
+6. Add environment variables: `DATABASE_URL` (use Render's free PostgreSQL), `JWT_SECRET`, `CORS_ORIGINS`.
+7. Deploy.
+
+---
+
+## API Documentation
+
+Full reference in [docs/API.md](docs/API.md). Quick summary:
+
+### Auth — `/api/auth`
+
+| Method | Path | Description |
+|---|---|---|
+| POST | `/api/auth/register` | Register a new user |
+| POST | `/api/auth/login` | Login and receive JWT |
+| GET | `/api/auth/me` | Get current user (Bearer) |
+
+### Permits — `/api/permits`
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/api/permits` | List permits (filterable) |
+| POST | `/api/permits` | Submit permit + run clash detection |
+| GET | `/api/permits/{id}` | Get permit by ID |
+| PUT | `/api/permits/{id}` | Update permit |
+| DELETE | `/api/permits/{id}` | Delete permit |
+| GET | `/api/permits/export/csv` | Download CSV export |
+
+### Clashes — `/api/clashes`
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/api/clashes` | List clashes (filterable) |
+| GET | `/api/clashes/{id}` | Get clash with nested data |
+| POST | `/api/clashes/{id}/resolve` | Resolve clash (accept/dismiss) |
+
+### Complaints — `/api/complaints`
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/api/complaints` | List complaints (filterable) |
+| POST | `/api/complaints` | Submit a complaint |
+| GET | `/api/complaints/{id}` | Get complaint by ID |
+| PATCH | `/api/complaints/{id}` | Update status/assignment |
+| GET | `/api/complaints/export/csv` | Download CSV export |
+
+### Analytics — `/api`
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/api/analytics` | Full analytics snapshot |
+| GET | `/api/savings` | Savings summary + breakdown |
+
+### Notifications — `/api/notifications`
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/api/notifications` | List notifications |
+| PATCH | `/api/notifications/{id}/read` | Mark as read |
+
+### System
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/health` | Health check |
+| GET | `/` | Service info |
+| GET | `/docs` | Swagger UI |
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React + Vite |
-| Styling | Tailwind CSS |
-| Map | Leaflet.js + OpenStreetMap |
-| Backend | FastAPI (Python) |
-| Database | SQLite (dev) / PostgreSQL (prod) |
-| Spatial logic | Shapely (Python) |
-| Image upload | Cloudinary (citizen reports) |
-| Deploy — Frontend | Vercel |
-| Deploy — Backend | Render |
+### Backend
+- **FastAPI** — async Python web framework
+- **SQLAlchemy 2.0** — ORM with SQLite (dev) and PostgreSQL (prod) support
+- **Pydantic v2** — data validation and serialization
+- **python-jose** — JWT authentication
+- **passlib[bcrypt]** — password hashing
+- **Shapely** — geometric operations for clash detection
+- **python-dateutil** — date arithmetic
+
+### Frontend
+- **React 18** — UI framework
+- **Vite** — build tool and dev server
+- **TypeScript** — static typing
+- **Tailwind CSS** — utility-first styling
+- **Framer Motion** — animations
+- **React Router v6** — client-side routing
+- **TanStack Query v5** — server state management
+- **Recharts** — data visualization
+- **Leaflet + React-Leaflet** — interactive maps
+- **Axios** — HTTP client
+- **react-hot-toast** — notifications
+- **jsPDF + jspdf-autotable** — PDF generation
+- **date-fns** — date utilities
+- **lucide-react** — icon set
 
 ---
 
-## Project Structure
+## Roadmap
 
-```
-trencsync/
-├── frontend/
-│   ├── src/
-│   │   ├── pages/
-│   │   │   ├── Dashboard.jsx        # GHMC live permit map + savings
-│   │   │   ├── SubmitPermit.jsx     # Utility permit submission form
-│   │   │   ├── ClashAlert.jsx       # Clash detection result + co-dig UI
-│   │   │   └── CitizenReport.jsx    # Public issue reporting page
-│   │   ├── components/
-│   │   │   ├── MapView.jsx          # Leaflet map wrapper
-│   │   │   ├── PermitCard.jsx       # Single permit display card
-│   │   │   └── ReportCard.jsx       # Citizen report card
-│   │   └── main.jsx
-│   ├── index.html
-│   └── vite.config.js
-│
-├── backend/
-│   ├── main.py                      # FastAPI app + route registration
-│   ├── models.py                    # SQLAlchemy models
-│   ├── schemas.py                   # Pydantic schemas
-│   ├── clash.py                     # Spatial + date clash detection logic
-│   ├── seed.py                      # Seed script — 8 Hyderabad permits
-│   └── database.py                  # DB connection + session
-│
-└── README.md
-```
-
----
-
-## Getting Started
-
-### Backend Setup
-
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate
-pip install fastapi uvicorn sqlalchemy shapely pydantic python-multipart
-python seed.py
-uvicorn main:app --reload
-```
-
-Backend runs at `http://localhost:8000`  
-API docs at `http://localhost:8000/docs`
-
-### Frontend Setup
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Frontend runs at `http://localhost:5173`
-
----
-
-## API Reference
-
-### Permits
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/permits` | List all active permits |
-| `POST` | `/permits` | Submit a new permit (triggers clash detection) |
-| `GET` | `/permits/{id}` | Get a single permit |
-
-#### POST `/permits` — request body
-
-```json
-{
-  "utility": "TSSPDCL",
-  "road_name": "Road No. 12, Banjara Hills",
-  "lat1": 17.4156, "lng1": 78.4347,
-  "lat2": 17.4189, "lng2": 78.4401,
-  "depth_m": 1.2,
-  "start_date": "2026-06-10",
-  "end_date": "2026-06-25"
-}
-```
-
-#### Response — clash detected
-
-```json
-{
-  "status": "clash",
-  "clashing_permits": [
-    {
-      "id": 3,
-      "utility": "HMWSSB",
-      "road_name": "Road No. 12, Banjara Hills",
-      "start_date": "2026-06-01",
-      "end_date": "2026-06-20"
-    }
-  ],
-  "estimated_saving_inr": 57600,
-  "co_dig_suggestion": "Coordinate with HMWSSB to share a single trench on Road No. 12. Proposed window: June 10-20."
-}
-```
-
-### Citizen Reports
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/reports` | List all citizen-submitted reports |
-| `POST` | `/reports` | Submit a new unattended dig report |
-| `PATCH` | `/reports/{id}/status` | Update report status (admin) |
-
-#### POST `/reports` — multipart form
-
-| Field | Type | Description |
-|---|---|---|
-| `description` | string | What the citizen observed |
-| `location_text` | string | Landmark / address |
-| `lat` | float | GPS latitude |
-| `lng` | float | GPS longitude |
-| `photo` | file | Image of the hazard (optional) |
-| `reporter_phone` | string | Optional contact for follow-up |
-
----
-
-## Clash Detection Logic
-
-```python
-from shapely.geometry import LineString
-
-def segments_overlap(p1, p2, q1, q2, buffer_m=15):
-    seg_p = LineString([p1, p2]).buffer(buffer_m / 111320)
-    seg_q = LineString([q1, q2])
-    return seg_p.intersects(seg_q)
-
-def dates_overlap(start1, end1, start2, end2):
-    return start1 <= end2 and start2 <= end1
-```
-
-Cost saving formula:
-
-```
-saving (Rs.) = segment_length_m x avg_trench_width_m x ghmc_relay_rate_per_sqm
-             = segment_length_m x 1.5 x 1000
-```
-
----
-
-## Citizen Report Flow
-
-1. Citizen visits `/report` — no login required
-2. Fills description, drops a pin on the map, optionally uploads a photo
-3. Report stored with status `open`
-4. GHMC admin sees all open reports alongside active permits on the same map
-5. Admin updates status to `in_progress` or `resolved`
-6. Citizen can track status via their report ID
-
----
-
-## Seeded Demo Data
-
-Run `python seed.py` to load these Hyderabad permits:
-
-| Utility | Road | Dates |
-|---|---|---|
-| HMWSSB | Road No. 12, Banjara Hills | Jun 1 – Jun 20 |
-| TSSPDCL | Jubilee Hills Rd 36 | Jun 15 – Jul 5 |
-| Jio | Madhapur Main Rd | May 20 – Jun 10 |
-| BSNL | HITEC City Lane | Jun 18 – Jul 10 |
-| HMWSSB | Kondapur Main Rd | Jun 5 – Jun 28 |
-| GAIL | Gachibowli Rd | Jul 1 – Jul 20 |
-| TSSPDCL | Film Nagar Rd | Jun 10 – Jun 30 |
-| Jio | Madhapur Inner Ring | Jun 22 – Jul 15 |
-
-**Demo clash**: Submit TSSPDCL on Road No. 12, Banjara Hills for Jun 15–25 → clashes with HMWSSB permit.
-
----
-
-## Impact
-
-- Hyderabad: 400+ road cutting permits per year
-- GHMC re-lay cost: Rs. 800–1,200 per sq.m
-- 15% co-dig coordination = ~Rs. 4–6 crore saved annually
-- Citizen reports reduce unattended dig hazard time from ~11 days to under 48 hours
+- [ ] **Mobile App** — React Native companion for field officers
+- [ ] **GIS Integration** — Import road network from GHMC GIS server
+- [ ] **Push Notifications** — Web push + SMS (Twilio) for permit status updates
+- [ ] **Multilingual Support** — Telugu, Hindi, Urdu alongside English
+- [ ] **Bulk Permit Import** — CSV/Excel upload for large-scale projects
+- [ ] **Advanced Analytics** — Predictive clash detection using historical patterns
+- [ ] **Contractor Portal** — Track actual excavation vs approved boundaries
+- [ ] **SLA Tracking** — Automated escalation when permits exceed approved duration
+- [ ] **Aadhaar/DigiLocker Integration** — Verified identity for permit applicants
+- [ ] **Scalability to Other Cities** — Multi-tenant city configuration
 
 ---
 
 ## License
 
-MIT — Built at CivicTech Hackathon, Hyderabad 2026
+MIT License — see [LICENSE](LICENSE).
 
+---
+
+*Built with care for the people of Hyderabad. DigAlert is a DigAlert Technologies initiative, designed to make city infrastructure management smarter, safer, and more collaborative.*
