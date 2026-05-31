@@ -10,7 +10,11 @@ from backend.clash_engine import check_clash_for_permit, parse_geometry, check_d
 
 router = APIRouter(prefix="/api/permits", tags=["permits"])
 
-# Pydantic Schemas
+# ==========================================
+# PYDANTIC SCHEMAS
+# ==========================================
+
+
 class PermitCreate(BaseModel):
     title: str
     description: Optional[str] = None
@@ -20,6 +24,7 @@ class PermitCreate(BaseModel):
     start_date: datetime.date
     end_date: datetime.date
 
+
 class PermitPrecheck(BaseModel):
     wkt_geometry: str
     depth_meters: float
@@ -27,10 +32,12 @@ class PermitPrecheck(BaseModel):
     start_date: datetime.date
     end_date: datetime.date
 
+
 class ClashResponse(BaseModel):
     id: Optional[int] = None
     permit_id: int
-    conflicting_permit_id: int
+    # Updated so Pydantic allows None
+    conflicting_permit_id: Optional[int] = None
     conflicting_agency: str
     conflicting_title: str
     overlap_percentage: float
@@ -41,6 +48,7 @@ class ClashResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
 
 class PermitResponse(BaseModel):
     id: int
@@ -60,8 +68,14 @@ class PermitResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
 class StatusUpdate(BaseModel):
     status: str  # APPROVED, REJECTED, IN_PROGRESS, COMPLETED, PENDING_REVIEW
+
+
+# ==========================================
+# ENDPOINTS
+# ==========================================
 
 # Precheck Endpoint for Clash Detection (Non-committing)
 @router.post("/precheck", response_model=List[ClashResponse])
@@ -81,23 +95,20 @@ def precheck_clashes(data: PermitPrecheck, db: Session = Depends(get_db)):
         end_date=data.end_date,
         agency_name="Precheck Agency"
     )
-    
+
     clash_exists, clash_objects = check_clash_for_permit(mock_permit, db)
-    
+
     clash_responses = []
     for clash in clash_objects:
-        # Load conflicting entity details (could be another permit or a recently resurfaced road)
-        if clash.conflicting_permit_id < 0:
-            # It's a recently resurfaced road!
-            road_id = -clash.conflicting_permit_id
-            road = db.query(RoadSegment).filter(RoadSegment.id == road_id).first()
+        if clash.conflicting_permit_id is None:
             conflicting_agency = "GHMC (Road Safety Division)"
-            conflicting_title = f"Locked Resurfaced Road: {road.name if road else 'Hyderabad Highway'}"
+            conflicting_title = "Locked Resurfaced Road"
         else:
-            other_permit = db.query(Permit).filter(Permit.id == clash.conflicting_permit_id).first()
+            other_permit = db.query(Permit).filter(
+                Permit.id == clash.conflicting_permit_id).first()
             conflicting_agency = other_permit.agency_name if other_permit else "Unknown Agency"
             conflicting_title = other_permit.title if other_permit else "Active Excavation"
-            
+
         clash_responses.append(
             ClashResponse(
                 permit_id=0,
@@ -111,10 +122,12 @@ def precheck_clashes(data: PermitPrecheck, db: Session = Depends(get_db)):
                 resolved=False
             )
         )
-        
+
     return clash_responses
 
 # Submit Permit (with automatic clash detection triggered)
+
+
 @router.post("", response_model=PermitResponse)
 def create_permit(permit_data: PermitCreate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     if current_user.role not in ["UTILITY", "ADMIN"]:
@@ -122,7 +135,7 @@ def create_permit(permit_data: PermitCreate, current_user: User = Depends(get_cu
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only utilities or admins can submit permit requests"
         )
-        
+
     # Create the permit database entry
     new_permit = Permit(
         title=permit_data.title,
@@ -139,33 +152,32 @@ def create_permit(permit_data: PermitCreate, current_user: User = Depends(get_cu
     db.add(new_permit)
     db.commit()
     db.refresh(new_permit)
-    
+
     # Run spatial and temporal clash analysis
     clash_exists, clash_objects = check_clash_for_permit(new_permit, db)
-    
+
     final_clash_responses = []
     if clash_exists:
         new_permit.status = "CLASH_DETECTED"
         db.commit()
-        
+
         # Save all detected clashes
         for clash in clash_objects:
             clash.permit_id = new_permit.id
             db.add(clash)
             db.commit()
             db.refresh(clash)
-            
+
             # Form response structure
-            if clash.conflicting_permit_id < 0:
-                road_id = -clash.conflicting_permit_id
-                road = db.query(RoadSegment).filter(RoadSegment.id == road_id).first()
+            if clash.conflicting_permit_id is None:
                 conflicting_agency = "GHMC"
-                conflicting_title = f"Recently Resurfaced: {road.name if road else 'Road segment'}"
+                conflicting_title = "Recently Resurfaced Road"
             else:
-                other_permit = db.query(Permit).filter(Permit.id == clash.conflicting_permit_id).first()
+                other_permit = db.query(Permit).filter(
+                    Permit.id == clash.conflicting_permit_id).first()
                 conflicting_agency = other_permit.agency_name if other_permit else "Unknown Agency"
                 conflicting_title = other_permit.title if other_permit else "Excavation Works"
-                
+
             final_clash_responses.append(
                 ClashResponse(
                     id=clash.id,
@@ -184,7 +196,7 @@ def create_permit(permit_data: PermitCreate, current_user: User = Depends(get_cu
         # Standard workflow: No conflicts found -> Move to review
         new_permit.status = "PENDING_REVIEW"
         db.commit()
-        
+
     return PermitResponse(
         id=new_permit.id,
         title=new_permit.title,
@@ -202,6 +214,8 @@ def create_permit(permit_data: PermitCreate, current_user: User = Depends(get_cu
     )
 
 # List Permits
+
+
 @router.get("", response_model=List[PermitResponse])
 def list_permits(
     status_filter: Optional[str] = None,
@@ -209,29 +223,28 @@ def list_permits(
     db: Session = Depends(get_db)
 ):
     query = db.query(Permit)
-    
+
     if status_filter:
         query = query.filter(Permit.status == status_filter)
     if agency_filter:
         query = query.filter(Permit.agency_name == agency_filter)
-        
+
     permits = query.order_by(Permit.created_at.desc()).all()
-    
+
     responses = []
     for permit in permits:
         clashes = db.query(Clash).filter(Clash.permit_id == permit.id).all()
         clash_responses = []
         for clash in clashes:
-            if clash.conflicting_permit_id < 0:
-                road_id = -clash.conflicting_permit_id
-                road = db.query(RoadSegment).filter(RoadSegment.id == road_id).first()
+            if clash.conflicting_permit_id is None:
                 conflicting_agency = "GHMC"
-                conflicting_title = f"Locked Resurfaced Road: {road.name if road else 'Hyderabad Segment'}"
+                conflicting_title = "Locked Resurfaced Road"
             else:
-                other_p = db.query(Permit).filter(Permit.id == clash.conflicting_permit_id).first()
+                other_p = db.query(Permit).filter(
+                    Permit.id == clash.conflicting_permit_id).first()
                 conflicting_agency = other_p.agency_name if other_p else "Unknown Agency"
                 conflicting_title = other_p.title if other_p else "Excavation"
-                
+
             clash_responses.append(
                 ClashResponse(
                     id=clash.id,
@@ -263,29 +276,30 @@ def list_permits(
                 clashes=clash_responses
             )
         )
-        
+
     return responses
 
 # Get Single Permit Detail
+
+
 @router.get("/{permit_id}", response_model=PermitResponse)
 def get_permit(permit_id: int, db: Session = Depends(get_db)):
     permit = db.query(Permit).filter(Permit.id == permit_id).first()
     if not permit:
         raise HTTPException(status_code=404, detail="Permit not found")
-        
+
     clashes = db.query(Clash).filter(Clash.permit_id == permit.id).all()
     clash_responses = []
     for clash in clashes:
-        if clash.conflicting_permit_id < 0:
-            road_id = -clash.conflicting_permit_id
-            road = db.query(RoadSegment).filter(RoadSegment.id == road_id).first()
+        if clash.conflicting_permit_id is None:
             conflicting_agency = "GHMC"
-            conflicting_title = f"Locked Road: {road.name if road else 'Hyderabad Road'}"
+            conflicting_title = "Locked Road"
         else:
-            other_p = db.query(Permit).filter(Permit.id == clash.conflicting_permit_id).first()
+            other_p = db.query(Permit).filter(
+                Permit.id == clash.conflicting_permit_id).first()
             conflicting_agency = other_p.agency_name if other_p else "Unknown"
             conflicting_title = other_p.title if other_p else "Active Digging"
-            
+
         clash_responses.append(
             ClashResponse(
                 id=clash.id,
@@ -300,7 +314,7 @@ def get_permit(permit_id: int, db: Session = Depends(get_db)):
                 resolved=clash.resolved
             )
         )
-        
+
     return PermitResponse(
         id=permit.id,
         title=permit.title,
@@ -318,6 +332,8 @@ def get_permit(permit_id: int, db: Session = Depends(get_db)):
     )
 
 # Update Permit Status (Admin only workflow)
+
+
 @router.patch("/{permit_id}/status", response_model=PermitResponse)
 def update_permit_status(
     permit_id: int,
@@ -331,18 +347,20 @@ def update_permit_status(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only GHMC administrators can approve/reject/modify permit workflows"
         )
-        
+
     permit = db.query(Permit).filter(Permit.id == permit_id).first()
     if not permit:
         raise HTTPException(status_code=404, detail="Permit not found")
-        
+
     permit.status = status_update.status
     db.commit()
     db.refresh(permit)
-    
+
     return get_permit(permit_id, db)
 
 # Resolve Clash (Admin workflow to establish co-digging project)
+
+
 @router.post("/{permit_id}/resolve-clash", response_model=PermitResponse)
 def resolve_clash(
     permit_id: int,
@@ -350,34 +368,36 @@ def resolve_clash(
     db: Session = Depends(get_db)
 ):
     if current_user.role != "ADMIN":
-        raise HTTPException(status_code=403, detail="Only GHMC administrators can approve co-dig plans")
-        
+        raise HTTPException(
+            status_code=403, detail="Only GHMC administrators can approve co-dig plans")
+
     permit = db.query(Permit).filter(Permit.id == permit_id).first()
     if not permit:
         raise HTTPException(status_code=404, detail="Permit not found")
-        
+
     # Mark all related clashes as resolved
     clashes = db.query(Clash).filter(Clash.permit_id == permit.id).all()
     for clash in clashes:
         clash.resolved = True
-        
+
         # If it's a conflict with another permit, mark the inverse clash as resolved too
-        if clash.conflicting_permit_id > 0:
+        if clash.conflicting_permit_id is not None:
             inverse_clashes = db.query(Clash).filter(
                 Clash.permit_id == clash.conflicting_permit_id,
                 Clash.conflicting_permit_id == permit.id
             ).all()
             for inv in inverse_clashes:
                 inv.resolved = True
-                
+
             # Move the conflicting permit to PENDING_REVIEW or APPROVED as part of joint scheduling
-            other_permit = db.query(Permit).filter(Permit.id == clash.conflicting_permit_id).first()
+            other_permit = db.query(Permit).filter(
+                Permit.id == clash.conflicting_permit_id).first()
             if other_permit and other_permit.status == "CLASH_DETECTED":
                 other_permit.status = "APPROVED"  # Auto-approve the co-dig partner too!
-                
+
     # Transition this permit status to APPROVED (or IN_PROGRESS if started)
     permit.status = "APPROVED"
     db.commit()
     db.refresh(permit)
-    
+
     return get_permit(permit_id, db)
