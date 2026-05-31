@@ -183,9 +183,9 @@ const FileComplaint = () => {
                 onChange={(e) => setComplaintType(e.target.value)}
                 className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300"
               >
-                <option value="WATER">Water</option>
-                <option value="TELECOM">Telecom</option>
-                <option value="ELECTRICITY">Electricity</option>
+                <option value="WATER">Water Supply & Sewerage Infrastructure</option>
+                <option value="TELECOM">Telecommunications & Fiber Optic Grid</option>
+                <option value="ELECTRICITY">Power Grid & Electrical Distribution</option>
               </select>
             </div>
 
