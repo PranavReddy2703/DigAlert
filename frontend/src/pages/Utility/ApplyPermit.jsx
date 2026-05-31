@@ -199,14 +199,14 @@ const ApplyPermit = () => {
           return (
             <div key={s.num} className="flex items-center gap-2 flex-1 justify-center last:flex-none">
               <div className="flex items-center gap-2">
-                <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-extrabold transition-all duration-300 ${
+                <span className={`flex h-8 w-8 sm:h-6 sm:w-6 shrink-0 items-center justify-center rounded-full text-xs sm:text-[10px] font-extrabold transition-all duration-300 ${
                   isActive 
                     ? 'bg-[#E0FDFA] text-[#0F766E] border border-[#0F766E]' 
                     : isCompleted
                       ? 'bg-green-50 text-green-600 border border-green-200 shadow-sm shadow-green-500/10'
                       : 'bg-slate-100 text-slate-400 border border-slate-200'
                 }`}>
-                  {isCompleted ? <Check className="h-3 w-3 stroke-[3px]" /> : s.num}
+                  {isCompleted ? <Check className="h-4 w-4 sm:h-3 sm:w-3 stroke-[3px]" /> : s.num}
                 </span>
                 <span className={`text-[10px] md:text-xs font-bold uppercase tracking-wider hidden sm:inline transition-colors duration-300 ${
                   isActive ? 'text-[#0F766E]' : 'text-[#64748B]'
