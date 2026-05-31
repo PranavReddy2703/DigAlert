@@ -37,6 +37,7 @@ const Layout = ({ children }) => {
         { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
         { label: 'City Map', path: '/citizen', icon: Map },
         { label: 'Permit Approvals', path: '/admin/permits', icon: ClipboardCheck },
+        { label: 'Restoration Center', path: '/admin/verifications', icon: ClipboardCheck },
         { label: 'Conflict Manager', path: '/admin/conflicts', icon: ShieldAlert },
         { label: 'Complaints', path: '/admin/complaints', icon: AlertOctagon }
       ];

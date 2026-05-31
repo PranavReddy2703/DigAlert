@@ -51,11 +51,23 @@ class Permit(Base):
     work_type = Column(String, nullable=False)
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
+    authorized_at = Column(DateTime, nullable=True)
+    authorized_by = Column(String, nullable=True)
+    restoration_deadline = Column(Date, nullable=True)
+    completed_at = Column(DateTime, nullable=True)
+    completed_by = Column(String, nullable=True)
+    completion_notes = Column(String, nullable=True)
+    restoration_verified_at = Column(DateTime, nullable=True)
+    restoration_verified_by = Column(String, nullable=True)
+    restoration_remarks = Column(String, nullable=True)
+    closed_at = Column(DateTime, nullable=True)
+    closed_by = Column(String, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     # Relationships
     utility = relationship("User", back_populates="permits")
     complaints = relationship("Complaint", back_populates="permit")
+    audit_logs = relationship("AuditLog", back_populates="permit", cascade="all, delete-orphan")
 
 
 class Clash(Base):
@@ -98,3 +110,16 @@ class Complaint(Base):
 
     # Relationships
     permit = relationship("Permit", back_populates="complaints")
+
+class AuditLog(Base):
+    __tablename__ = "audit_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    permit_id = Column(Integer, ForeignKey("permits.id"), nullable=False)
+    event_type = Column(String, nullable=False)  # Permit Submitted, Clash Detected, Clash Resolved, Approved By GHMC, Excavation Authorized, Excavation Started, Work Completed, Road Restored
+    description = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    username = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    permit = relationship("Permit", back_populates="audit_logs")

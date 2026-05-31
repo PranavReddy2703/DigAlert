@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { analyticsAPI } from '../../utils/api';
+import { analyticsAPI, permitsAPI } from '../../utils/api';
 import { 
   Building2, 
   Coins, 
@@ -9,13 +9,17 @@ import {
   MapPin, 
   MessageSquareWarning, 
   Trophy, 
-  LineChart 
+  LineChart,
+  Clock,
+  Lock,
+  CheckSquare
 } from 'lucide-react';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [summary, setSummary] = useState(null);
   const [leaderboard, setLeaderboard] = useState([]);
+  const [permits, setPermits] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,8 +27,10 @@ const AdminDashboard = () => {
       try {
         const summaryData = await analyticsAPI.getSummary();
         const leaderboardData = await analyticsAPI.getLeaderboard();
+        const permitsData = await permitsAPI.list();
         setSummary(summaryData);
         setLeaderboard(leaderboardData);
+        setPermits(permitsData);
       } catch (err) {
         console.error("Failed to load analytics data", err);
       } finally {
@@ -33,6 +39,14 @@ const AdminDashboard = () => {
     };
     loadAnalytics();
   }, []);
+
+  // Compute status aggregates
+  const pendingApprovals = permits.filter(p => ['SUBMITTED', 'PENDING_REVIEW', 'CLASH_DETECTED'].includes(p.status)).length;
+  const authorizedExcavations = permits.filter(p => p.status === 'AUTHORIZED_EXCAVATION').length;
+  const activeExcavations = permits.filter(p => p.status === 'IN_PROGRESS').length;
+  const awaitingVerification = permits.filter(p => p.status === 'EXCAVATION_COMPLETED').length;
+  const restoredRoads = permits.filter(p => p.status === 'ROAD_RESTORED').length;
+  const closedProjects = permits.filter(p => p.status === 'PROJECT_CLOSED').length;
 
   return (
     <div className="space-y-6">
@@ -68,52 +82,88 @@ const AdminDashboard = () => {
       ) : (
         <>
           {/* Central Metrics Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Total Permits */}
-            <div className="glass-panel rounded-xl p-5 border border-gray-800 flex items-center justify-between glass-panel-hover">
-              <div>
-                <p className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Total Permits Registered</p>
-                <h3 className="text-2xl font-extrabold text-white mt-1.5">{summary.total_permits}</h3>
-                <p className="text-[10px] text-primaryAqua mt-1 font-semibold">Active digs: {summary.active_permits}</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+            {/* Pending Permit Approvals */}
+            <div className="glass-panel rounded-xl p-4 border border-gray-800 flex flex-col justify-between glass-panel-hover">
+              <div className="flex items-center justify-between text-gray-500">
+                <span className="text-[9px] uppercase font-bold tracking-wider">Pending Approvals</span>
+                <Lock className="h-4 w-4 text-cyan-400" />
               </div>
-              <div className="h-10 w-10 rounded-lg bg-cyan-950/40 text-primaryAqua border border-cyan-900/30 flex items-center justify-center aqua-glow">
-                <Building2 className="h-5 w-5" />
-              </div>
-            </div>
-
-            {/* Money Saved */}
-            <div className="glass-panel rounded-xl p-5 border border-gray-800 flex items-center justify-between glass-panel-hover">
-              <div>
-                <p className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Co-Dig Monetary Saved</p>
-                <h3 className="text-2xl font-extrabold text-primaryEmerald mt-1.5 font-mono">₹{summary.money_saved_inr.toLocaleString()}</h3>
-                <p className="text-[10px] text-gray-400 mt-1">Co-dig projects: {summary.co_dig_projects}</p>
-              </div>
-              <div className="h-10 w-10 rounded-lg bg-emerald-950/40 text-primaryEmerald border border-emerald-900/30 flex items-center justify-center emerald-glow">
-                <Coins className="h-5 w-5 animate-pulse" />
+              <div className="mt-2">
+                <h3 className="text-2xl font-extrabold text-cyan-400 font-mono">{pendingApprovals}</h3>
+                <p className="text-[9px] text-gray-400 mt-0.5">Permit Approvals</p>
               </div>
             </div>
 
-            {/* Conflicts */}
-            <div className="glass-panel rounded-xl p-5 border border-gray-800 flex items-center justify-between glass-panel-hover">
-              <div>
-                <p className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Geospatial Conflicts</p>
-                <h3 className="text-2xl font-extrabold text-alertRed mt-1.5">{summary.conflicts_detected}</h3>
-                <p className="text-[10px] text-gray-400 mt-1">Resolved: {summary.conflicts_resolved} clashes</p>
+            {/* Authorized Excavations */}
+            <div className="glass-panel rounded-xl p-4 border border-gray-800 flex flex-col justify-between glass-panel-hover">
+              <div className="flex items-center justify-between text-gray-500">
+                <span className="text-[9px] uppercase font-bold tracking-wider">Authorized</span>
+                <Clock className="h-4 w-4 text-purple-400" />
               </div>
-              <div className="h-10 w-10 rounded-lg bg-red-950/40 text-alertRed border border-red-900/30 flex items-center justify-center red-glow">
-                <ShieldAlert className="h-5 w-5" />
+              <div className="mt-2">
+                <h3 className="text-2xl font-extrabold text-purple-400 font-mono">{authorizedExcavations}</h3>
+                <p className="text-[9px] text-gray-400 mt-0.5">Excavations</p>
               </div>
             </div>
 
-            {/* Citizen Complaints */}
-            <div className="glass-panel rounded-xl p-5 border border-gray-800 flex items-center justify-between glass-panel-hover">
-              <div>
-                <p className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Citizen Safety Reports</p>
-                <h3 className="text-2xl font-extrabold text-orange-400 mt-1.5">{summary.total_complaints}</h3>
-                <p className="text-[10px] text-gray-400 mt-1">Pending: {summary.complaints_by_status.OPEN + summary.complaints_by_status.ASSIGNED}</p>
+            {/* Active Excavations */}
+            <div className="glass-panel rounded-xl p-4 border border-gray-800 flex flex-col justify-between glass-panel-hover">
+              <div className="flex items-center justify-between text-gray-500">
+                <span className="text-[9px] uppercase font-bold tracking-wider">Active Digs</span>
+                <Activity className="h-4 w-4 text-orange-400 animate-pulse" />
               </div>
-              <div className="h-10 w-10 rounded-lg bg-orange-950/40 text-orange-400 border border-orange-900/30 flex items-center justify-center">
-                <MessageSquareWarning className="h-5 w-5" />
+              <div className="mt-2">
+                <h3 className="text-2xl font-extrabold text-orange-400 font-mono">{activeExcavations}</h3>
+                <p className="text-[9px] text-gray-400 mt-0.5">Excavations</p>
+              </div>
+            </div>
+
+            {/* Completed Excavations */}
+            <div className="glass-panel rounded-xl p-4 border border-gray-800 flex flex-col justify-between glass-panel-hover">
+              <div className="flex items-center justify-between text-gray-500">
+                <span className="text-[9px] uppercase font-bold tracking-wider">Completed</span>
+                <CheckSquare className="h-4 w-4 text-yellow-400" />
+              </div>
+              <div className="mt-2">
+                <h3 className="text-2xl font-extrabold text-yellow-400 font-mono">{awaitingVerification}</h3>
+                <p className="text-[9px] text-gray-400 mt-0.5">Excavations</p>
+              </div>
+            </div>
+
+            {/* Awaiting Restoration Verification */}
+            <div className="glass-panel rounded-xl p-4 border border-gray-800 flex flex-col justify-between glass-panel-hover">
+              <div className="flex items-center justify-between text-gray-500">
+                <span className="text-[9px] uppercase font-bold tracking-wider">Awaiting Verif</span>
+                <Clock className="h-4 w-4 text-yellow-400 animate-pulse" />
+              </div>
+              <div className="mt-2">
+                <h3 className="text-2xl font-extrabold text-yellow-400 font-mono">{awaitingVerification}</h3>
+                <p className="text-[9px] text-gray-400 mt-0.5">Restorations</p>
+              </div>
+            </div>
+
+            {/* Road Restored */}
+            <div className="glass-panel rounded-xl p-4 border border-gray-800 flex flex-col justify-between glass-panel-hover">
+              <div className="flex items-center justify-between text-gray-500">
+                <span className="text-[9px] uppercase font-bold tracking-wider">Road Restored</span>
+                <CheckSquare className="h-4 w-4 text-green-400" />
+              </div>
+              <div className="mt-2">
+                <h3 className="text-2xl font-extrabold text-green-400 font-mono">{restoredRoads}</h3>
+                <p className="text-[9px] text-gray-400 mt-0.5">Restored</p>
+              </div>
+            </div>
+
+            {/* Projects Closed */}
+            <div className="glass-panel rounded-xl p-4 border border-gray-800 flex flex-col justify-between glass-panel-hover">
+              <div className="flex items-center justify-between text-gray-500">
+                <span className="text-[9px] uppercase font-bold tracking-wider">Projects Closed</span>
+                <CheckSquare className="h-4 w-4 text-primaryEmerald" />
+              </div>
+              <div className="mt-2">
+                <h3 className="text-2xl font-extrabold text-primaryEmerald font-mono">{closedProjects}</h3>
+                <p className="text-[9px] text-gray-400 mt-0.5">Archived</p>
               </div>
             </div>
           </div>
