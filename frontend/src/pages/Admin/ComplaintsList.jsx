@@ -166,8 +166,7 @@ const ComplaintsList = () => {
                       <option value="">Unassigned</option>
                       <option value="TSSPDCL">TSSPDCL (Electricity)</option>
                       <option value="HMWSSB">HMWSSB (Water Grid)</option>
-                      <option value="Airtel">Airtel Fiber</option>
-                      <option value="BSNL">BSNL Broadband</option>
+                      <option value="Telecom">telecom(airtel, bsnl,..)</option>
                     </select>
                   </div>
 
