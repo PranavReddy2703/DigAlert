@@ -9,6 +9,7 @@ import {
   Clock, 
   ShieldAlert, 
   CheckCircle, 
+  Check,
   AlertTriangle, 
   Printer, 
   Layers, 
@@ -554,13 +555,13 @@ const PermitTracker = () => {
             <div className="space-y-3 shrink-0">
               {/* Search text */}
               <div className="relative">
-                <Search className="absolute left-3.5 top-3 h-4.5 w-4.5 text-[#94A3B8]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#94A3B8]" />
                 <input
                   type="text"
                   placeholder="Search ID or Title..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg bg-white border border-[#E2E8F0] px-4 py-2 text-xs text-[#0F172A] focus:outline-none focus:border-[#0F766E] transition duration-200 placeholder-slate-400"
+                  className="w-full rounded-lg bg-white border border-[#E2E8F0] pl-9 pr-4 py-2 text-xs text-[#0F172A] focus:outline-none focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/10 transition duration-200 placeholder-slate-450"
                 />
               </div>
 
@@ -709,13 +710,6 @@ const PermitTracker = () => {
                 <div className="grid grid-cols-2 md:grid-cols-8 gap-4 relative">
                   {selectedPermitTimeline.map((step, idx) => (
                     <div key={idx} className="relative flex flex-col items-center md:items-start text-center md:text-left space-y-2">
-                      {/* Connection Line */}
-                      {idx < 7 && (
-                        <div className={`hidden md:block absolute top-3 left-7 w-[calc(100%-14px)] h-[2px] z-0 ${
-                          selectedPermitTimeline[idx+1].isDone ? 'bg-green-600' : 'bg-slate-100'
-                        }`} />
-                      )}
-
                       {/* Timeline Dot Indicator */}
                       <span className={`relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[10px] font-extrabold ${
                         step.isActive 
@@ -723,11 +717,18 @@ const PermitTracker = () => {
                             ? 'bg-red-50 text-[#DC2626] border-[#DC2626] animate-bounce'
                             : 'bg-teal-50 text-[#0F766E] border-[#0F766E]'
                           : step.isDone
-                            ? 'bg-green-50 text-green-600 border-green-200'
+                            ? 'bg-green-50 text-green-600 border-green-200 shadow-sm shadow-green-500/10'
                             : 'bg-slate-100 text-slate-400 border-slate-200'
                       }`}>
-                        {step.isDone ? <CheckCircle className="h-3.5 w-3.5" /> : idx + 1}
+                        {step.isDone ? <Check className="h-3.5 w-3.5 stroke-[3px]" /> : idx + 1}
                       </span>
+
+                      {/* Connection Line (Placed after span with absolute centering and space-y bypass) */}
+                      {idx < 7 && (
+                        <div className={`hidden md:block absolute top-[11px] left-3 w-full h-[2px] z-0 !mt-0 ${
+                          selectedPermitTimeline[idx+1].isDone ? 'bg-green-600' : 'bg-slate-100'
+                        }`} />
+                      )}
 
                       <div className="space-y-0.5 max-w-[150px]">
                         <h4 className={`text-xs font-semibold ${
