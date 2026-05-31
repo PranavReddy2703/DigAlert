@@ -75,67 +75,105 @@ def get_analytics_summary(db: Session = Depends(get_db)):
 @router.get("/leaderboard", response_model=List[UtilityLeaderboardItem])
 def get_utility_leaderboard(db: Session = Depends(get_db)):
     """
-    Computes a compliance score leaderboard of all utility agencies working in Hyderabad.
-    Formula:
-    Compliance = (Resolved Clashes * 40% + Resolved Complaints * 40% + Active Permits Ratio * 20%)
-    We base it on actual db data, supplemented with default values to look professional.
+    Computes a compliance score leaderboard of all registered utility agencies.
+    Agency list is derived dynamically from Users with role=UTILITY so any newly
+    registered agency appears automatically without code changes.
+
+    Compliance formula (0-100):
+      50% clash health  = 1 - (unresolved_clashes / total_permits)
+      50% complaint resolution = resolved_complaints / total_complaints
+    Agencies with no activity yet start at a 85.0 baseline.
     """
-    agencies = ["TSSPDCL", "HMWSSB", "Airtel", "BSNL", "Adani Gas", "L&T Metro"]
-    
+    # --- 1. Discover all registered utility agencies from the Users table ----------
+    agency_rows = (
+        db.query(User.agency_name)
+        .filter(User.role == "UTILITY", User.agency_name.isnot(None))
+        .distinct()
+        .all()
+    )
+    agencies = [row.agency_name for row in agency_rows]
+
+    if not agencies:
+        return []
+
+    # --- 2. Batch-aggregate permit stats across all agencies in 3 queries ----------
+    # Total permits per agency
+    permit_totals = dict(
+        db.query(Permit.agency_name, func.count(Permit.id))
+        .filter(Permit.agency_name.in_(agencies))
+        .group_by(Permit.agency_name)
+        .all()
+    )
+    # Active (IN_PROGRESS) permits per agency
+    permit_active = dict(
+        db.query(Permit.agency_name, func.count(Permit.id))
+        .filter(Permit.agency_name.in_(agencies), Permit.status == "IN_PROGRESS")
+        .group_by(Permit.agency_name)
+        .all()
+    )
+    # Unresolved clashes per agency (joined through the permit owner)
+    unresolved_clashes = dict(
+        db.query(Permit.agency_name, func.count(Clash.id))
+        .join(Clash, Clash.permit_id == Permit.id)
+        .filter(Permit.agency_name.in_(agencies), Clash.resolved == False)
+        .group_by(Permit.agency_name)
+        .all()
+    )
+    # Resolved clashes per agency
+    resolved_clashes = dict(
+        db.query(Permit.agency_name, func.count(Clash.id))
+        .join(Clash, Clash.permit_id == Permit.id)
+        .filter(Permit.agency_name.in_(agencies), Clash.resolved == True)
+        .group_by(Permit.agency_name)
+        .all()
+    )
+
+    # --- 3. Batch-aggregate complaint stats in 2 queries --------------------------
+    complaint_totals = dict(
+        db.query(Complaint.agency_assigned, func.count(Complaint.id))
+        .filter(Complaint.agency_assigned.in_(agencies))
+        .group_by(Complaint.agency_assigned)
+        .all()
+    )
+    complaint_resolved = dict(
+        db.query(Complaint.agency_assigned, func.count(Complaint.id))
+        .filter(Complaint.agency_assigned.in_(agencies), Complaint.status == "RESOLVED")
+        .group_by(Complaint.agency_assigned)
+        .all()
+    )
+
+    # --- 4. Build leaderboard rows -------------------------------------------------
     leaderboard = []
-    
     for agency in agencies:
-        total_p = db.query(Permit).filter(Permit.agency_name == agency).count()
-        active_p = db.query(Permit).filter(Permit.agency_name == agency, Permit.status == "IN_PROGRESS").count()
-        
-        # Get count of clashes involving this utility's permits that are resolved
-        resolved_c = db.query(Clash).join(Permit, Clash.permit_id == Permit.id).filter(
-            Permit.agency_name == agency,
-            Clash.resolved == True
-        ).count()
-        
-        # Complaints
-        total_comp = db.query(Complaint).filter(Complaint.agency_assigned == agency).count()
-        resolved_comp = db.query(Complaint).filter(Complaint.agency_assigned == agency, Complaint.status == "RESOLVED").count()
-        
-        # Compute dynamic compliance score between 0 and 100
-        # If no permits or complaints, provide a reasonable baseline compliance score
+        total_p    = permit_totals.get(agency, 0)
+        active_p   = permit_active.get(agency, 0)
+        resolved_c = resolved_clashes.get(agency, 0)
+        unresolv_c = unresolved_clashes.get(agency, 0)
+        total_comp = complaint_totals.get(agency, 0)
+        resolv_comp = complaint_resolved.get(agency, 0)
+
         if total_p == 0 and total_comp == 0:
-            compliance = 85.0 # baseline
+            compliance = 85.0  # new agency baseline — no data yet
         else:
-            clash_ratio = 1.0 if (total_p == 0) else (1.0 - (db.query(Clash).join(Permit, Clash.permit_id == Permit.id).filter(Permit.agency_name == agency, Clash.resolved == False).count() / max(total_p, 1)))
-            complaint_ratio = 1.0 if (total_comp == 0) else (resolved_comp / max(total_comp, 1))
-            compliance = (clash_ratio * 50.0) + (complaint_ratio * 50.0)
-            # Ensure it fits nicely
+            clash_health     = 1.0 if total_p == 0 else (1.0 - unresolv_c / max(total_p, 1))
+            complaint_health = 1.0 if total_comp == 0 else (resolv_comp / max(total_comp, 1))
+            compliance = (clash_health * 50.0) + (complaint_health * 50.0)
             compliance = max(40.0, min(100.0, compliance))
-            
+
         leaderboard.append({
-            "agency_name": agency,
-            "total_permits": total_p,
+            "agency_name":       agency,
+            "total_permits":     total_p,
             "conflicts_resolved": resolved_c,
-            "active_digs": active_p,
-            "complaints_count": total_comp,
-            "complaints_resolved": resolved_comp,
-            "compliance_score": round(compliance, 1)
+            "active_digs":       active_p,
+            "complaints_count":  total_comp,
+            "complaints_resolved": resolv_comp,
+            "compliance_score":  round(compliance, 1),
         })
-        
-    # Sort leaderboard by compliance score descending
+
+    # --- 5. Sort by compliance score, then assign ranks ---------------------------
     leaderboard.sort(key=lambda x: x["compliance_score"], reverse=True)
-    
-    # Assign ranks
-    ranked_leaderboard = []
-    for idx, item in enumerate(leaderboard):
-        ranked_leaderboard.append(
-            UtilityLeaderboardItem(
-                rank=idx + 1,
-                agency_name=item["agency_name"],
-                total_permits=item["total_permits"],
-                conflicts_resolved=item["conflicts_resolved"],
-                active_digs=item["active_digs"],
-                complaints_count=item["complaints_count"],
-                complaints_resolved=item["complaints_resolved"],
-                compliance_score=item["compliance_score"]
-            )
-        )
-        
-    return ranked_leaderboard
+
+    return [
+        UtilityLeaderboardItem(rank=idx + 1, **item)
+        for idx, item in enumerate(leaderboard)
+    ]
