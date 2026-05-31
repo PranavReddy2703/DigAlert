@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from backend.database import engine, Base
-from backend.routers import auth, permits, complaints, analytics
+from backend.routers import auth, permits, complaints, analytics, notifications
 
 # Create all database tables on startup
 Base.metadata.create_all(bind=engine)
@@ -47,6 +47,7 @@ app.include_router(auth.router)
 app.include_router(permits.router)
 app.include_router(complaints.router)
 app.include_router(analytics.router)
+app.include_router(notifications.router)
 
 
 @app.get("/")

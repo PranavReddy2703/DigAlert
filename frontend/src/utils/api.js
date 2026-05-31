@@ -133,4 +133,23 @@ export const analyticsAPI = {
   },
 };
 
+export const notificationsAPI = {
+  list: async () => {
+    const response = await api.get('/api/notifications');
+    return response.data;
+  },
+  markRead: async (id) => {
+    const response = await api.post(`/api/notifications/${id}/read`);
+    return response.data;
+  },
+  markAllRead: async () => {
+    const response = await api.post('/api/notifications/read-all');
+    return response.data;
+  },
+  delete: async (id) => {
+    const response = await api.delete(`/api/notifications/${id}`);
+    return response.data;
+  },
+};
+
 export default api;

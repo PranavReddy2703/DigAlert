@@ -123,3 +123,21 @@ class AuditLog(Base):
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     permit = relationship("Permit", back_populates="audit_logs")
+
+
+class Notification(Base):
+    __tablename__ = "notifications"
+
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    message = Column(String, nullable=False)
+    read = Column(Boolean, default=False)
+    recipient_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    recipient_role = Column(String, nullable=True)  # ADMIN, UTILITY, CITIZEN
+    recipient_agency = Column(String, nullable=True)  # e.g. Airtel, BSNL
+    permit_id = Column(Integer, ForeignKey("permits.id"), nullable=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+    # Relationships
+    recipient = relationship("User", foreign_keys=[recipient_id])
+    permit = relationship("Permit", foreign_keys=[permit_id])
