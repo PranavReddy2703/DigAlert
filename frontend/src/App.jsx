@@ -12,12 +12,14 @@ import TrackComplaint from './pages/Citizen/TrackComplaint';
 // Utility Portal Pages
 import UtilityDashboard from './pages/Utility/Dashboard';
 import ApplyPermit from './pages/Utility/ApplyPermit';
+import PermitTracker from './pages/Utility/PermitTracker';
 
 // Admin Portal Pages
 import AdminDashboard from './pages/Admin/Dashboard';
 import PermitApprovals from './pages/Admin/PermitApprovals';
 import ConflictManager from './pages/Admin/ConflictManager';
 import ComplaintsList from './pages/Admin/ComplaintsList';
+import RestorationVerification from './pages/Admin/RestorationVerification';
 
 // Protected Route Guard
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -102,6 +104,13 @@ function App() {
               </Layout>
             </ProtectedRoute>
           } />
+          <Route path="/admin/verifications" element={
+            <ProtectedRoute allowedRoles={['ADMIN']}>
+              <Layout>
+                <RestorationVerification />
+              </Layout>
+            </ProtectedRoute>
+          } />
           <Route path="/admin/conflicts" element={
             <ProtectedRoute allowedRoles={['ADMIN']}>
               <Layout>
@@ -113,6 +122,15 @@ function App() {
             <ProtectedRoute allowedRoles={['ADMIN']}>
               <Layout>
                 <ComplaintsList />
+              </Layout>
+            </ProtectedRoute>
+          } />
+
+          {/* Shared Permit Tracker Route */}
+          <Route path="/tracker" element={
+            <ProtectedRoute allowedRoles={['UTILITY', 'ADMIN']}>
+              <Layout>
+                <PermitTracker />
               </Layout>
             </ProtectedRoute>
           } />

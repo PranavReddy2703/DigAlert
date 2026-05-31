@@ -1,18 +1,24 @@
 import datetime
 from sqlalchemy.orm import Session
 from backend.database import SessionLocal, Base, engine
-from backend.models import User, RoadSegment, Permit, Clash, Complaint
+from backend.models import User, RoadSegment, Permit, Clash, Complaint, AuditLog
 from backend.auth import get_password_hash
 from backend.clash_engine import check_clash_for_permit
 
 
 def seed_data():
-    # Ensure tables are created
+    # Force schema refresh by dropping all existing tables
+    print("Dropping all existing database tables...")
+    Base.metadata.drop_all(bind=engine)
+    
+    # Ensure tables are created with the latest SQLAlchemy schemas
+    print("Recreating database schemas...")
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
 
     # 1. Clean existing records
     print("Cleaning database...")
+    db.query(AuditLog).delete()
     db.query(Clash).delete()
     db.query(Complaint).delete()
     db.query(Permit).delete()
@@ -161,12 +167,18 @@ def seed_data():
         description="Upgraded legacy copper core to fiber-ring lines for defense and central exchange operations.",
         utility_id=user_map["bsnl"].id,
         agency_name="BSNL",
-        status="COMPLETED",
+        status="EXCAVATION_COMPLETED",
         wkt_geometry="LINESTRING(78.4720 17.4380, 78.4750 17.4400)",
         depth_meters=0.6,
         work_type="TELECOM",
         start_date=datetime.date(2026, 4, 1),
-        end_date=datetime.date(2026, 4, 20)
+        end_date=datetime.date(2026, 4, 20),
+        authorized_at=datetime.datetime.utcnow() - datetime.timedelta(days=15),
+        authorized_by="admin",
+        restoration_deadline=datetime.date(2026, 4, 27),
+        completed_at=datetime.datetime.utcnow() - datetime.timedelta(days=5),
+        completed_by="bsnl",
+        completion_notes="Copper migration completed successfully. Backfill operations done. Ready for asphalt tarring."
     )
     db.add(p_bsnl)
     db.commit()
@@ -206,6 +218,97 @@ def seed_data():
     db.add(p_violator)
     db.commit()
     db.refresh(p_violator)
+
+    # 4.7 Approved HMWSSB permit (Awaiting road cut authorization)
+    p_approved_hmwssb = Permit(
+        title="Banjara Hills Pipeline Maintenance Grid Link",
+        description="Awaiting road cut clearance from GHMC Central office to start pipe refurbishing.",
+        utility_id=user_map["hmwssb"].id,
+        agency_name="HMWSSB",
+        status="APPROVED",
+        wkt_geometry="LINESTRING(78.4350 17.4120, 78.4410 17.4150)",
+        depth_meters=1.1,
+        work_type="WATER",
+        start_date=datetime.date(2026, 6, 10),
+        end_date=datetime.date(2026, 6, 25)
+    )
+    db.add(p_approved_hmwssb)
+    db.commit()
+    db.refresh(p_approved_hmwssb)
+
+    # 4.8 Authorized Airtel permit (Ready to start excavation)
+    p_auth_airtel = Permit(
+        title="Madhapur Fiber Ring Phase 2 Underground Link",
+        description="Airtel premium high-speed fiber ring link connection for financial sector offices.",
+        utility_id=user_map["airtel"].id,
+        agency_name="Airtel",
+        status="AUTHORIZED_EXCAVATION",
+        wkt_geometry="LINESTRING(78.3810 17.4420, 78.3840 17.4450)",
+        depth_meters=0.5,
+        work_type="TELECOM",
+        start_date=datetime.date(2026, 6, 5),
+        end_date=datetime.date(2026, 6, 20),
+        authorized_at=datetime.datetime.utcnow() - datetime.timedelta(days=1),
+        authorized_by="admin",
+        restoration_deadline=datetime.date(2026, 6, 20)
+    )
+    db.add(p_auth_airtel)
+    db.commit()
+    db.refresh(p_auth_airtel)
+
+    # 4.9 Road Restored BSNL permit (Completed excavation lifecycle)
+    p_restored_bsnl = Permit(
+        title="Koti Telephone Exchange Copper Migration Link",
+        description="Legacy network copper cores successfully converted to fiber ring. Backfill and concrete tarring cleared.",
+        utility_id=user_map["bsnl"].id,
+        agency_name="BSNL",
+        status="ROAD_RESTORED",
+        wkt_geometry="LINESTRING(78.4810 17.3820, 78.4840 17.3850)",
+        depth_meters=0.6,
+        work_type="TELECOM",
+        start_date=datetime.date(2026, 3, 1),
+        end_date=datetime.date(2026, 3, 20),
+        authorized_at=datetime.datetime.utcnow() - datetime.timedelta(days=90),
+        authorized_by="admin",
+        restoration_deadline=datetime.date(2026, 3, 27),
+        completed_at=datetime.datetime.utcnow() - datetime.timedelta(days=70),
+        completed_by="bsnl",
+        completion_notes="Copper migration completed, road compacted.",
+        restoration_verified_at=datetime.datetime.utcnow() - datetime.timedelta(days=68),
+        restoration_verified_by="admin",
+        restoration_remarks="Road restored and verified by inspector."
+    )
+    db.add(p_restored_bsnl)
+    db.commit()
+    db.refresh(p_restored_bsnl)
+
+    # 4.10 Project Closed TSSPDCL permit
+    p_closed_tsspdcl = Permit(
+        title="Secunderabad Metro Station Cable Laying",
+        description="High tension cabling works finished, road restored and verified, and project closed officially by GHMC.",
+        utility_id=user_map["tsspdcl"].id,
+        agency_name="TSSPDCL",
+        status="PROJECT_CLOSED",
+        wkt_geometry="LINESTRING(78.5010 17.4420, 78.5040 17.4450)",
+        depth_meters=1.0,
+        work_type="POWER",
+        start_date=datetime.date(2026, 2, 1),
+        end_date=datetime.date(2026, 2, 28),
+        authorized_at=datetime.datetime.utcnow() - datetime.timedelta(days=120),
+        authorized_by="admin",
+        restoration_deadline=datetime.date(2026, 3, 7),
+        completed_at=datetime.datetime.utcnow() - datetime.timedelta(days=100),
+        completed_by="tsspdcl",
+        completion_notes="Power cabling completed, grid synchronized, trench backfilled.",
+        restoration_verified_at=datetime.datetime.utcnow() - datetime.timedelta(days=95),
+        restoration_verified_by="admin",
+        restoration_remarks="Trench filled, concrete layered, asphalt smooth and level.",
+        closed_at=datetime.datetime.utcnow() - datetime.timedelta(days=90),
+        closed_by="admin"
+    )
+    db.add(p_closed_tsspdcl)
+    db.commit()
+    db.refresh(p_closed_tsspdcl)
 
     # 5. Run Clash engine to populate Clash tables automatically!
     print("Running clash engine on submitted permits...")
@@ -276,6 +379,104 @@ def seed_data():
     db.commit()
 
     print("Database seeding completed successfully!")
+    
+    # 7. Seed Audit Logs for all permits to make timelines realistic
+    print("Seeding audit logs...")
+    all_permits = db.query(Permit).all()
+    for p in all_permits:
+        # Every permit has a submitted log
+        db.add(AuditLog(
+            permit_id=p.id,
+            event_type="Permit Submitted",
+            description=f"Excavation permit request registered in GHMC central grid by {p.agency_name} (User: {p.agency_name.lower() if p.agency_name != 'Utility' else 'admin'}).",
+            created_at=datetime.datetime.combine(p.created_at.date() if p.created_at else datetime.date.today(), datetime.time(9, 0))
+        ))
+        
+        # Clashing permits have clash logs
+        clashes = db.query(Clash).filter(Clash.permit_id == p.id).all()
+        if len(clashes) > 0:
+            db.add(AuditLog(
+                permit_id=p.id,
+                event_type="Clash Detected",
+                description=f"Geospatial check scan flagged {len(clashes)} conflict(s) with road safety or other utility schedules.",
+                created_at=datetime.datetime.combine(p.created_at.date() if p.created_at else datetime.date.today(), datetime.time(9, 15))
+            ))
+            
+            # If resolved, add resolved and approved log
+            if p.status not in ["CLASH_DETECTED", "SUBMITTED"]:
+                db.add(AuditLog(
+                    permit_id=p.id,
+                    event_type="Clash Resolved",
+                    description=f"GHMC Admin 'admin' reviewed spatial overlapping and approved co-digging joint alignment.",
+                    created_at=datetime.datetime.combine(p.created_at.date() if p.created_at else datetime.date.today(), datetime.time(14, 0))
+                ))
+                db.add(AuditLog(
+                    permit_id=p.id,
+                    event_type="Approved By GHMC",
+                    description=f"Permit approved by GHMC Admin 'admin'. Excavation schedule cleared.",
+                    created_at=datetime.datetime.combine(p.created_at.date() if p.created_at else datetime.date.today(), datetime.time(14, 5))
+                ))
+        elif p.status not in ["SUBMITTED", "PENDING_REVIEW"]:
+            # Standard approved / active permits get standard approved log
+            db.add(AuditLog(
+                permit_id=p.id,
+                event_type="Approved By GHMC",
+                description=f"Permit approved by GHMC Admin 'admin'. Excavation schedule cleared.",
+                created_at=datetime.datetime.combine(p.created_at.date() if p.created_at else datetime.date.today(), datetime.time(14, 0))
+            ))
+
+        # Authorized permits get authorization log
+        if p.status in ["AUTHORIZED_EXCAVATION", "IN_PROGRESS", "EXCAVATION_COMPLETED", "ROAD_RESTORED", "PROJECT_CLOSED"]:
+            auth_time = p.authorized_at or (datetime.datetime.utcnow() - datetime.timedelta(days=5))
+            db.add(AuditLog(
+                permit_id=p.id,
+                event_type="Excavation Authorized",
+                description=f"Excavation authorized by GHMC Administrator 'admin'. Restoration deadline scheduled for {p.restoration_deadline or p.end_date}.",
+                created_at=auth_time
+            ))
+
+        # In-progress permits get start excavation log
+        if p.status in ["IN_PROGRESS", "EXCAVATION_COMPLETED", "ROAD_RESTORED", "PROJECT_CLOSED"]:
+            auth_t = p.authorized_at or (datetime.datetime.utcnow() - datetime.timedelta(days=5))
+            start_time = (auth_t + datetime.timedelta(hours=2))
+            db.add(AuditLog(
+                permit_id=p.id,
+                event_type="Excavation Started",
+                description=f"Physical excavation and road cutting initiated on-site by {p.agency_name} engineers.",
+                created_at=start_time
+            ))
+
+        # Completed permits get completed log
+        if p.status in ["EXCAVATION_COMPLETED", "ROAD_RESTORED", "PROJECT_CLOSED"]:
+            comp_time = datetime.datetime.combine(p.end_date, datetime.time(17, 0))
+            db.add(AuditLog(
+                permit_id=p.id,
+                event_type="Excavation Completed",
+                description=f"Physical excavation completed on-site. Trench refilled/backfilled. Notes: {p.completion_notes or 'Work finished successfully.'}",
+                created_at=comp_time
+            ))
+
+        # Road restored permits get road restored log
+        if p.status in ["ROAD_RESTORED", "PROJECT_CLOSED"]:
+            restore_time = datetime.datetime.combine(p.end_date, datetime.time(12, 0)) + datetime.timedelta(days=2)
+            db.add(AuditLog(
+                permit_id=p.id,
+                event_type="Restoration Verified",
+                description=f"Road restoration verified and approved by GHMC Admin 'admin'. Remarks: {p.restoration_remarks or 'Verified clean and level.'}",
+                created_at=restore_time
+            ))
+
+        # Closed projects get closed log
+        if p.status == "PROJECT_CLOSED":
+            close_time = datetime.datetime.combine(p.end_date, datetime.time(16, 0)) + datetime.timedelta(days=3)
+            db.add(AuditLog(
+                permit_id=p.id,
+                event_type="Project Closed",
+                description=f"Project officially closed by GHMC Admin 'admin'. Central road safety grid cleared.",
+                created_at=close_time
+            ))
+
+    db.commit()
     db.close()
 
 

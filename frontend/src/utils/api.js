@@ -72,6 +72,30 @@ export const permitsAPI = {
     const response = await api.post(`/api/permits/${id}/resolve-clash`);
     return response.data;
   },
+  authorize: async (id, data = {}) => {
+    const response = await api.post(`/api/permits/${id}/authorize`, data);
+    return response.data;
+  },
+  startExcavation: async (id) => {
+    const response = await api.post(`/api/permits/${id}/start-excavation`);
+    return response.data;
+  },
+  completeExcavation: async (id, data = {}) => {
+    const response = await api.post(`/api/permits/${id}/complete`, data);
+    return response.data;
+  },
+  verifyRestoration: async (id, data = {}) => {
+    const response = await api.post(`/api/permits/${id}/verify-restoration`, data);
+    return response.data;
+  },
+  requestRework: async (id, data = {}) => {
+    const response = await api.post(`/api/permits/${id}/request-rework`, data);
+    return response.data;
+  },
+  closeProject: async (id) => {
+    const response = await api.post(`/api/permits/${id}/close`);
+    return response.data;
+  },
 };
 
 export const complaintsAPI = {

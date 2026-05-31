@@ -23,6 +23,7 @@ const ApplyPermit = () => {
   const [precheckClashes, setPrecheckClashes] = useState([]);
   const [hasChecked, setHasChecked] = useState(false);
   const [checking, setChecking] = useState(false);
+  const [createdPermit, setCreatedPermit] = useState(null);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -85,12 +86,88 @@ const ApplyPermit = () => {
     }
   };
 
+  const handlePrintReceipt = (permit) => {
+    if (!permit) return;
+    const printWindow = window.open('', '_blank', 'width=800,height=800');
+    const agencyPrefix = permit.agency_name ? permit.agency_name.toUpperCase().substring(0, 3) : 'UTI';
+    const permitCode = `DA-${agencyPrefix}-${String(permit.id).padStart(5, '0')}`;
+    
+    const html = `
+      <html>
+        <head>
+          <title>Permit Receipt - ${permitCode}</title>
+          <style>
+            body { font-family: sans-serif; padding: 40px; color: #333; line-height: 1.6; }
+            .border-box { border: 2px solid #0284c7; padding: 30px; border-radius: 8px; }
+            .header { border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+            .logo { font-size: 20px; font-weight: bold; color: #0284c7; }
+            .code { font-size: 24px; font-weight: bold; font-family: monospace; color: #0f172a; margin: 15px 0; background: #f1f5f9; padding: 10px; border-radius: 4px; display: inline-block; }
+            h1 { font-size: 22px; margin-top: 0; }
+            table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+            td { padding: 10px; border: 1px solid #e2e8f0; font-size: 14px; }
+            .title-td { font-weight: bold; width: 150px; background: #f8fafc; }
+            .footer { margin-top: 40px; font-size: 12px; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 15px; text-align: center; }
+          </style>
+        </head>
+        <body>
+          <div class="border-box">
+            <div class="header">
+              <span class="logo">DIGALERT INTEL</span>
+              <span style="font-weight: bold; color: #059669;">SUBMITTED</span>
+            </div>
+            <h1>Excavation Permit Receipt</h1>
+            <p>Your excavation permit application has been registered successfully. Use the permit reference code below to track administrative review and spatial clash statuses.</p>
+            
+            <div style="text-align: center;">
+              <div class="code">${permitCode}</div>
+            </div>
+
+            <table>
+              <tr>
+                <td class="title-td">Permit ID</td>
+                <td>#${permit.id}</td>
+              </tr>
+              <tr>
+                <td class="title-td">Project Title</td>
+                <td><strong>${permit.title}</strong></td>
+              </tr>
+              <tr>
+                <td class="title-td">Agency Name</td>
+                <td>${permit.agency_name}</td>
+              </tr>
+              <tr>
+                <td class="title-td">Category</td>
+                <td>${permit.work_type}</td>
+              </tr>
+              <tr>
+                <td class="title-td">Schedule</td>
+                <td>${permit.start_date} to ${permit.end_date}</td>
+              </tr>
+              <tr>
+                <td class="title-td">Depth</td>
+                <td>${permit.depth_meters} meters</td>
+              </tr>
+            </table>
+
+            <div class="footer">
+              <p>Hyderabad Municipal Corporation (GHMC) • DigAlert Smart City Grid</p>
+              <p>Generated on: ${new Date().toLocaleString()}</p>
+            </div>
+          </div>
+          <script>window.onload = function() { window.print(); }</script>
+        </body>
+      </html>
+    `;
+    printWindow.document.write(html);
+    printWindow.document.close();
+  };
+
   const handleFinalSubmit = async () => {
     setSubmitLoading(true);
     setError('');
     try {
       const wkt = getWKTString();
-      await permitsAPI.create({
+      const response = await permitsAPI.create({
         title,
         description,
         wkt_geometry: wkt,
@@ -99,7 +176,7 @@ const ApplyPermit = () => {
         start_date: startDate,
         end_date: endDate
       });
-      navigate('/utility');
+      setCreatedPermit(response);
     } catch (err) {
       setError('Permit creation failed. Please verify submission data.');
     } finally {
@@ -396,6 +473,58 @@ const ApplyPermit = () => {
               </div>
             </div>
           )}
+        </div>
+      )}
+      {/* SUCCESS MODAL FOR GENERATED CODE */}
+      {createdPermit && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
+          <div className="glass-panel max-w-md w-full p-6 border border-gray-800 space-y-6 text-center shadow-aquaGlow animate-fade-in">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-950/40 text-primaryEmerald border border-emerald-900/30 emerald-glow">
+              <CheckCircle className="h-8 w-8 animate-pulse" />
+            </div>
+            
+            <div className="space-y-2">
+              <h3 className="text-xl font-bold text-white tracking-wide">Permit Application Submitted</h3>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                Your permit request has been registered in the GHMC central grid. Your unique identification permit code is generated below:
+              </p>
+            </div>
+
+            {/* Generated Permit Code */}
+            <div className="bg-slate-950/80 px-4 py-3 rounded-xl border border-gray-800 text-lg font-extrabold tracking-widest text-primaryAqua font-mono select-all">
+              {`DA-${createdPermit.agency_name ? createdPermit.agency_name.toUpperCase().substring(0,3) : 'UTI'}-${String(createdPermit.id).padStart(5, '0')}`}
+            </div>
+
+            <div className="border-t border-gray-850 pt-4 space-y-2 text-xs text-left text-gray-400">
+              <div className="flex justify-between">
+                <span className="font-semibold">Project Title:</span>
+                <span className="text-white truncate max-w-[200px]">{createdPermit.title}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold">Work Category:</span>
+                <span className="text-white uppercase">{createdPermit.work_type}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold">Status Code:</span>
+                <span className="text-primaryEmerald uppercase font-bold">{createdPermit.status}</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 pt-2">
+              <button
+                onClick={() => handlePrintReceipt(createdPermit)}
+                className="w-full rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-700 py-2.5 text-xs font-bold text-primaryAqua hover:text-white transition duration-300"
+              >
+                Print Registration Receipt
+              </button>
+              <button
+                onClick={() => navigate('/utility')}
+                className="w-full rounded-xl bg-gradient-to-r from-primaryAqua to-primaryEmerald py-2.5 text-xs font-bold text-black hover:opacity-90 shadow-aquaGlow transition duration-300"
+              >
+                Go to Utility Dashboard
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

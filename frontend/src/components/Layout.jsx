@@ -39,7 +39,9 @@ const Layout = ({ children }) => {
         { label: 'Control Panel', path: '/admin', icon: LayoutDashboard },
         { label: 'Active Hyderabad Map', path: '/citizen', icon: Map },
         { label: 'Permit Approvals', path: '/admin/permits', icon: ClipboardCheck },
+        { label: 'Restoration Center', path: '/admin/verifications', icon: ClipboardCheck },
         { label: 'Conflict Manager', path: '/admin/conflicts', icon: ShieldAlert },
+        { label: 'Permit Tracker', path: '/tracker', icon: ClipboardCheck },
         { label: 'Citizen Complaints', path: '/admin/complaints', icon: AlertOctagon },
       ];
     }
@@ -49,6 +51,7 @@ const Layout = ({ children }) => {
         { label: 'Utility Dashboard', path: '/utility', icon: LayoutDashboard },
         { label: 'Live Dig Map', path: '/citizen', icon: Map },
         { label: 'Apply Permit', path: '/utility/apply', icon: FilePlus },
+        { label: 'Permit Tracker', path: '/tracker', icon: ClipboardCheck },
       ];
     }
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { permitsAPI } from '../../utils/api';
 import HyderabadMap from '../../components/HyderabadMap';
-import { ShieldAlert, CheckCircle, XCircle, Info, Calendar, Layers, Map } from 'lucide-react';
+import { ShieldAlert, CheckCircle, XCircle, Info, Calendar, Layers, Map, RefreshCw } from 'lucide-react';
 
 const PermitApprovals = () => {
   const [permits, setPermits] = useState([]);
@@ -9,12 +9,15 @@ const PermitApprovals = () => {
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  // Dual-tab queue center states
+  const [activeTab, setActiveTab] = useState('applications'); // 'applications' or 'verifications'
+  const [remarks, setRemarks] = useState('');
 
   const loadPermitQueue = async () => {
     setLoading(true);
     try {
       const data = await permitsAPI.list();
-      // Filter permits that require action (SUBMITTED, PENDING_REVIEW, CLASH_DETECTED)
       setPermits(data);
     } catch (err) {
       console.error("Failed to load permit queue", err);
@@ -50,6 +53,64 @@ const PermitApprovals = () => {
     }
   };
 
+  const handleAuthorizeExcavation = async (id) => {
+    setActionLoading(true);
+    setError('');
+    try {
+      await permitsAPI.authorize(id);
+      setSelectedPermit(null);
+      await loadPermitQueue();
+    } catch (err) {
+      setError('Excavation authorization failed. Please try again.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleVerifyRestoration = async (id) => {
+    setActionLoading(true);
+    setError('');
+    try {
+      await permitsAPI.verifyRestoration(id, { remarks });
+      setRemarks('');
+      setSelectedPermit(null);
+      await loadPermitQueue();
+    } catch (err) {
+      setError('Verification failed. Please try again.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleRequestRework = async (id) => {
+    setActionLoading(true);
+    setError('');
+    try {
+      await permitsAPI.requestRework(id, { remarks });
+      setRemarks('');
+      setSelectedPermit(null);
+      await loadPermitQueue();
+    } catch (err) {
+      setError('Rework request failed. Please try again.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleCloseProject = async (id) => {
+    setActionLoading(true);
+    setError('');
+    try {
+      await permitsAPI.closeProject(id);
+      setSelectedPermit(null);
+      await loadPermitQueue();
+    } catch (err) {
+      setError('Project closure failed. Please try again.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
   const handleApproveCoDig = async (id) => {
     setActionLoading(true);
     setError('');
@@ -67,54 +128,110 @@ const PermitApprovals = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-white tracking-wide">Permit Approval Workflows</h2>
-        <p className="text-xs text-gray-400 mt-1">Review incoming road cutting applications, check lock-in road protections, and authorize or reject work schedules.</p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-panel rounded-2xl p-6 border border-gray-800">
+        <div>
+          <h2 className="text-2xl font-bold text-white tracking-wide">Permit Approval Workflows</h2>
+          <p className="text-xs text-gray-400 mt-1">Review incoming road cutting applications, check lock-in road protections, and authorize or reject work schedules.</p>
+        </div>
+        <button
+          onClick={loadPermitQueue}
+          className="flex items-center gap-1.5 rounded-xl bg-gray-900 hover:bg-gray-800 border border-gray-800 px-4 py-2.5 text-xs font-bold text-gray-300 transition duration-300 shrink-0"
+        >
+          <RefreshCw className="h-4 w-4 text-primaryAqua" />
+          Sync Queue Feed
+        </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* Permits Queue Table */}
         <div className="lg:col-span-2 glass-panel rounded-2xl p-6 border border-gray-800 space-y-4 h-[650px] overflow-y-auto">
-          <h3 className="text-sm font-bold text-white uppercase tracking-wider">Excavation Permit Queue ({permits.length})</h3>
-          
+          {/* Tab Switcher */}
+          <div className="flex border-b border-gray-800 mb-2">
+            <button
+              onClick={() => { setActiveTab('applications'); setSelectedPermit(null); }}
+              className={`flex-1 pb-3 text-xs font-bold uppercase tracking-wider transition duration-300 border-b-2 ${
+                activeTab === 'applications' 
+                  ? 'text-primaryAqua border-primaryAqua' 
+                  : 'text-gray-400 border-transparent hover:text-white'
+              }`}
+            >
+              Permit Applications Queue ({permits.filter(p => ['SUBMITTED', 'PENDING_REVIEW', 'CLASH_DETECTED', 'APPROVED'].includes(p.status)).length})
+            </button>
+            <button
+              onClick={() => { setActiveTab('verifications'); setSelectedPermit(null); }}
+              className={`flex-1 pb-3 text-xs font-bold uppercase tracking-wider transition duration-300 border-b-2 ${
+                activeTab === 'verifications' 
+                  ? 'text-warningYellow border-warningYellow' 
+                  : 'text-gray-400 border-transparent hover:text-white'
+              }`}
+            >
+              Restoration Verification Queue ({permits.filter(p => ['EXCAVATION_COMPLETED', 'ROAD_RESTORED'].includes(p.status)).length})
+            </button>
+          </div>
+
           {loading ? (
             <div className="h-40 flex items-center justify-center">
               <div className="h-8 w-8 animate-spin rounded-full border-4 border-t-primaryAqua border-gray-800"></div>
             </div>
-          ) : permits.length === 0 ? (
-            <p className="text-xs text-gray-505 text-center py-20">No pending permit submissions found.</p>
+          ) : permits.filter(permit => {
+              if (activeTab === 'applications') {
+                return ['SUBMITTED', 'PENDING_REVIEW', 'CLASH_DETECTED', 'APPROVED'].includes(permit.status);
+              } else {
+                return ['EXCAVATION_COMPLETED', 'ROAD_RESTORED'].includes(permit.status);
+              }
+            }).length === 0 ? (
+            <p className="text-xs text-gray-500 text-center py-20">
+              {activeTab === 'applications' 
+                ? 'No pending permit submissions found.' 
+                : 'No completed excavations awaiting restoration verification.'}
+            </p>
           ) : (
             <div className="space-y-3">
-              {permits.map((permit) => (
-                <div
-                  key={permit.id}
-                  onClick={() => handleSelectPermit(permit)}
-                  className={`rounded-xl border p-4 space-y-2 cursor-pointer transition-all duration-300 ${
-                    selectedPermit?.id === permit.id 
-                      ? 'bg-gray-800/40 border-primaryAqua shadow-aquaGlow' 
-                      : 'bg-gray-900/10 border-gray-800 hover:border-gray-700'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[9px] uppercase font-bold text-gray-500 font-mono">Permit Ref #{permit.id}</span>
-                    <span className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded ${
-                      permit.status === 'CLASH_DETECTED' ? 'bg-red-950/50 text-alertRed border border-red-900/30 font-extrabold animate-pulse' :
-                      permit.status === 'PENDING_REVIEW' ? 'bg-yellow-950/50 text-warningYellow border border-yellow-900/30' :
-                      permit.status === 'APPROVED' ? 'bg-emerald-950/50 text-primaryEmerald' :
-                      'bg-gray-850 text-gray-300'
-                    }`}>
-                      {permit.status}
-                    </span>
-                  </div>
+              {permits
+                .filter(permit => {
+                  if (activeTab === 'applications') {
+                    return ['SUBMITTED', 'PENDING_REVIEW', 'CLASH_DETECTED', 'APPROVED'].includes(permit.status);
+                  } else {
+                    return ['EXCAVATION_COMPLETED', 'ROAD_RESTORED'].includes(permit.status);
+                  }
+                })
+                .map((permit) => (
+                  <div
+                    key={permit.id}
+                    onClick={() => handleSelectPermit(permit)}
+                    className={`rounded-xl border p-4 space-y-2 cursor-pointer transition-all duration-300 ${
+                      selectedPermit?.id === permit.id 
+                        ? 'bg-gray-800/40 border-primaryAqua shadow-aquaGlow' 
+                        : 'bg-gray-900/10 border-gray-800 hover:border-gray-700'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[9px] uppercase font-bold text-gray-500 font-mono">Permit Ref #{permit.id}</span>
+                      <span className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded ${
+                        permit.status === 'CLASH_DETECTED' ? 'bg-red-950/50 text-alertRed border border-red-900/30 font-extrabold animate-pulse' :
+                        permit.status === 'PENDING_REVIEW' ? 'bg-yellow-950/50 text-warningYellow border border-yellow-900/30' :
+                        permit.status === 'APPROVED' ? 'bg-cyan-950/50 text-primaryAqua border border-cyan-900/30 font-bold' :
+                        permit.status === 'AUTHORIZED_EXCAVATION' ? 'bg-purple-950/50 text-purple-400 border border-purple-900/30 font-bold shadow-[0_0_8px_rgba(147,51,234,0.2)]' :
+                        permit.status === 'IN_PROGRESS' ? 'bg-orange-950/50 text-orange-400 border border-orange-900/30 font-bold' :
+                        permit.status === 'EXCAVATION_COMPLETED' ? 'bg-yellow-950/50 text-warningYellow border border-yellow-900/30 font-bold' :
+                        permit.status === 'ROAD_RESTORED' ? 'bg-emerald-950/50 text-primaryEmerald border border-emerald-900/30 font-bold' :
+                        permit.status === 'PROJECT_CLOSED' ? 'bg-teal-950/50 text-teal-400 border border-teal-900/30 font-bold' :
+                        permit.status === 'COMPLETED' ? 'bg-emerald-950/50 text-primaryEmerald border border-emerald-900/30 font-bold' :
+                        permit.status === 'REJECTED' ? 'bg-red-950/50 text-alertRed border border-red-900/30 font-bold' :
+                        'bg-gray-850 text-gray-300'
+                      }`}>
+                        {permit.status}
+                      </span>
+                    </div>
 
-                  <h4 className="text-sm font-bold text-white leading-snug">{permit.title}</h4>
-                  
-                  <div className="flex items-center justify-between text-[10px] text-gray-400">
-                    <p className="font-semibold text-primaryEmerald">Agency: {permit.agency_name}</p>
-                    <p className="font-medium">Dates: {permit.start_date} to {permit.end_date}</p>
+                    <h4 className="text-sm font-bold text-white leading-snug">{permit.title}</h4>
+                    
+                    <div className="flex items-center justify-between text-[10px] text-gray-400">
+                      <p className="font-semibold text-primaryEmerald">Agency: {permit.agency_name}</p>
+                      <p className="font-medium">Dates: {permit.start_date} to {permit.end_date}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           )}
         </div>
@@ -134,7 +251,21 @@ const PermitApprovals = () => {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-[9px] uppercase font-bold text-primaryAqua font-mono">ref #{selectedPermit.id}</span>
-                  <span className="text-[10px] uppercase font-bold text-primaryEmerald">{selectedPermit.status}</span>
+                  <span className={`text-[10px] uppercase font-bold px-2.5 py-0.5 rounded ${
+                    selectedPermit.status === 'CLASH_DETECTED' ? 'bg-red-950/50 text-alertRed border border-red-900/30 font-extrabold animate-pulse' :
+                    selectedPermit.status === 'PENDING_REVIEW' ? 'bg-yellow-950/50 text-warningYellow border border-yellow-900/30 font-semibold' :
+                    selectedPermit.status === 'APPROVED' ? 'bg-cyan-950/50 text-primaryAqua border border-cyan-900/30 font-semibold' :
+                    selectedPermit.status === 'AUTHORIZED_EXCAVATION' ? 'bg-purple-950/50 text-purple-400 border border-purple-900/30 font-semibold shadow-[0_0_8px_rgba(147,51,234,0.3)]' :
+                    selectedPermit.status === 'IN_PROGRESS' ? 'bg-orange-950/50 text-orange-400 border border-orange-900/30 font-semibold' :
+                    selectedPermit.status === 'EXCAVATION_COMPLETED' ? 'bg-yellow-950/50 text-warningYellow border border-yellow-900/30 font-semibold' :
+                    selectedPermit.status === 'ROAD_RESTORED' ? 'bg-emerald-950/50 text-primaryEmerald border border-emerald-900/30 font-semibold' :
+                    selectedPermit.status === 'PROJECT_CLOSED' ? 'bg-teal-950/50 text-teal-400 border border-teal-900/30 font-semibold' :
+                    selectedPermit.status === 'COMPLETED' ? 'bg-emerald-950/50 text-primaryEmerald border border-emerald-900/30 font-semibold' :
+                    selectedPermit.status === 'REJECTED' ? 'bg-red-950/50 text-alertRed border border-red-900/30 font-semibold' :
+                    'bg-gray-850 text-gray-300'
+                  }`}>
+                    {selectedPermit.status}
+                  </span>
                 </div>
 
                 <div>
@@ -162,6 +293,60 @@ const PermitApprovals = () => {
                     <p className="max-w-[200px] truncate">Geometry (WKT): <span className="font-mono text-[10px] text-gray-500">{selectedPermit.wkt_geometry}</span></p>
                   </div>
                 </div>
+
+                {/* Restoration Verification Info */}
+                {['EXCAVATION_COMPLETED', 'ROAD_RESTORED', 'PROJECT_CLOSED'].includes(selectedPermit.status) && (
+                  <div className="rounded-xl border border-yellow-950/30 bg-yellow-950/5 p-4 space-y-3 border border-gray-800">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-warningYellow flex items-center gap-1.5">
+                      <CheckCircle className="h-4 w-4 text-warningYellow" />
+                      Excavation Completion Log
+                    </h4>
+                    <div className="space-y-1.5 text-xs text-gray-300">
+                      <p>Completed At: <span className="font-semibold text-white">{selectedPermit.completed_at ? new Date(selectedPermit.completed_at).toLocaleString() : 'N/A'}</span></p>
+                      <p>Completed By: <span className="font-semibold text-white">{selectedPermit.completed_by || 'N/A'}</span></p>
+                      <p>Completion Notes: <span className="font-semibold text-white">{selectedPermit.completion_notes || 'No notes provided.'}</span></p>
+                      {selectedPermit.restoration_deadline && (
+                        <p>Restoration Deadline: <span className="font-semibold text-white">{selectedPermit.restoration_deadline}</span></p>
+                      )}
+                    </div>
+                    {/* Mock Restoration Photo */}
+                    <div className="mt-3">
+                      <p className="text-[10px] uppercase font-bold text-gray-500 mb-1">On-Site Work Evidence</p>
+                      <img 
+                        src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=400&q=80" 
+                        alt="Excavation Evidence" 
+                        className="rounded-lg w-full h-32 object-cover border border-gray-800"
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {['ROAD_RESTORED', 'PROJECT_CLOSED'].includes(selectedPermit.status) && (
+                  <div className="rounded-xl border border-emerald-950/30 bg-emerald-950/5 p-4 space-y-2 border border-gray-800">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-primaryEmerald flex items-center gap-1.5">
+                      <CheckCircle className="h-4 w-4 text-primaryEmerald" />
+                      GHMC Verification Details
+                    </h4>
+                    <div className="space-y-1 text-xs text-gray-300">
+                      <p>Verified At: <span className="font-semibold text-white">{selectedPermit.restoration_verified_at ? new Date(selectedPermit.restoration_verified_at).toLocaleString() : 'N/A'}</span></p>
+                      <p>Verified By: <span className="font-semibold text-white">{selectedPermit.restoration_verified_by || 'N/A'}</span></p>
+                      <p>Remarks: <span className="font-semibold text-white">{selectedPermit.restoration_remarks || 'No remarks provided.'}</span></p>
+                    </div>
+                  </div>
+                )}
+
+                {selectedPermit.status === 'PROJECT_CLOSED' && (
+                  <div className="rounded-xl border border-teal-950/30 bg-teal-950/5 p-4 space-y-2 border border-gray-800">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-teal-400 flex items-center gap-1.5">
+                      <CheckCircle className="h-4 w-4 text-teal-400" />
+                      Project Closed
+                    </h4>
+                    <div className="space-y-1 text-xs text-gray-300">
+                      <p>Closed At: <span className="font-semibold text-white">{selectedPermit.closed_at ? new Date(selectedPermit.closed_at).toLocaleString() : 'N/A'}</span></p>
+                      <p>Closed By: <span className="font-semibold text-white">{selectedPermit.closed_by || 'N/A'}</span></p>
+                    </div>
+                  </div>
+                )}
 
                 {/* Display Clashes if flagged */}
                 {selectedPermit.clashes && selectedPermit.clashes.length > 0 && (
@@ -205,24 +390,89 @@ const PermitApprovals = () => {
                   </button>
                 )}
 
-                <div className="grid grid-cols-2 gap-2">
+                {/* Approve/Reject for review queue */}
+                {(selectedPermit.status === 'SUBMITTED' || selectedPermit.status === 'PENDING_REVIEW' || selectedPermit.status === 'CLASH_DETECTED') && (
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => handleUpdateStatus(selectedPermit.id, 'APPROVED')}
+                      disabled={actionLoading || selectedPermit.clashes.some(c => c.conflicting_permit_id < 0)} // lock out resurfaced completely
+                      className="rounded-xl bg-emerald-950/40 hover:bg-emerald-950/70 border border-emerald-900/40 py-2.5 text-xs font-bold text-primaryEmerald transition duration-300 flex items-center justify-center gap-1"
+                    >
+                      <CheckCircle className="h-3.5 w-3.5" />
+                      Approve Permit
+                    </button>
+                    <button
+                      onClick={() => handleUpdateStatus(selectedPermit.id, 'REJECTED')}
+                      disabled={actionLoading}
+                      className="rounded-xl bg-red-950/40 hover:bg-red-950/70 border border-red-900/40 py-2.5 text-xs font-bold text-alertRed transition duration-300 flex items-center justify-center gap-1"
+                    >
+                      <XCircle className="h-3.5 w-3.5" />
+                      Reject
+                    </button>
+                  </div>
+                )}
+
+                {/* Authorize Excavation for APPROVED permits */}
+                {selectedPermit.status === 'APPROVED' && (
                   <button
-                    onClick={() => handleUpdateStatus(selectedPermit.id, 'APPROVED')}
-                    disabled={actionLoading || selectedPermit.clashes.some(c => c.conflicting_permit_id < 0)} // lock out resurfaced completely
-                    className="rounded-xl bg-emerald-950/40 hover:bg-emerald-950/70 border border-emerald-900/40 py-2.5 text-xs font-bold text-primaryEmerald transition duration-300 flex items-center justify-center gap-1"
-                  >
-                    <CheckCircle className="h-3.5 w-3.5" />
-                    Authorize
-                  </button>
-                  <button
-                    onClick={() => handleUpdateStatus(selectedPermit.id, 'REJECTED')}
+                    onClick={() => handleAuthorizeExcavation(selectedPermit.id)}
                     disabled={actionLoading}
-                    className="rounded-xl bg-red-950/40 hover:bg-red-950/70 border border-red-900/40 py-2.5 text-xs font-bold text-alertRed transition duration-300 flex items-center justify-center gap-1"
+                    className="w-full rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 py-2.5 text-xs font-bold text-white shadow-[0_0_15px_rgba(147,51,234,0.4)] hover:shadow-[0_0_20px_rgba(147,51,234,0.6)] transition duration-300 flex items-center justify-center gap-1.5 border border-purple-500/30"
                   >
-                    <XCircle className="h-3.5 w-3.5" />
-                    Reject
+                    <CheckCircle className="h-4 w-4" />
+                    Authorize Excavation
                   </button>
-                </div>
+                )}
+
+                {/* Verification Actions for EXCAVATION_COMPLETED */}
+                {selectedPermit.status === 'EXCAVATION_COMPLETED' && (
+                  <div className="space-y-3">
+                    <div className="space-y-1.5">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Restoration Inspection Remarks</label>
+                      <textarea
+                        value={remarks}
+                        onChange={(e) => setRemarks(e.target.value)}
+                        placeholder="Provide details about road quality, restoration finish, or reason for rework..."
+                        className="w-full rounded-xl bg-gray-950 border border-gray-800 px-3 py-2 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-primaryAqua min-h-[60px]"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => handleVerifyRestoration(selectedPermit.id)}
+                        disabled={actionLoading}
+                        className="rounded-xl bg-emerald-950/40 hover:bg-emerald-950/70 border border-emerald-900/40 py-2.5 text-xs font-bold text-primaryEmerald transition duration-300 flex items-center justify-center gap-1 shadow-[0_0_10px_rgba(16,185,129,0.15)]"
+                      >
+                        <CheckCircle className="h-3.5 w-3.5" />
+                        Verify
+                      </button>
+                      <button
+                        onClick={() => handleRequestRework(selectedPermit.id)}
+                        disabled={actionLoading || !remarks.trim()}
+                        className={`rounded-xl py-2.5 text-xs font-bold transition duration-300 flex items-center justify-center gap-1 ${
+                          remarks.trim() 
+                            ? 'bg-red-950/40 hover:bg-red-950/70 border border-red-900/40 text-alertRed shadow-[0_0_10px_rgba(239,68,68,0.15)]'
+                            : 'bg-gray-900 border border-gray-800 text-gray-600 cursor-not-allowed'
+                        }`}
+                        title={!remarks.trim() ? "Remarks are required to request rework" : ""}
+                      >
+                        <XCircle className="h-3.5 w-3.5" />
+                        Request Rework
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Project Closure for ROAD_RESTORED */}
+                {selectedPermit.status === 'ROAD_RESTORED' && (
+                  <button
+                    onClick={() => handleCloseProject(selectedPermit.id)}
+                    disabled={actionLoading}
+                    className="w-full rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 py-2.5 text-xs font-bold text-white shadow-[0_0_15px_rgba(16,185,129,0.4)] hover:shadow-[0_0_20px_rgba(16,185,129,0.6)] transition duration-300 flex items-center justify-center gap-1.5 border border-emerald-500/30"
+                  >
+                    <CheckCircle className="h-4 w-4" />
+                    Close Project
+                  </button>
+                )}
 
                 <button
                   onClick={() => setSelectedPermit(null)}
