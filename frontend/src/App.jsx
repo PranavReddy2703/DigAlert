@@ -52,8 +52,7 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* Public Citizen map doesn't require login */}
-          <Route path="/" element={<Navigate to="/citizen" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/citizen" element={
             <Layout>
               <PublicMap />
@@ -136,7 +135,7 @@ function App() {
           } />
 
           {/* Fallback */}
-          <Route path="*" element={<Navigate to="/citizen" replace />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
     </AuthProvider>
