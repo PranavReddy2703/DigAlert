@@ -28,7 +28,7 @@ class ComplaintCreate(BaseModel):
     photo_url: Optional[str] = None
 
 class ComplaintUpdate(BaseModel):
-    status: str  # OPEN, ASSIGNED, RESOLVED
+    status: Optional[str] = None  # OPEN, ASSIGNED, RESOLVED
     agency_assigned: Optional[str] = None
 
 class ComplaintResponse(BaseModel):
@@ -206,11 +206,19 @@ def update_complaint(
                 detail="You can only resolve complaints assigned to your specific agency."
             )
             
-    complaint.status = data.status
-    if data.agency_assigned:
-        complaint.agency_assigned = data.agency_assigned
-        if complaint.status == "OPEN":
-            complaint.status = "ASSIGNED"
+    if data.status is not None:
+        complaint.status = data.status
+        
+    if data.agency_assigned is not None:
+        # Convert empty string to None if selected Unassigned
+        assigned = data.agency_assigned if data.agency_assigned != "" else None
+        complaint.agency_assigned = assigned
+        if assigned:
+            if complaint.status == "OPEN":
+                complaint.status = "ASSIGNED"
+        else:
+            if complaint.status == "ASSIGNED":
+                complaint.status = "OPEN"
             
     db.commit()
     db.refresh(complaint)

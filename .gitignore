@@ -1,6 +1,7 @@
 # Virtual Environments
 .venv/
 .venv311/
+venv311/
 
 # Python Cache
 __pycache__/
