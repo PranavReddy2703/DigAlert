@@ -197,7 +197,7 @@ const ApplyPermit = () => {
           const isActive = step === s.num;
           const isCompleted = step > s.num;
           return (
-            <div key={s.num} className="flex items-center gap-2 flex-1 justify-center last:flex-none">
+            <div key={s.num} className="flex items-center gap-2 flex-1 justify-center md:last:flex-none">
               <div className="flex items-center gap-2">
                 <span className={`flex h-8 w-8 sm:h-6 sm:w-6 shrink-0 items-center justify-center rounded-full text-xs sm:text-[10px] font-extrabold transition-all duration-300 ${
                   isActive 
