@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HyderabadMap from '../../components/HyderabadMap';
 import { permitsAPI } from '../../utils/api';
-import { MapPin, Calendar, ShieldAlert, CheckCircle, Info, Award, HelpCircle } from 'lucide-react';
+import { MapPin, Calendar, ShieldAlert, CheckCircle, Info, Award, HelpCircle, Check } from 'lucide-react';
 
 const ApplyPermit = () => {
   const navigate = useNavigate();
@@ -187,11 +187,41 @@ const ApplyPermit = () => {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Wizard Step Timeline */}
-      <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 flex justify-between items-center text-xs font-bold text-[#64748B] uppercase tracking-wider">
-        <span className={step === 1 ? 'text-[#0F766E] border-b-2 border-[#0F766E] pb-1' : ''}>1. Specifics</span>
-        <span className={step === 2 ? 'text-[#0F766E] border-b-2 border-[#0F766E] pb-1' : ''}>2. Plot Path</span>
-        <span className={step === 3 ? 'text-[#0F766E] border-b-2 border-[#0F766E] pb-1' : ''}>3. Schedule</span>
-        <span className={step === 4 ? 'text-[#0F766E] border-b-2 border-[#0F766E] pb-1' : ''}>4. Clash Grid Check</span>
+      <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4 flex justify-between items-center gap-4">
+        {[
+          { num: 1, label: 'Specifics' },
+          { num: 2, label: 'Plot Path' },
+          { num: 3, label: 'Schedule' },
+          { num: 4, label: 'Clash Precheck' }
+        ].map((s) => {
+          const isActive = step === s.num;
+          const isCompleted = step > s.num;
+          return (
+            <div key={s.num} className="flex items-center gap-2 flex-1 justify-center last:flex-none">
+              <div className="flex items-center gap-2">
+                <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-extrabold transition-all duration-300 ${
+                  isActive 
+                    ? 'bg-[#E0FDFA] text-[#0F766E] border border-[#0F766E]' 
+                    : isCompleted
+                      ? 'bg-green-50 text-green-600 border border-green-200 shadow-sm shadow-green-500/10'
+                      : 'bg-slate-100 text-slate-400 border border-slate-200'
+                }`}>
+                  {isCompleted ? <Check className="h-3 w-3 stroke-[3px]" /> : s.num}
+                </span>
+                <span className={`text-[10px] md:text-xs font-bold uppercase tracking-wider hidden sm:inline transition-colors duration-300 ${
+                  isActive ? 'text-[#0F766E]' : 'text-[#64748B]'
+                }`}>
+                  {s.label}
+                </span>
+              </div>
+              {s.num < 4 && (
+                <div className={`hidden md:block flex-1 h-[2px] ml-4 ${
+                  isCompleted ? 'bg-[#0F766E]' : 'bg-slate-100'
+                }`} />
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {error && (
