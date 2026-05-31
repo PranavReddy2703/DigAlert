@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 import datetime
 from backend.database import get_db
-from backend.models import Permit, User, Clash, RoadSegment, AuditLog
+from backend.models import Permit, User, Clash, RoadSegment, AuditLog, Notification
 from backend.auth import get_current_user, RoleChecker
 from backend.clash_engine import check_clash_for_permit, parse_geometry, check_date_overlap, check_depth_conflict, SPATIAL_BUFFER_DEGREES
 
@@ -252,6 +252,16 @@ def create_permit(permit_data: PermitCreate, current_user: User = Depends(get_cu
         new_permit.status = "PENDING_REVIEW"
         db.commit()
 
+    # Create notification for admins
+    admin_notif = Notification(
+        title="New Permit Submitted",
+        message=f"{new_permit.agency_name} submitted a new permit request: '{new_permit.title}' ({new_permit.status}).",
+        recipient_role="ADMIN",
+        permit_id=new_permit.id
+    )
+    db.add(admin_notif)
+    db.commit()
+
     return PermitResponse(
         id=new_permit.id,
         title=new_permit.title,
@@ -470,6 +480,17 @@ def update_permit_status(
     db.commit()
     db.refresh(permit)
 
+    # Create notification for utility
+    utility_notif = Notification(
+        title=f"Permit Status: {permit.status}",
+        message=f"GHMC Admin updated permit '{permit.title}' to {permit.status}.",
+        recipient_role="UTILITY",
+        recipient_agency=permit.agency_name,
+        permit_id=permit.id
+    )
+    db.add(utility_notif)
+    db.commit()
+
     return get_permit(permit_id, db)
 
 # Resolve Clash (Admin workflow to establish co-digging project)
@@ -508,6 +529,15 @@ def resolve_clash(
                 Permit.id == clash.conflicting_permit_id).first()
             if other_permit and other_permit.status == "CLASH_DETECTED":
                 other_permit.status = "APPROVED"  # Auto-approve the co-dig partner too!
+                # Notify other permit utility
+                other_notif = Notification(
+                    title="Co-dig Clash Resolved & Approved",
+                    message=f"GHMC Admin resolved conflicts and APPROVED your permit '{other_permit.title}' as part of a co-digging joint alignment.",
+                    recipient_role="UTILITY",
+                    recipient_agency=other_permit.agency_name,
+                    permit_id=other_permit.id
+                )
+                db.add(other_notif)
                 
     # Log Audit Event for Clash Resolution
     audit_log_resolve = AuditLog(
@@ -533,6 +563,17 @@ def resolve_clash(
     permit.status = "APPROVED"
     db.commit()
     db.refresh(permit)
+
+    # Create notification for main utility
+    utility_notif = Notification(
+        title="Clash Resolved & Approved",
+        message=f"GHMC Admin resolved conflicts and APPROVED your permit request: '{permit.title}'.",
+        recipient_role="UTILITY",
+        recipient_agency=permit.agency_name,
+        permit_id=permit.id
+    )
+    db.add(utility_notif)
+    db.commit()
 
     return get_permit(permit_id, db)
 
@@ -579,6 +620,17 @@ def authorize_permit(
     db.commit()
     db.refresh(permit)
     
+    # Create notification for utility
+    utility_notif = Notification(
+        title="Excavation Authorized",
+        message=f"GHMC Admin authorized excavation for '{permit.title}'. Restoration deadline: {deadline}.",
+        recipient_role="UTILITY",
+        recipient_agency=permit.agency_name,
+        permit_id=permit.id
+    )
+    db.add(utility_notif)
+    db.commit()
+    
     return get_permit(permit_id, db)
 
 # Start Excavation (Utility Field Workflow)
@@ -624,6 +676,16 @@ def start_excavation(
     db.add(audit_log)
     db.commit()
     db.refresh(permit)
+    
+    # Create notification for admins
+    admin_notif = Notification(
+        title="Excavation Started",
+        message=f"{permit.agency_name} has started excavation works for '{permit.title}'.",
+        recipient_role="ADMIN",
+        permit_id=permit.id
+    )
+    db.add(admin_notif)
+    db.commit()
     
     return get_permit(permit_id, db)
 
@@ -677,6 +739,16 @@ def complete_excavation(
     db.commit()
     db.refresh(permit)
     
+    # Create notification for admins
+    admin_notif = Notification(
+        title="Excavation Completed",
+        message=f"{permit.agency_name} completed excavation works for '{permit.title}' and requested restoration inspection.",
+        recipient_role="ADMIN",
+        permit_id=permit.id
+    )
+    db.add(admin_notif)
+    db.commit()
+    
     return get_permit(permit_id, db)
 
 # Verify Restoration (Admin Workflow)
@@ -722,6 +794,17 @@ def verify_restoration(
     db.commit()
     db.refresh(permit)
     
+    # Create notification for utility
+    utility_notif = Notification(
+        title="Restoration Verified",
+        message=f"GHMC Admin verified and APPROVED road restoration for '{permit.title}'.",
+        recipient_role="UTILITY",
+        recipient_agency=permit.agency_name,
+        permit_id=permit.id
+    )
+    db.add(utility_notif)
+    db.commit()
+    
     return get_permit(permit_id, db)
 
 # Request Rework (Admin Workflow)
@@ -765,6 +848,17 @@ def request_rework(
     db.commit()
     db.refresh(permit)
     
+    # Create notification for utility
+    utility_notif = Notification(
+        title="Rework Requested",
+        message=f"GHMC Admin rejected restoration and requested rework for '{permit.title}'. Remarks: {remarks or 'None.'}",
+        recipient_role="UTILITY",
+        recipient_agency=permit.agency_name,
+        permit_id=permit.id
+    )
+    db.add(utility_notif)
+    db.commit()
+    
     return get_permit(permit_id, db)
 
 # Close Project (Admin Workflow)
@@ -805,5 +899,16 @@ def close_permit_project(
     db.add(audit_log)
     db.commit()
     db.refresh(permit)
+    
+    # Create notification for utility
+    utility_notif = Notification(
+        title="Project Closed",
+        message=f"GHMC Admin officially closed permit project '{permit.title}'. Central grid cleared.",
+        recipient_role="UTILITY",
+        recipient_agency=permit.agency_name,
+        permit_id=permit.id
+    )
+    db.add(utility_notif)
+    db.commit()
     
     return get_permit(permit_id, db)

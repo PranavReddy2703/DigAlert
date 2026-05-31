@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import digalertLogo from '../assets/digalert_logo.png';
+import { notificationsAPI } from '../utils/api';
 import { 
   LayoutDashboard, 
   Map, 
@@ -12,7 +13,10 @@ import {
   LogOut, 
   User as UserIcon,
   Menu,
-  X
+  X,
+  Bell,
+  Trash2,
+  Check
 } from 'lucide-react';
 
 const Layout = ({ children }) => {
@@ -20,6 +24,168 @@ const Layout = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Notifications state & fetching logic
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [isNotifDropdownOpen, setIsNotifDropdownOpen] = useState(false);
+
+  const fetchNotifications = async () => {
+    if (!user) return;
+    try {
+      const data = await notificationsAPI.list();
+      setNotifications(data);
+      setUnreadCount(data.filter((n) => !n.read).length);
+    } catch (err) {
+      console.error('Error fetching notifications:', err);
+    }
+  };
+
+  const handleMarkAsRead = async (id, permitId) => {
+    try {
+      await notificationsAPI.markRead(id);
+      await fetchNotifications();
+      setIsNotifDropdownOpen(false);
+      // Navigate based on user role & permit ID
+      if (permitId) {
+        if (user.role === 'ADMIN') {
+          navigate('/admin/permits');
+        } else {
+          navigate('/tracker');
+        }
+      }
+    } catch (err) {
+      console.error('Error marking notification as read:', err);
+    }
+  };
+
+  const handleMarkAllRead = async () => {
+    try {
+      await notificationsAPI.markAllRead();
+      await fetchNotifications();
+    } catch (err) {
+      console.error('Error marking all notifications as read:', err);
+    }
+  };
+
+  const handleDeleteNotification = async (e, id) => {
+    e.stopPropagation(); // Avoid triggering parent container click
+    try {
+      await notificationsAPI.delete(id);
+      await fetchNotifications();
+    } catch (err) {
+      console.error('Error deleting notification:', err);
+    }
+  };
+
+  const formatTime = (dateStr) => {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours}h ago`;
+    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchNotifications();
+      const interval = setInterval(fetchNotifications, 10000); // Poll every 10s
+      return () => clearInterval(interval);
+    }
+  }, [user]);
+
+  const renderNotificationCenter = () => {
+    if (!user) return null;
+    return (
+      <div className="relative">
+        <button
+          onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
+          className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 border border-[#E2E8F0] text-slate-600 hover:bg-[#F0FDFA] hover:text-[#0F766E] transition active:scale-95 shadow-sm"
+          aria-label="View notifications"
+        >
+          <Bell className="h-4.5 w-4.5" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#DC2626] text-[8px] font-extrabold text-white animate-pulse">
+              {unreadCount}
+            </span>
+          )}
+        </button>
+
+        {isNotifDropdownOpen && (
+          <>
+            {/* Click-away backdrop */}
+            <div 
+              onClick={() => setIsNotifDropdownOpen(false)} 
+              className="fixed inset-0 z-40 bg-transparent"
+            />
+            
+            {/* Dropdown panel */}
+            <div className="absolute right-0 mt-2.5 w-80 bg-white border border-[#E2E8F0] shadow-xl rounded-2xl p-4 z-50 animate-fade-in max-sm:-right-10 max-sm:w-72">
+              <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-2.5 mb-2.5">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#0F172A]">Notifications</span>
+                {unreadCount > 0 && (
+                  <button
+                    onClick={handleMarkAllRead}
+                    className="text-[9px] font-extrabold uppercase tracking-wider text-[#0F766E] hover:underline"
+                  >
+                    Mark all read
+                  </button>
+                )}
+              </div>
+
+              <div className="max-h-64 overflow-y-auto space-y-2 pr-1">
+                {notifications.length === 0 ? (
+                  <div className="text-center py-6 text-slate-400 text-xs font-medium">
+                    No notifications yet.
+                  </div>
+                ) : (
+                  notifications.map((notif) => (
+                    <div
+                      key={notif.id}
+                      onClick={() => handleMarkAsRead(notif.id, notif.permit_id)}
+                      className={`p-3 rounded-xl border flex flex-col gap-1 transition cursor-pointer text-left ${
+                        !notif.read
+                          ? 'bg-[#F0FDFA]/70 border-[#99F6E4] hover:bg-[#F0FDFA]'
+                          : 'bg-slate-50/40 border-[#E2E8F0] hover:bg-slate-50'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                          {!notif.read && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-[#0F766E] shrink-0" />
+                          )}
+                          <h4 className={`text-xs truncate font-bold ${!notif.read ? 'text-[#0F766E]' : 'text-slate-800'}`}>
+                            {notif.title}
+                          </h4>
+                        </div>
+                        <button
+                          onClick={(e) => handleDeleteNotification(e, notif.id)}
+                          className="text-slate-400 hover:text-[#DC2626] p-0.5 rounded transition"
+                          title="Delete notification"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      </div>
+                      <p className="text-[10px] text-slate-500 leading-normal font-medium break-words">
+                        {notif.message}
+                      </p>
+                      <span className="text-[9px] text-slate-400 font-semibold mt-1">
+                        {formatTime(notif.created_at)}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
 
   const handleLogout = () => {
     logout();
@@ -164,13 +330,16 @@ const Layout = ({ children }) => {
               <p className="text-[8px] uppercase tracking-widest text-[#0F766E] font-bold">Civic Platform</p>
             </div>
           </div>
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-800 transition active:scale-95 shadow-sm"
-            aria-label="Toggle navigation menu"
-          >
-            {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          <div className="flex items-center gap-2">
+            {renderNotificationCenter()}
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-800 transition active:scale-95 shadow-sm"
+              aria-label="Toggle navigation menu"
+            >
+              {isSidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </header>
 
         {/* Desktop Top Header */}
@@ -186,6 +355,7 @@ const Layout = ({ children }) => {
           </div>
 
           <div className="flex items-center gap-4">
+            {renderNotificationCenter()}
             <div className="text-right">
               <p className="text-xs text-[#94A3B8] font-medium">Server Connection</p>
               <p className="text-xs font-bold text-[#16A34A] uppercase">Operational</p>
