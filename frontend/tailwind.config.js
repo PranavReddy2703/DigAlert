@@ -7,21 +7,28 @@ export default {
   theme: {
     extend: {
       colors: {
-        darkBg: "#0B111E",
-        darkCard: "rgba(17, 24, 39, 0.65)",
-        primaryAqua: "#00F2FE",
-        primaryEmerald: "#05F0A4",
-        alertRed: "#FF3366",
-        warningYellow: "#FFD000"
+        darkBg: "#F8FAFC",
+        darkCard: "#FFFFFF",
+        primaryAqua: "#0F766E",
+        primaryEmerald: "#115E59",
+        alertRed: "#DC2626",
+        warningYellow: "#D97706",
+        success: "#16A34A",
+        border: "#E2E8F0",
+        textPrimary: "#0F172A",
+        textSecondary: "#64748B",
+        textMuted: "#94A3B8",
       },
       fontFamily: {
-        sans: ["Outfit", "Inter", "sans-serif"]
+        sans: ["Inter", "Outfit", "sans-serif"]
       },
       boxShadow: {
-        glass: "0 8px 32px 0 rgba(0, 0, 0, 0.37)",
-        aquaGlow: "0 0 15px rgba(0, 242, 254, 0.45)",
-        emeraldGlow: "0 0 15px rgba(5, 240, 164, 0.45)",
-        redGlow: "0 0 15px rgba(255, 51, 102, 0.45)",
+        glass: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)",
+        aquaGlow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
+        emeraldGlow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
+        redGlow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
+        card: "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)",
+        cardHover: "0 4px 12px 0 rgba(0, 0, 0, 0.08)",
       }
     },
   },

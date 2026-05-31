@@ -39,27 +39,27 @@ const Login = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-darkBg animated-gradient px-4">
-      <div className="w-full max-w-md glass-panel rounded-2xl p-8 border border-gray-800 shadow-glass">
+    <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC] px-4">
+      <div className="w-full max-w-md bg-white rounded-2xl p-8 border border-[#E2E8F0] shadow-card">
 
         {/* Logo */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-primaryAqua to-primaryEmerald text-black font-extrabold shadow-aquaGlow">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#0F766E] to-[#059669] text-white font-extrabold shadow-sm text-sm">
             DA
           </div>
 
-          <h2 className="text-2xl font-bold tracking-tight text-white">
-            DigAlert Hyderabad
+          <h2 className="text-2xl font-bold tracking-tight text-[#0F172A]">
+            Utility Login
           </h2>
 
-          <p className="mt-1.5 text-xs tracking-wider uppercase text-primaryAqua font-semibold">
-            Excavation Coordination Control
+          <p className="mt-1.5 text-xs tracking-wider uppercase text-[#0F766E] font-semibold">
+            Hyderabad Civic Platform
           </p>
         </div>
 
         {/* Error Box */}
         {error && (
-          <div className="mb-6 flex items-start gap-2.5 rounded-xl border border-red-900/40 bg-red-950/20 p-4 text-xs font-semibold text-alertRed">
+          <div className="mb-6 flex items-start gap-2.5 rounded-xl border border-[#FECACA] bg-[#FEF2F2] p-4 text-xs font-semibold text-[#DC2626]">
             <AlertTriangle className="h-4 w-4 shrink-0" />
             <p>{error}</p>
           </div>
@@ -69,12 +69,12 @@ const Login = () => {
         <form onSubmit={handleFormSubmit} className="space-y-4">
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-1.5">
               Username
             </label>
 
             <div className="relative">
-              <User className="absolute left-3.5 top-3.5 h-4 w-4 text-gray-500" />
+              <User className="absolute left-3.5 top-3.5 h-4 w-4 text-[#94A3B8]" />
 
               <input
                 type="text"
@@ -82,18 +82,18 @@ const Login = () => {
                 required
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-3 pl-10 text-sm text-white focus:outline-none focus:border-primaryAqua"
+                className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-3 pl-10 text-sm text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-1.5">
               Password
             </label>
 
             <div className="relative">
-              <KeyRound className="absolute left-3.5 top-3.5 h-4 w-4 text-gray-500" />
+              <KeyRound className="absolute left-3.5 top-3.5 h-4 w-4 text-[#94A3B8]" />
 
               <input
                 type="password"
@@ -101,7 +101,7 @@ const Login = () => {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-3 pl-10 text-sm text-white focus:outline-none focus:border-primaryAqua"
+                className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-3 pl-10 text-sm text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition"
               />
             </div>
           </div>
@@ -109,7 +109,7 @@ const Login = () => {
           {/* Login Button */}
           <button
             type="submit"
-            className="w-full rounded-xl bg-gradient-to-r from-primaryAqua to-primaryEmerald py-3 text-sm font-bold text-black hover:opacity-90 transition-all"
+            className="w-full rounded-xl bg-[#0F766E] hover:bg-[#115E59] py-3 text-sm font-bold text-white transition-all shadow-sm"
           >
             Sign In
           </button>
@@ -118,16 +118,16 @@ const Login = () => {
           <button
             type="button"
             onClick={() => navigate('/citizen/report')}
-            className="w-full rounded-xl border border-primaryAqua py-3 text-sm font-bold text-primaryAqua hover:bg-primaryAqua hover:text-black transition-all duration-300"
+            className="w-full rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] py-3 text-sm font-bold text-white transition-all shadow-sm"
           >
-            Raise Complaint as Citizen
+            File Complaint
           </button>
 
           {/* Citizen Tracking Button */}
           <button
             type="button"
             onClick={() => navigate('/citizen/track')}
-            className="w-full rounded-xl border border-gray-700 py-3 text-sm font-bold text-gray-300 hover:bg-gray-800 transition-all duration-300"
+            className="w-full rounded-xl border border-[#E2E8F0] bg-white py-3 text-sm font-bold text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#0F172A] transition-all"
           >
             Track Existing Complaint
           </button>

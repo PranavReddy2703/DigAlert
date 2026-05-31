@@ -23,12 +23,12 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 // Custom styling icons for different complaint types
 const getComplaintIcon = (type) => {
-  let color = '#FF3366'; // Red default
-  if (type === 'WATER_LEAKAGE') color = '#00F2FE';
-  if (type === 'TRAFFIC_OBSTRUCTION') color = '#FFD000';
+  let color = '#DC2626'; // Red default
+  if (type === 'WATER_LEAKAGE') color = '#0284C7';
+  if (type === 'TRAFFIC_OBSTRUCTION') color = '#D97706';
   
   return L.divIcon({
-    html: `<span style="background-color: ${color}; width: 12px; height: 12px; display: block; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 8px rgba(0,0,0,0.5)"></span>`,
+    html: `<span style="background-color: ${color}; width: 12px; height: 12px; display: block; border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.3)"></span>`,
     className: 'custom-complaint-marker',
     iconSize: [12, 12],
     iconAnchor: [6, 6]
@@ -97,21 +97,21 @@ const HyderabadMap = ({
 }) => {
   const hyderabadCenter = [17.3850, 78.4867];
   
-  // Custom status color mapper
+  // Professional status color mapper
   const getStatusColor = (status) => {
     switch (status) {
-      case 'APPROVED': return '#05F0A4'; // Emerald green
-      case 'IN_PROGRESS': return '#00F2FE'; // Aqua blue
-      case 'CLASH_DETECTED': return '#FF3366'; // Glowing red
-      case 'PENDING_REVIEW': return '#FFD000'; // Amber yellow
-      case 'EMERGENCY': return '#F59E0B'; // Orange
-      case 'COMPLETED': return '#64748B'; // Slate gray
-      default: return '#3B82F6'; // Standard blue
+      case 'APPROVED': return '#16A34A';
+      case 'IN_PROGRESS': return '#0284C7';
+      case 'CLASH_DETECTED': return '#DC2626';
+      case 'PENDING_REVIEW': return '#D97706';
+      case 'EMERGENCY': return '#EA580C';
+      case 'COMPLETED': return '#64748B';
+      default: return '#3B82F6';
     }
   };
 
   return (
-    <div className="h-[500px] w-full rounded-xl overflow-hidden shadow-glass border border-gray-800">
+    <div className="h-[500px] w-full rounded-xl overflow-hidden shadow-card border border-[#E2E8F0]">
       <MapContainer
         center={hyderabadCenter}
         zoom={12}
@@ -147,7 +147,7 @@ const HyderabadMap = ({
               positions={coords}
               pathOptions={{
                 color: color,
-                weight: 6,
+                weight: 5,
                 opacity: 0.85,
                 lineCap: 'round',
                 dashArray: permit.status === 'CLASH_DETECTED' ? '12 8' : undefined
@@ -158,13 +158,13 @@ const HyderabadMap = ({
             >
               <Popup>
                 <div className="p-1 min-w-[200px]">
-                  <span className="inline-block text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full mb-2" style={{ backgroundColor: `${color}30`, color: color }}>
+                  <span className="inline-block text-[9px] uppercase tracking-wider font-extrabold px-2 py-0.5 rounded-full mb-2" style={{ backgroundColor: `${color}15`, color: color, border: `1px solid ${color}30` }}>
                     {permit.status}
                   </span>
-                  <h3 className="font-bold text-sm text-white mb-1">{permit.title}</h3>
-                  <p className="text-xs text-gray-400 mb-1">Utility: {permit.agency_name}</p>
-                  <p className="text-[10px] text-gray-500">Dates: {permit.start_date} to {permit.end_date}</p>
-                  <p className="text-[10px] text-gray-500">Excavation Depth: {permit.depth_meters}m</p>
+                  <h3 className="font-bold text-sm text-[#0F172A] mb-1">{permit.title}</h3>
+                  <p className="text-xs text-[#64748B] mb-1">Utility: {permit.agency_name}</p>
+                  <p className="text-[10px] text-[#94A3B8]">Dates: {permit.start_date} to {permit.end_date}</p>
+                  <p className="text-[10px] text-[#94A3B8]">Excavation Depth: {permit.depth_meters}m</p>
                 </div>
               </Popup>
             </Polyline>
@@ -177,8 +177,8 @@ const HyderabadMap = ({
             <Polyline
               positions={drawingPoints}
               pathOptions={{
-                color: '#00F2FE',
-                weight: 5,
+                color: '#0F766E',
+                weight: 4,
                 opacity: 0.9,
                 dashArray: '5 5'
               }}
@@ -201,14 +201,14 @@ const HyderabadMap = ({
           >
             <Popup>
               <div className="p-1 min-w-[180px]">
-                <span className="inline-block text-[9px] uppercase tracking-wider font-extrabold bg-red-950/40 text-alertRed px-2 py-0.5 rounded-full mb-2 border border-red-900/30">
+                <span className="inline-block text-[9px] uppercase tracking-wider font-extrabold bg-[#FEF2F2] text-[#DC2626] px-2 py-0.5 rounded-full mb-2 border border-[#FECACA]">
                   {complaint.complaint_type.replace('_', ' ')}
                 </span>
-                <h4 className="font-bold text-xs text-white">{complaint.citizen_name}</h4>
-                <p className="text-xs text-gray-300 my-1">{complaint.description}</p>
-                <p className="text-[10px] text-gray-500">Status: <span className="font-semibold text-primaryAqua">{complaint.status}</span></p>
+                <h4 className="font-bold text-xs text-[#0F172A]">{complaint.citizen_name}</h4>
+                <p className="text-xs text-[#64748B] my-1">{complaint.description}</p>
+                <p className="text-[10px] text-[#94A3B8]">Status: <span className="font-semibold text-[#0F766E]">{complaint.status}</span></p>
                 {complaint.agency_assigned && (
-                  <p className="text-[10px] text-gray-500">Assigned To: <span className="font-semibold text-primaryEmerald">{complaint.agency_assigned}</span></p>
+                  <p className="text-[10px] text-[#94A3B8]">Assigned To: <span className="font-semibold text-[#115E59]">{complaint.agency_assigned}</span></p>
                 )}
               </div>
             </Popup>
@@ -219,7 +219,7 @@ const HyderabadMap = ({
         {isPlacingComplaint && complaintCoordinate && (
           <Marker position={[complaintCoordinate.lat, complaintCoordinate.lng]}>
             <Popup>
-              <span className="text-xs font-semibold text-gray-200">Selected Location to report</span>
+              <span className="text-xs font-semibold text-[#0F172A]">Selected Location to report</span>
             </Popup>
           </Marker>
         )}

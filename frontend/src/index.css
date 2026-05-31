@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,101 +6,94 @@
 
 @layer base {
   body {
-    @apply bg-darkBg text-gray-100 font-sans antialiased overflow-x-hidden;
+    @apply bg-[#F8FAFC] text-[#0F172A] font-sans antialiased overflow-x-hidden;
   }
 }
 
-/* Glassmorphism card utilities */
+/* Professional card panel utility */
+.card-panel {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Keep glass-panel as an alias for backwards compat during migration */
 .glass-panel {
-  background: rgba(13, 20, 35, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
 .glass-panel-hover {
-  @apply transition-all duration-300;
+  @apply transition-all duration-200;
 }
 .glass-panel-hover:hover {
-  background: rgba(17, 27, 47, 0.7);
-  border-color: rgba(0, 242, 254, 0.35);
-  box-shadow: 0 8px 32px 0 rgba(0, 242, 254, 0.08);
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+  border-color: #CBD5E1;
 }
 
-/* Neon accent glows */
+/* Legacy glow classes — neutralized to subtle shadows */
 .aqua-glow {
-  box-shadow: 0 0 15px rgba(0, 242, 254, 0.25);
-  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .emerald-glow {
-  box-shadow: 0 0 15px rgba(5, 240, 164, 0.25);
-  border-color: rgba(5, 240, 164, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .red-glow {
-  box-shadow: 0 0 15px rgba(255, 51, 102, 0.25);
-  border-color: rgba(255, 51, 102, 0.4);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Leaflet Dark Mode CSS Hack */
+/* Leaflet Clean Light Mode */
 .leaflet-container {
-  background: #0f172a !important;
+  background: #F8FAFC !important;
   font-family: 'Inter', sans-serif !important;
-  /* Dark mode filter trick */
-  filter: invert(90%) hue-rotate(180deg) brightness(95%) contrast(95%);
   border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid #E2E8F0 !important;
 }
 
 .leaflet-popup-content-wrapper {
-  background: #0f172a !important;
-  color: #f8fafc !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #E2E8F0 !important;
   border-radius: 0.5rem !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
 }
 
 .leaflet-popup-tip {
-  background: #0f172a !important;
-  border-left: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: #FFFFFF !important;
+  border-left: 1px solid #E2E8F0 !important;
+  border-bottom: 1px solid #E2E8F0 !important;
 }
 
-/* Smooth custom scrollbars */
+/* Smooth custom scrollbars — light mode */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b111e;
+  background: #F1F5F9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #CBD5E1;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #00F2FE;
+  background: #0F766E;
 }
 
-/* Custom animated gradient backgrounds */
-.animated-gradient {
-  background: linear-gradient(-45deg, #0b111e, #111a2e, #06373a, #0b111e);
-  background-size: 400% 400%;
-  animation: gradientBG 15s ease infinite;
+/* Subtle pulse animation for status indicators */
+@keyframes subtlePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+.animate-subtle-pulse {
+  animation: subtlePulse 2s ease-in-out infinite;
 }

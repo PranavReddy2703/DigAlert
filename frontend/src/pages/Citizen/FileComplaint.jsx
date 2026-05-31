@@ -72,7 +72,7 @@ const FileComplaint = () => {
     setError('');
     
     if (!latitude || !longitude) {
-      setError('CRITICAL: Please click on the Hyderabad map to pinpoint the exact location of the hazard.');
+      setError('Please click on the Hyderabad map to pinpoint the exact location of the hazard.');
       return;
     }
 
@@ -101,39 +101,39 @@ const FileComplaint = () => {
 
   if (isSuccess) {
     return (
-      <div className="max-w-xl mx-auto glass-panel rounded-2xl p-8 border border-gray-800 text-center space-y-6 shadow-glass my-12">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-950/40 text-primaryEmerald border border-emerald-900/30 emerald-glow">
+      <div className="max-w-xl mx-auto bg-white rounded-2xl p-8 border border-[#E2E8F0] shadow-card text-center space-y-6 my-12">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#F0FDF4] text-[#16A34A] border border-[#BBF7D0]">
           <CheckCircle className="h-8 w-8" />
         </div>
         
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-white tracking-wide">Complaint Logged Successfully!</h2>
-          <p className="text-gray-400 text-sm">
+          <h2 className="text-2xl font-bold text-[#0F172A] tracking-wide">Complaint Logged Successfully!</h2>
+          <p className="text-[#64748B] text-sm">
             Thank you for helping keep Hyderabad safe. Your report has been registered on the central control grid.
           </p>
         </div>
 
-        <div className="bg-gray-900/80 border border-gray-800 rounded-xl p-4 space-y-1">
-          <p className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Unique Complaint Tracking ID</p>
-          <p className="text-2xl font-extrabold text-primaryAqua tracking-widest font-mono">#{trackingId}</p>
+        <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-4 space-y-1">
+          <p className="text-[10px] uppercase font-bold text-[#94A3B8] tracking-wider">Unique Complaint Tracking ID</p>
+          <p className="text-2xl font-extrabold text-[#0F766E] tracking-widest font-mono">#{trackingId}</p>
         </div>
 
-        <p className="text-xs text-gray-500 leading-relaxed">
-          Our **Geospatial Proximity Router** has scanned active permits around your pin coordinates. If an active utility digging is found within 20m, the complaint has been **automatically linked and dispatched** directly to their ops manager.
+        <p className="text-xs text-[#94A3B8] leading-relaxed">
+          Our Geospatial Proximity Router has scanned active permits around your pin coordinates. If an active utility digging is found within 20m, the complaint has been automatically linked and dispatched directly to their ops manager.
         </p>
 
         <div className="flex gap-3 justify-center pt-4">
           <button
             onClick={() => navigate('/citizen/track', { state: { complaintId: trackingId } })}
-            className="rounded-xl bg-gradient-to-r from-primaryAqua to-primaryEmerald px-5 py-3 text-xs font-bold text-black hover:opacity-90 shadow-aquaGlow transition duration-300"
+            className="rounded-xl bg-[#0F766E] hover:bg-[#115E59] px-5 py-3 text-xs font-bold text-white shadow-sm transition duration-200"
           >
             Track Status Timeline
           </button>
           <button
             onClick={() => navigate('/citizen')}
-            className="rounded-xl bg-gray-900 hover:bg-gray-800 border border-gray-800 px-5 py-3 text-xs font-bold text-gray-300 transition duration-300"
+            className="rounded-xl bg-white hover:bg-[#F8FAFC] border border-[#E2E8F0] px-5 py-3 text-xs font-bold text-[#64748B] transition duration-200"
           >
-            Return to Active Grid
+            Return to Map
           </button>
         </div>
       </div>
@@ -144,26 +144,26 @@ const FileComplaint = () => {
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Intro Header */}
       <div>
-        <h2 className="text-2xl font-bold text-white tracking-wide">Report Excavation Hazard / Complaint</h2>
-        <p className="text-sm text-gray-400 mt-1">
-          Pinpoint open trenches, unsafe barricades, un-restored roads, or traffic hazards. DigAlert routes your ticket directly to the responsible utility.
+        <h2 className="text-2xl font-bold text-[#0F172A] tracking-wide">File Complaint</h2>
+        <p className="text-sm text-[#64748B] mt-1">
+          Report hazards, road issues, utility complaints, and public safety concerns. DigAlert routes your ticket directly to the responsible utility.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
         {/* Step 1: Map Picker */}
         <div className="lg:col-span-3 space-y-3">
-          <div className="flex items-center justify-between glass-panel rounded-xl px-4 py-3 border border-gray-800">
+          <div className="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-[#E2E8F0] shadow-sm">
             <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-primaryAqua animate-bounce" />
-              <span className="text-xs font-bold text-gray-200 uppercase tracking-wide">Step 1: Pinpoint Site Location on Map</span>
+              <MapPin className="h-4 w-4 text-[#0F766E]" />
+              <span className="text-xs font-bold text-[#0F172A] uppercase tracking-wide">Step 1: Pinpoint Site Location on Map</span>
             </div>
             {latitude ? (
-              <span className="text-[10px] bg-emerald-950/40 text-primaryEmerald px-2 py-0.5 rounded border border-emerald-900/30 font-semibold font-mono">
+              <span className="text-[10px] bg-[#F0FDF4] text-[#16A34A] px-2 py-0.5 rounded border border-[#BBF7D0] font-semibold font-mono">
                 Lat: {latitude.toFixed(5)}, Lng: {longitude.toFixed(5)}
               </span>
             ) : (
-              <span className="text-[10px] bg-red-950/40 text-alertRed px-2 py-0.5 rounded border border-red-900/30 font-semibold uppercase animate-pulse">
+              <span className="text-[10px] bg-[#FEF2F2] text-[#DC2626] px-2 py-0.5 rounded border border-[#FECACA] font-semibold uppercase">
                 Click map to select
               </span>
             )}
@@ -178,11 +178,11 @@ const FileComplaint = () => {
         </div>
 
         {/* Step 2: Form submission */}
-        <div className="lg:col-span-2 glass-panel rounded-2xl p-6 border border-gray-800 space-y-4">
-          <span className="text-[10px] font-bold text-primaryAqua uppercase tracking-widest">Step 2: Enter Complaint Specifications</span>
+        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card space-y-4">
+          <span className="text-[10px] font-bold text-[#0F766E] uppercase tracking-widest">Step 2: Enter Complaint Details</span>
           
           {error && (
-            <div className="flex items-start gap-2.5 rounded-xl border border-red-900/40 bg-red-950/20 p-4 text-xs font-semibold text-alertRed red-glow">
+            <div className="flex items-start gap-2.5 rounded-xl border border-[#FECACA] bg-[#FEF2F2] p-4 text-xs font-semibold text-[#DC2626]">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <p>{error}</p>
             </div>
@@ -190,22 +190,22 @@ const FileComplaint = () => {
 
           <form onSubmit={handleFormSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Your Name (Optional)</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-1.5">Your Name (Optional)</label>
               <input
                 type="text"
                 placeholder="Submit Anonymously"
                 value={citizenName}
                 onChange={(e) => setCitizenName(e.target.value)}
-                className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300"
+                className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-2.5 text-xs text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Hazard Type</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-1.5">Hazard Type</label>
               <select
                 value={complaintType}
                 onChange={(e) => setComplaintType(e.target.value)}
-                className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300"
+                className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-2.5 text-xs text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition"
               >
                 <option value="OPEN_TRENCH">Open Trench (No covering)</option>
                 <option value="UNSAFE_BARRICADING">Unsafe / Missing Barricading</option>
@@ -217,27 +217,27 @@ const FileComplaint = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Hazard Description</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-1.5">Hazard Description</label>
               <textarea
                 placeholder="Please describe what is unsafe. Mention landmarks if helpful (e.g. In front of metro pillar 15...)"
                 required
                 rows={4}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300 leading-relaxed"
+                className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-2.5 text-xs text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition leading-relaxed"
               ></textarea>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Upload Site Photo (Optional)</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-1.5">Upload Site Photo (Optional)</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handlePhotoChange}
-                className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300"
+                className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-2.5 text-xs text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition"
               />
               {photoPreview && (
-                <div className="mt-3 rounded-2xl overflow-hidden border border-gray-800">
+                <div className="mt-3 rounded-2xl overflow-hidden border border-[#E2E8F0]">
                   <img
                     src={photoPreview}
                     alt="Selected site proof"
@@ -250,7 +250,7 @@ const FileComplaint = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-xl bg-gradient-to-r from-red-600 to-alertRed py-3 text-xs font-bold text-white hover:opacity-90 shadow-redGlow transition duration-300 flex items-center justify-center gap-2"
+              className="w-full rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] py-3 text-xs font-bold text-white shadow-sm transition duration-200 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-t-transparent border-white"></div>

@@ -98,9 +98,9 @@ const ApplyPermit = () => {
           <title>Permit Receipt - ${permitCode}</title>
           <style>
             body { font-family: sans-serif; padding: 40px; color: #333; line-height: 1.6; }
-            .border-box { border: 2px solid #0284c7; padding: 30px; border-radius: 8px; }
+            .border-box { border: 2px solid #0f766e; padding: 30px; border-radius: 8px; }
             .header { border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-            .logo { font-size: 20px; font-weight: bold; color: #0284c7; }
+            .logo { font-size: 20px; font-weight: bold; color: #0f766e; }
             .code { font-size: 24px; font-weight: bold; font-family: monospace; color: #0f172a; margin: 15px 0; background: #f1f5f9; padding: 10px; border-radius: 4px; display: inline-block; }
             h1 { font-size: 22px; margin-top: 0; }
             table { width: 100%; border-collapse: collapse; margin-top: 15px; }
@@ -113,7 +113,7 @@ const ApplyPermit = () => {
           <div class="border-box">
             <div class="header">
               <span class="logo">DIGALERT INTEL</span>
-              <span style="font-weight: bold; color: #059669;">SUBMITTED</span>
+              <span style="font-weight: bold; color: #16a34a;">SUBMITTED</span>
             </div>
             <h1>Excavation Permit Receipt</h1>
             <p>Your excavation permit application has been registered successfully. Use the permit reference code below to track administrative review and spatial clash statuses.</p>
@@ -187,68 +187,68 @@ const ApplyPermit = () => {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Wizard Step Timeline */}
-      <div className="glass-panel rounded-2xl p-5 border border-gray-800 flex justify-between items-center text-xs font-bold text-gray-500 uppercase tracking-wider">
-        <span className={step === 1 ? 'text-primaryAqua border-b border-primaryAqua pb-1' : ''}>1. Specifics</span>
-        <span className={step === 2 ? 'text-primaryAqua border-b border-primaryAqua pb-1' : ''}>2. Plot Path</span>
-        <span className={step === 3 ? 'text-primaryAqua border-b border-primaryAqua pb-1' : ''}>3. Schedule</span>
-        <span className={step === 4 ? 'text-primaryAqua border-b border-primaryAqua pb-1' : ''}>4. Clash Grid Check</span>
+      <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 flex justify-between items-center text-xs font-bold text-[#64748B] uppercase tracking-wider">
+        <span className={step === 1 ? 'text-[#0F766E] border-b-2 border-[#0F766E] pb-1' : ''}>1. Specifics</span>
+        <span className={step === 2 ? 'text-[#0F766E] border-b-2 border-[#0F766E] pb-1' : ''}>2. Plot Path</span>
+        <span className={step === 3 ? 'text-[#0F766E] border-b-2 border-[#0F766E] pb-1' : ''}>3. Schedule</span>
+        <span className={step === 4 ? 'text-[#0F766E] border-b-2 border-[#0F766E] pb-1' : ''}>4. Clash Grid Check</span>
       </div>
 
       {error && (
-        <div className="flex items-start gap-2.5 rounded-xl border border-red-900/40 bg-red-950/20 p-4 text-xs font-semibold text-alertRed red-glow">
-          <ShieldAlert className="h-4 w-4 shrink-0" />
+        <div className="flex items-start gap-2.5 rounded-xl border border-red-200 bg-red-50 p-4 text-xs font-semibold text-[#DC2626]">
+          <ShieldAlert className="h-4.5 w-4.5 shrink-0" />
           <p>{error}</p>
         </div>
       )}
 
       {/* STEP 1: Details */}
       {step === 1 && (
-        <div className="glass-panel rounded-2xl p-6 border border-gray-800 space-y-4">
-          <h3 className="text-base font-bold text-white uppercase tracking-wider">Step 1: Enter Project Details</h3>
+        <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 space-y-4">
+          <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider">Step 1: Enter Project Details</h3>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Permit Title / Work Name</label>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-[#64748B] mb-1.5">Permit Title / Work Name</label>
               <input
                 type="text"
                 placeholder="e.g. Laying 11KV power cables along Gachibowli Ring Road Link"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300"
+                className="w-full rounded-lg bg-white border border-[#E2E8F0] px-4 py-2.5 text-xs text-[#0F172A] focus:outline-none focus:border-[#0F766E] transition duration-200 placeholder-slate-400"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Description (Optional)</label>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-[#64748B] mb-1.5">Description (Optional)</label>
               <textarea
                 placeholder="Outline details, target utility buildings, or specific road margins..."
                 rows={4}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300 leading-relaxed"
+                className="w-full rounded-lg bg-white border border-[#E2E8F0] px-4 py-2.5 text-xs text-[#0F172A] focus:outline-none focus:border-[#0F766E] transition duration-200 placeholder-slate-400 leading-normal"
               ></textarea>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Excavation Depth (Meters)</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#64748B] mb-1.5">Excavation Depth (Meters)</label>
                 <input
                   type="number"
                   step="0.1"
                   required
                   value={depth}
                   onChange={(e) => setDepth(e.target.value)}
-                  className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300 font-mono"
+                  className="w-full rounded-lg bg-white border border-[#E2E8F0] px-4 py-2.5 text-xs text-[#0F172A] focus:outline-none focus:border-[#0F766E] transition duration-200 font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5">Work Category</label>
+                <label className="block text-[10px] font-bold uppercase tracking-wider text-[#64748B] mb-1.5">Work Category</label>
                 <select
                   value={workType}
                   onChange={(e) => setWorkType(e.target.value)}
-                  className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300 font-bold"
+                  className="w-full rounded-lg bg-white border border-[#E2E8F0] px-4 py-2.5 text-xs text-[#0F172A] focus:outline-none focus:border-[#0F766E] transition duration-200 font-semibold"
                 >
                   <option value="POWER">Power Grid Lines (Electricity)</option>
                   <option value="WATER">Water Pipelines (Sewerage/Water)</option>
@@ -264,7 +264,7 @@ const ApplyPermit = () => {
           <div className="pt-4 flex justify-end">
             <button
               onClick={handleNextStep}
-              className="rounded-xl bg-gradient-to-r from-primaryAqua to-primaryEmerald px-6 py-2.5 text-xs font-bold text-black hover:opacity-90 shadow-aquaGlow transition duration-300"
+              className="rounded-lg bg-[#0F766E] hover:bg-[#115E59] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition duration-200"
             >
               Continue to Plotting Route
             </button>
@@ -275,37 +275,39 @@ const ApplyPermit = () => {
       {/* STEP 2: Map Route Drawing */}
       {step === 2 && (
         <div className="space-y-4">
-          <div className="glass-panel rounded-2xl p-4 border border-gray-800 flex justify-between items-center">
+          <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4 flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-primaryAqua animate-pulse" />
-              <p className="text-xs text-gray-300 font-medium">
-                Instructions: **Click along the road path** on the Hyderabad map to plot your excavation segment nodes.
+              <MapPin className="h-4.5 w-4.5 text-[#0F766E]" />
+              <p className="text-xs text-[#64748B] font-medium">
+                Instructions: <span className="font-semibold text-[#0F172A]">Click along the road path</span> on the Hyderabad map to plot your excavation segment nodes.
               </p>
             </div>
             <button
               onClick={() => setDrawingPoints([])}
-              className="rounded-lg bg-red-950/20 hover:bg-red-950/40 border border-red-900/30 px-3 py-1.5 text-[10px] font-bold text-alertRed transition duration-300"
+              className="rounded-lg bg-red-50 hover:bg-red-100 border border-red-200 px-3 py-1.5 text-[10px] font-semibold text-[#DC2626] transition duration-200"
             >
               Clear Route
             </button>
           </div>
 
-          <HyderabadMap
-            isDrawing={true}
-            drawingPoints={drawingPoints}
-            setDrawingPoints={setDrawingPoints}
-          />
+          <div className="border border-[#E2E8F0] rounded-2xl overflow-hidden shadow-sm">
+            <HyderabadMap
+              isDrawing={true}
+              drawingPoints={drawingPoints}
+              setDrawingPoints={setDrawingPoints}
+            />
+          </div>
 
           <div className="flex justify-between pt-4">
             <button
               onClick={() => setStep(1)}
-              className="rounded-xl bg-gray-900 hover:bg-gray-800 border border-gray-800 px-6 py-2.5 text-xs font-bold text-gray-400 hover:text-white transition duration-300"
+              className="rounded-lg bg-white border border-[#E2E8F0] hover:bg-slate-50 px-6 py-2.5 text-xs font-semibold text-[#64748B] transition duration-200"
             >
               Back
             </button>
             <button
               onClick={handleNextStep}
-              className="rounded-xl bg-gradient-to-r from-primaryAqua to-primaryEmerald px-6 py-2.5 text-xs font-bold text-black hover:opacity-90 shadow-aquaGlow transition duration-300"
+              className="rounded-lg bg-[#0F766E] hover:bg-[#115E59] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition duration-200"
             >
               Confirm Excavation Segment
             </button>
@@ -315,34 +317,34 @@ const ApplyPermit = () => {
 
       {/* STEP 3: Dates */}
       {step === 3 && (
-        <div className="glass-panel rounded-2xl p-6 border border-gray-800 space-y-4">
-          <h3 className="text-base font-bold text-white uppercase tracking-wider">Step 3: Schedule Project Window</h3>
+        <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 space-y-4">
+          <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider">Step 3: Schedule Project Window</h3>
           
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5 font-bold">Planned Start Date</label>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-[#64748B] mb-1.5">Planned Start Date</label>
               <div className="relative">
-                <Calendar className="absolute left-3.5 top-3.5 h-4 w-4 text-gray-500" />
+                <Calendar className="absolute left-3 top-3 h-4.5 w-4.5 text-[#94A3B8]" />
                 <input
                   type="date"
                   required
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 pl-10 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300"
+                  className="w-full rounded-lg bg-white border border-[#E2E8F0] px-4 py-2.5 pl-10 text-xs text-[#0F172A] focus:outline-none focus:border-[#0F766E] transition duration-200"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-gray-400 mb-1.5 font-bold">Estimated Completion Date</label>
+              <label className="block text-[10px] font-bold uppercase tracking-wider text-[#64748B] mb-1.5">Estimated Completion Date</label>
               <div className="relative">
-                <Calendar className="absolute left-3.5 top-3.5 h-4 w-4 text-gray-500" />
+                <Calendar className="absolute left-3 top-3 h-4.5 w-4.5 text-[#94A3B8]" />
                 <input
                   type="date"
                   required
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 pl-10 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300"
+                  className="w-full rounded-lg bg-white border border-[#E2E8F0] px-4 py-2.5 pl-10 text-xs text-[#0F172A] focus:outline-none focus:border-[#0F766E] transition duration-200"
                 />
               </div>
             </div>
@@ -351,13 +353,13 @@ const ApplyPermit = () => {
           <div className="flex justify-between pt-4">
             <button
               onClick={() => setStep(2)}
-              className="rounded-xl bg-gray-900 hover:bg-gray-800 border border-gray-800 px-6 py-2.5 text-xs font-bold text-gray-400 hover:text-white transition duration-300"
+              className="rounded-lg bg-white border border-[#E2E8F0] hover:bg-slate-50 px-6 py-2.5 text-xs font-semibold text-[#64748B] transition duration-200"
             >
               Back
             </button>
             <button
               onClick={handleNextStep}
-              className="rounded-xl bg-gradient-to-r from-primaryAqua to-primaryEmerald px-6 py-2.5 text-xs font-bold text-black hover:opacity-90 shadow-aquaGlow transition duration-300"
+              className="rounded-lg bg-[#0F766E] hover:bg-[#115E59] px-6 py-2.5 text-xs font-semibold text-white shadow-sm transition duration-200"
             >
               Initialize Clash Scan
             </button>
@@ -370,10 +372,10 @@ const ApplyPermit = () => {
         <div className="space-y-6">
           {/* Clash check loader */}
           {checking && (
-            <div className="glass-panel rounded-2xl p-10 border border-gray-800 flex flex-col items-center justify-center space-y-4">
-              <div className="h-10 w-10 animate-spin rounded-full border-4 border-t-primaryAqua border-gray-850"></div>
-              <h4 className="text-white font-bold">Scanning GHMC Geospatial Registry...</h4>
-              <p className="text-xs text-gray-500">Checking spatial buffers, temporal overlaps, depths, and resurfaced locked segments.</p>
+            <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-10 flex flex-col items-center justify-center space-y-4">
+              <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-[#0F766E]"></div>
+              <h4 className="text-[#0F172A] font-bold">Scanning GHMC Geospatial Registry...</h4>
+              <p className="text-xs text-[#64748B] text-center">Checking spatial buffers, temporal overlaps, depths, and resurfaced locked segments.</p>
             </div>
           )}
 
@@ -382,13 +384,13 @@ const ApplyPermit = () => {
             <div className="space-y-6">
               {precheckClashes.length === 0 ? (
                 /* 4A: NO CLASHES FOUND */
-                <div className="glass-panel rounded-2xl p-8 border border-gray-800 text-center space-y-4 border-l-4 border-l-primaryEmerald">
-                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-950/40 text-primaryEmerald border border-emerald-900/30 emerald-glow">
+                <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-8 text-center space-y-4 border-l-4 border-l-[#16A34A]">
+                  <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-50 text-green-600 border border-green-100">
                     <CheckCircle className="h-8 w-8" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-white tracking-wide">Geospatial Conflict Check Passed</h3>
-                    <p className="text-xs text-gray-400 mt-1 max-w-md mx-auto leading-relaxed">
+                    <h3 className="text-lg font-bold text-[#0F172A] tracking-tight">Geospatial Conflict Check Passed</h3>
+                    <p className="text-xs text-[#64748B] mt-1 max-w-md mx-auto leading-normal">
                       GHMC lock-in check verified. No overlapping utility permits, depth collisions, or recently resurfaced roads are registered on this segment.
                     </p>
                   </div>
@@ -396,13 +398,13 @@ const ApplyPermit = () => {
               ) : (
                 /* 4B: CLASHES DETECTED */
                 <div className="space-y-4">
-                  <div className="glass-panel rounded-2xl p-6 border border-gray-800 border-l-4 border-l-alertRed flex items-start gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-950/40 text-alertRed border border-red-900/30 shrink-0">
+                  <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 border-l-4 border-l-[#DC2626] flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-[#DC2626] border border-red-100 shrink-0">
                       <ShieldAlert className="h-6 w-6" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-white uppercase tracking-wider">Spatial Conflicts Flagged ({precheckClashes.length})</h3>
-                      <p className="text-xs text-gray-400 mt-1 leading-relaxed">
+                      <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider">Spatial Conflicts Flagged ({precheckClashes.length})</h3>
+                      <p className="text-xs text-[#64748B] mt-1 leading-normal">
                         Our spatial algorithms detected overlapping works or policy violations on this segment. Review conflict details below.
                       </p>
                     </div>
@@ -413,32 +415,32 @@ const ApplyPermit = () => {
                     {precheckClashes.map((clash, idx) => {
                       const isRoadLock = clash.conflicting_permit_id < 0;
                       return (
-                        <div key={idx} className={`rounded-xl border p-5 space-y-3 ${
+                        <div key={idx} className={`rounded-xl border p-5 space-y-3 bg-white shadow-sm ${
                           isRoadLock 
-                            ? 'bg-red-950/10 border-red-900/30' 
-                            : 'bg-yellow-950/10 border-yellow-900/30'
+                            ? 'border-red-200' 
+                            : 'border-amber-200'
                         }`}>
                           <div className="flex items-center justify-between">
-                            <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-                              isRoadLock ? 'bg-red-950/60 text-alertRed' : 'bg-yellow-950/60 text-warningYellow'
+                            <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${
+                              isRoadLock ? 'bg-red-50 text-[#DC2626] border-red-100' : 'bg-amber-50 text-[#D97706] border-amber-100'
                             }`}>
                               {isRoadLock ? 'GHMC Policy Lockout' : 'Utility Clash Flagged'}
                             </span>
                             {!isRoadLock && (
-                              <span className="text-[10px] text-gray-500 font-semibold font-mono">
+                              <span className="text-[10px] text-[#64748B] font-semibold font-mono">
                                 Overlap Ratio: {clash.overlap_percentage}%
                               </span>
                             )}
                           </div>
 
-                          <h4 className="text-sm font-bold text-white">{clash.conflicting_title}</h4>
-                          <p className="text-xs text-gray-300 leading-relaxed font-semibold">{clash.recommendation_text}</p>
+                          <h4 className="text-xs font-bold text-[#0F172A]">{clash.conflicting_title}</h4>
+                          <p className="text-xs text-[#64748B] leading-normal font-medium">{clash.recommendation_text}</p>
 
                           {!isRoadLock && clash.estimated_savings > 0 && (
-                            <div className="flex items-center gap-2 bg-emerald-950/20 border border-emerald-900/30 rounded-lg p-3 mt-2 text-xs">
-                              <Award className="h-5 w-5 text-primaryEmerald shrink-0 animate-pulse" />
-                              <p className="text-gray-300">
-                                Joint excavation Coordination (Co-digging) splits restoration costs. Estimated savings: <span className="font-extrabold text-primaryEmerald font-mono">₹{clash.estimated_savings.toLocaleString()} INR</span>.
+                            <div className="flex items-center gap-2 bg-green-50 border border-green-100 rounded-lg p-3 mt-2 text-xs">
+                              <Award className="h-5 w-5 text-green-600 shrink-0" />
+                              <p className="text-[#64748B] leading-normal">
+                                Joint excavation Coordination (Co-digging) splits restoration costs. Estimated savings: <span className="font-bold text-green-700 font-mono">₹{clash.estimated_savings.toLocaleString()} INR</span>.
                               </p>
                             </div>
                           )}
@@ -453,7 +455,7 @@ const ApplyPermit = () => {
               <div className="flex justify-between pt-4">
                 <button
                   onClick={() => setStep(3)}
-                  className="rounded-xl bg-gray-900 hover:bg-gray-800 border border-gray-800 px-6 py-2.5 text-xs font-bold text-gray-400 hover:text-white transition duration-300"
+                  className="rounded-lg bg-white border border-[#E2E8F0] hover:bg-slate-50 px-6 py-2.5 text-xs font-semibold text-[#64748B] transition duration-200"
                 >
                   Back (Modify Schedule / Path)
                 </button>
@@ -462,10 +464,10 @@ const ApplyPermit = () => {
                 <button
                   onClick={handleFinalSubmit}
                   disabled={submitLoading}
-                  className={`rounded-xl px-6 py-2.5 text-xs font-bold text-black hover:opacity-90 transition duration-300 shadow-aquaGlow flex items-center gap-2 ${
+                  className={`rounded-lg px-6 py-2.5 text-xs font-semibold transition duration-200 shadow-sm flex items-center gap-2 ${
                     precheckClashes.some(c => c.conflicting_permit_id < 0)
-                      ? 'bg-red-500 opacity-60 cursor-not-allowed hover:opacity-60 text-white' // completely block resurfaced lock
-                      : 'bg-gradient-to-r from-primaryAqua to-primaryEmerald'
+                      ? 'bg-red-500 opacity-60 cursor-not-allowed text-white' // completely block resurfaced lock
+                      : 'bg-[#0F766E] hover:bg-[#115E59] text-white'
                   }`}
                 >
                   {submitLoading ? 'Registering...' : 'Register Excavation Permit'}
@@ -475,51 +477,52 @@ const ApplyPermit = () => {
           )}
         </div>
       )}
+      
       {/* SUCCESS MODAL FOR GENERATED CODE */}
       {createdPermit && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-          <div className="glass-panel max-w-md w-full p-6 border border-gray-800 space-y-6 text-center shadow-aquaGlow animate-fade-in">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-950/40 text-primaryEmerald border border-emerald-900/30 emerald-glow">
-              <CheckCircle className="h-8 w-8 animate-pulse" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+          <div className="bg-white max-w-md w-full p-6 border border-[#E2E8F0] rounded-2xl shadow-xl space-y-6 text-center animate-fade-in">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-50 text-green-600 border border-green-100">
+              <CheckCircle className="h-8 w-8" />
             </div>
             
             <div className="space-y-2">
-              <h3 className="text-xl font-bold text-white tracking-wide">Permit Application Submitted</h3>
-              <p className="text-xs text-gray-400 leading-relaxed">
+              <h3 className="text-lg font-bold text-[#0F172A] tracking-tight">Permit Application Submitted</h3>
+              <p className="text-xs text-[#64748B] leading-normal">
                 Your permit request has been registered in the GHMC central grid. Your unique identification permit code is generated below:
               </p>
             </div>
 
             {/* Generated Permit Code */}
-            <div className="bg-slate-950/80 px-4 py-3 rounded-xl border border-gray-800 text-lg font-extrabold tracking-widest text-primaryAqua font-mono select-all">
+            <div className="bg-slate-50 px-4 py-3 rounded-lg border border-[#E2E8F0] text-lg font-bold tracking-widest text-[#0F766E] font-mono select-all">
               {`DA-${createdPermit.agency_name ? createdPermit.agency_name.toUpperCase().substring(0,3) : 'UTI'}-${String(createdPermit.id).padStart(5, '0')}`}
             </div>
 
-            <div className="border-t border-gray-850 pt-4 space-y-2 text-xs text-left text-gray-400">
+            <div className="border-t border-[#E2E8F0] pt-4 space-y-2 text-xs text-left text-[#64748B]">
               <div className="flex justify-between">
                 <span className="font-semibold">Project Title:</span>
-                <span className="text-white truncate max-w-[200px]">{createdPermit.title}</span>
+                <span className="text-[#0F172A] font-semibold truncate max-w-[200px]">{createdPermit.title}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-semibold">Work Category:</span>
-                <span className="text-white uppercase">{createdPermit.work_type}</span>
+                <span className="text-[#0F172A] font-semibold uppercase">{createdPermit.work_type}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-semibold">Status Code:</span>
-                <span className="text-primaryEmerald uppercase font-bold">{createdPermit.status}</span>
+                <span className="text-green-700 font-bold uppercase">{createdPermit.status}</span>
               </div>
             </div>
 
             <div className="flex flex-col gap-2 pt-2">
               <button
                 onClick={() => handlePrintReceipt(createdPermit)}
-                className="w-full rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-700 py-2.5 text-xs font-bold text-primaryAqua hover:text-white transition duration-300"
+                className="w-full rounded-lg bg-white border border-[#E2E8F0] hover:bg-slate-50 py-2.5 text-xs font-semibold text-[#0F766E] transition duration-200 shadow-sm"
               >
                 Print Registration Receipt
               </button>
               <button
                 onClick={() => navigate('/utility')}
-                className="w-full rounded-xl bg-gradient-to-r from-primaryAqua to-primaryEmerald py-2.5 text-xs font-bold text-black hover:opacity-90 shadow-aquaGlow transition duration-300"
+                className="w-full rounded-lg bg-[#0F766E] hover:bg-[#115E59] py-2.5 text-xs font-semibold text-white transition duration-200 shadow-sm"
               >
                 Go to Utility Dashboard
               </button>

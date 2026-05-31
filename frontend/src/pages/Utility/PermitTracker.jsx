@@ -16,7 +16,6 @@ import {
   Filter, 
   ArrowRight,
   TrendingUp,
-  FileSpreadsheet,
   XCircle
 } from 'lucide-react';
 
@@ -303,7 +302,7 @@ const PermitTracker = () => {
               line-height: 1.5;
             }
             .header {
-              border-bottom: 3px double #0284c7;
+              border-bottom: 3px double #0f766e;
               padding-bottom: 20px;
               margin-bottom: 30px;
               display: flex;
@@ -313,7 +312,7 @@ const PermitTracker = () => {
             .logo {
               font-weight: 800;
               font-size: 24px;
-              color: #0284c7;
+              color: #0f766e;
               letter-spacing: 1px;
             }
             .badge {
@@ -344,8 +343,8 @@ const PermitTracker = () => {
               font-size: 14px;
               font-weight: bold;
               text-transform: uppercase;
-              color: #0369a1;
-              border-left: 4px solid #0284c7;
+              color: #0f766e;
+              border-left: 4px solid #0f766e;
               padding-left: 10px;
               margin-top: 30px;
               margin-bottom: 15px;
@@ -379,8 +378,8 @@ const PermitTracker = () => {
               color: #64748b;
             }
             .stamp {
-              border: 2px solid #059669;
-              color: #059669;
+              border: 2px solid #16a34a;
+              color: #16a34a;
               padding: 10px 15px;
               font-weight: bold;
               text-transform: uppercase;
@@ -518,10 +517,10 @@ const PermitTracker = () => {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-panel rounded-2xl p-6 border border-gray-800">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6">
         <div>
-          <h2 className="text-2xl font-bold text-white tracking-wide">Excavation Permit Tracker</h2>
-          <p className="text-gray-400 text-sm mt-1">
+          <h2 className="text-xl font-bold text-[#0F172A] tracking-tight">Excavation Permit Tracker</h2>
+          <p className="text-[#64748B] text-xs mt-1">
             {user.role === 'ADMIN' 
               ? 'GHMC Central Intelligence Portal. Search, trace, map, and print excavation records across all utility networks.'
               : `Utility control grid for ${user.agency_name}. Track excavation lifecycles, coordinate shared work segments, and clear citizen safety issues.`}
@@ -531,7 +530,7 @@ const PermitTracker = () => {
           {selectedPermit && (
             <button
               onClick={() => handlePrintReport(selectedPermit)}
-              className="flex items-center gap-2 rounded-xl bg-gray-900 border border-gray-800 hover:border-gray-700 px-4 py-3 text-xs font-bold text-primaryAqua transition duration-300 hover:text-white"
+              className="flex items-center gap-2 rounded-lg bg-white border border-[#E2E8F0] hover:bg-slate-50 px-4 py-2.5 text-xs font-semibold text-[#0F766E] shadow-sm transition duration-200"
             >
               <Printer className="h-4 w-4" />
               Print Official Report
@@ -544,10 +543,10 @@ const PermitTracker = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         
         {/* Left Sidebar: Search, Filters & Permits List */}
-        <div className="glass-panel rounded-2xl p-5 border border-gray-800 space-y-4 h-[750px] flex flex-col justify-between">
+        <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 space-y-4 h-[750px] flex flex-col justify-between">
           <div className="space-y-4 flex-1 overflow-hidden flex flex-col">
-            <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
-              <Filter className="h-4.5 w-4.5 text-primaryAqua" />
+            <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-2">
+              <Filter className="h-4.5 w-4.5 text-[#0F766E]" />
               Registry Query
             </h3>
 
@@ -555,24 +554,24 @@ const PermitTracker = () => {
             <div className="space-y-3 shrink-0">
               {/* Search text */}
               <div className="relative">
-                <Search className="absolute left-3.5 top-3 h-4 w-4 text-gray-500" />
+                <Search className="absolute left-3.5 top-3 h-4.5 w-4.5 text-[#94A3B8]" />
                 <input
                   type="text"
                   placeholder="Search ID or Title..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-xl bg-gray-900/60 border border-gray-800 px-4 py-2.5 pl-10 text-xs text-white focus:outline-none focus:border-primaryAqua transition duration-300"
+                  className="w-full rounded-lg bg-white border border-[#E2E8F0] px-4 py-2 text-xs text-[#0F172A] focus:outline-none focus:border-[#0F766E] transition duration-200 placeholder-slate-400"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-2">
                 {/* Status Filter */}
                 <div>
-                  <label className="block text-[9px] font-bold uppercase tracking-wider text-gray-500 mb-1">Status</label>
+                  <label className="block text-[9px] font-bold uppercase tracking-wider text-[#64748B] mb-1">Status</label>
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="w-full rounded-lg bg-gray-900/60 border border-gray-800 px-2 py-2 text-[10px] font-bold text-white focus:outline-none focus:border-primaryAqua transition duration-300"
+                    className="w-full rounded-lg bg-white border border-[#E2E8F0] px-2 py-1.5 text-[10px] font-semibold text-[#0F172A] focus:outline-none focus:border-[#0F766E] transition duration-200"
                   >
                     <option value="ALL">ALL STATUSES</option>
                     <option value="DRAFT">DRAFT</option>
@@ -591,11 +590,11 @@ const PermitTracker = () => {
 
                 {/* Agency Filter */}
                 <div>
-                  <label className="block text-[9px] font-bold uppercase tracking-wider text-gray-500 mb-1">Agency</label>
+                  <label className="block text-[9px] font-bold uppercase tracking-wider text-[#64748B] mb-1">Agency</label>
                   <select
                     value={agencyFilter}
                     onChange={(e) => setAgencyFilter(e.target.value)}
-                    className="w-full rounded-lg bg-gray-900/60 border border-gray-800 px-2 py-2 text-[10px] font-bold text-white focus:outline-none focus:border-primaryAqua transition duration-300"
+                    className="w-full rounded-lg bg-white border border-[#E2E8F0] px-2 py-1.5 text-[10px] font-semibold text-[#0F172A] focus:outline-none focus:border-[#0F766E] transition duration-200"
                   >
                     <option value="ALL">{user.role === 'ADMIN' ? 'ALL AGENCIES' : `MY AGENCY (${user.agency_name})`}</option>
                     <option value="Airtel">Airtel Fiber</option>
@@ -608,54 +607,54 @@ const PermitTracker = () => {
               </div>
             </div>
 
-            <div className="h-[1px] bg-gray-800/80 my-2 shrink-0"></div>
+            <div className="h-[1px] bg-slate-100 my-2 shrink-0"></div>
 
             {/* List results */}
-            <div className="flex-1 overflow-y-auto space-y-3.5 pr-1.5 scrollbar-thin">
+            <div className="flex-1 overflow-y-auto space-y-3 pr-1">
               {loading ? (
                 <div className="h-48 flex items-center justify-center">
-                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-t-primaryAqua border-gray-850"></div>
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#E2E8F0] border-t-[#0F766E]"></div>
                 </div>
               ) : filteredPermits.length === 0 ? (
-                <div className="text-center py-20">
-                  <Info className="h-8 w-8 text-gray-600 mx-auto mb-2 animate-pulse" />
-                  <p className="text-[11px] text-gray-550 font-medium">No permits match search parameters.</p>
+                <div className="text-center py-20 bg-slate-50 border border-slate-100 rounded-xl p-4">
+                  <Info className="h-8 w-8 text-[#94A3B8] mx-auto mb-2" />
+                  <p className="text-[11px] text-[#64748B] font-semibold">No permits match search parameters.</p>
                 </div>
               ) : (
                 filteredPermits.map((permit) => (
                   <div
                     key={permit.id}
                     onClick={() => handleSelectPermit(permit)}
-                    className={`rounded-xl border p-4 cursor-pointer transition-all duration-300 space-y-2.5 ${
+                    className={`rounded-xl border p-4 cursor-pointer transition-all duration-200 space-y-2.5 ${
                       selectedPermit?.id === permit.id 
-                        ? 'bg-gray-800/30 border-primaryAqua shadow-aquaGlow' 
-                        : 'bg-gray-900/10 border-gray-800/80 hover:border-gray-700/60'
+                        ? 'bg-slate-50 border-[#0F766E] shadow-sm' 
+                        : 'bg-white border-[#E2E8F0] hover:border-[#CBD5E1]'
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-[9px] uppercase font-bold text-gray-500 font-mono">Ref ID #{permit.id}</span>
-                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded ${
-                        permit.status === 'APPROVED' ? 'bg-cyan-950/50 text-primaryAqua border border-cyan-900/30 font-bold' :
-                        permit.status === 'CLASH_DETECTED' ? 'bg-red-950/50 text-alertRed border border-red-900/30 font-extrabold animate-pulse' :
-                        permit.status === 'PENDING_REVIEW' ? 'bg-yellow-950/50 text-warningYellow border border-yellow-900/30 font-bold' :
-                        permit.status === 'AUTHORIZED_EXCAVATION' ? 'bg-purple-950/50 text-purple-400 border border-purple-900/30 font-bold shadow-[0_0_8px_rgba(147,51,234,0.2)]' :
-                        permit.status === 'IN_PROGRESS' ? 'bg-orange-950/50 text-orange-400 border border-orange-900/30 font-bold animate-pulse' :
-                        permit.status === 'EXCAVATION_COMPLETED' ? 'bg-yellow-950/50 text-warningYellow border border-yellow-900/30 font-bold' :
-                        permit.status === 'ROAD_RESTORED' ? 'bg-emerald-950/50 text-primaryEmerald border border-emerald-900/30 font-bold' :
-                        permit.status === 'PROJECT_CLOSED' ? 'bg-teal-950/50 text-teal-400 border border-teal-900/30 font-bold' :
-                        permit.status === 'COMPLETED' ? 'bg-emerald-950/50 text-primaryEmerald border border-emerald-900/30 font-bold' :
-                        permit.status === 'REJECTED' ? 'bg-red-950/50 text-alertRed border border-red-900/30 font-bold' :
-                        'bg-gray-850 text-gray-300 border border-gray-800'
+                      <span className="text-[9px] uppercase font-bold text-[#64748B] font-mono">Ref ID #{permit.id}</span>
+                      <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full border ${
+                        permit.status === 'APPROVED' ? 'bg-teal-50 text-[#0F766E] border-teal-100' :
+                        permit.status === 'CLASH_DETECTED' ? 'bg-red-50 text-[#DC2626] border-red-100 font-extrabold' :
+                        permit.status === 'PENDING_REVIEW' ? 'bg-amber-50 text-[#D97706] border-amber-100 font-semibold' :
+                        permit.status === 'AUTHORIZED_EXCAVATION' ? 'bg-purple-50 text-purple-700 border-purple-100 font-semibold' :
+                        permit.status === 'IN_PROGRESS' ? 'bg-blue-50 text-blue-700 border-blue-100 font-semibold' :
+                        permit.status === 'EXCAVATION_COMPLETED' ? 'bg-yellow-50 text-yellow-800 border-yellow-100 font-semibold' :
+                        permit.status === 'ROAD_RESTORED' ? 'bg-green-50 text-green-700 border-green-100 font-semibold' :
+                        permit.status === 'PROJECT_CLOSED' ? 'bg-slate-100 text-slate-700 border-slate-200 font-semibold' :
+                        permit.status === 'COMPLETED' ? 'bg-green-50 text-green-700 border-green-100 font-semibold' :
+                        permit.status === 'REJECTED' ? 'bg-red-50 text-[#DC2626] border-red-100 font-semibold' :
+                        'bg-slate-100 text-slate-700 border-slate-200'
                       }`}>
                         {permit.status}
                       </span>
                     </div>
 
-                    <h4 className="text-xs font-bold text-white leading-relaxed line-clamp-2">{permit.title}</h4>
+                    <h4 className="text-xs font-bold text-[#0F172A] leading-normal line-clamp-2">{permit.title}</h4>
                     
                     <div className="flex items-center justify-between text-[10px]">
-                      <span className="font-bold text-primaryEmerald uppercase">{permit.agency_name}</span>
-                      <span className="text-gray-400 font-medium font-mono">{permit.start_date}</span>
+                      <span className="font-semibold text-[#0F766E] uppercase">{permit.agency_name}</span>
+                      <span className="text-[#64748B] font-semibold font-mono">{permit.start_date}</span>
                     </div>
                   </div>
                 ))
@@ -664,20 +663,20 @@ const PermitTracker = () => {
           </div>
           
           {/* Summary Widget */}
-          <div className="glass-panel bg-gray-950/40 rounded-xl p-3 border border-gray-850 shrink-0 text-[10px] space-y-1.5">
-            <div className="flex justify-between font-bold text-gray-400">
+          <div className="bg-slate-50 rounded-xl p-3 border border-[#E2E8F0] shrink-0 text-[10px] space-y-1.5">
+            <div className="flex justify-between font-bold text-[#64748B]">
               <span>Matching Permits:</span>
-              <span className="text-white font-mono">{filteredPermits.length}</span>
+              <span className="text-[#0F172A] font-mono">{filteredPermits.length}</span>
             </div>
-            <div className="flex justify-between font-bold text-gray-400">
+            <div className="flex justify-between font-bold text-[#64748B]">
               <span>Active excavations:</span>
-              <span className="text-primaryAqua font-mono">
+              <span className="text-[#0F766E] font-mono">
                 {filteredPermits.filter(p => p.status === 'IN_PROGRESS').length}
               </span>
             </div>
-            <div className="flex justify-between font-bold text-gray-400">
+            <div className="flex justify-between font-bold text-[#64748B]">
               <span>Clashes flagged:</span>
-              <span className="text-alertRed font-mono">
+              <span className="text-[#DC2626] font-mono">
                 {filteredPermits.filter(p => p.status === 'CLASH_DETECTED').length}
               </span>
             </div>
@@ -687,10 +686,10 @@ const PermitTracker = () => {
         {/* Right Panel: Permit full details */}
         <div className="lg:col-span-2 space-y-6">
           {!selectedPermit ? (
-            <div className="glass-panel rounded-2xl p-8 border border-gray-800 text-center h-[750px] flex flex-col items-center justify-center space-y-3">
-              <Layers className="h-14 w-14 text-primaryAqua animate-pulse mb-2" />
-              <h3 className="text-white font-bold text-lg">No Excavation Permit Selected</h3>
-              <p className="text-xs text-gray-400 max-w-sm leading-relaxed">
+            <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-8 text-center h-[750px] flex flex-col items-center justify-center space-y-3">
+              <Layers className="h-14 w-14 text-[#0F766E] animate-pulse mb-2" />
+              <h3 className="text-[#0F172A] font-bold text-base">No Excavation Permit Selected</h3>
+              <p className="text-xs text-[#64748B] max-w-sm leading-normal">
                 Choose any excavation permit from the registry column on the left to track timeline approvals, inspect spatial maps, and analyze conflict schedules.
               </p>
             </div>
@@ -698,11 +697,11 @@ const PermitTracker = () => {
             <div className="space-y-6">
               
               {/* Timeline approvals tracker panel */}
-              <div className="glass-panel rounded-2xl p-6 border border-gray-800 space-y-5">
+              <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 space-y-5">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider">Excavation Progress Timeline</h3>
-                  <span className="text-[10px] text-gray-400 font-bold uppercase font-mono">
-                    Permit Stage: <span className="text-primaryAqua">{selectedPermit.status}</span>
+                  <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider">Excavation Progress Timeline</h3>
+                  <span className="text-[10px] text-[#64748B] font-bold uppercase font-mono">
+                    Permit Stage: <span className="text-[#0F766E] font-semibold">{selectedPermit.status}</span>
                   </span>
                 </div>
 
@@ -713,7 +712,7 @@ const PermitTracker = () => {
                       {/* Connection Line */}
                       {idx < 7 && (
                         <div className={`hidden md:block absolute top-3 left-7 w-[calc(100%-14px)] h-[2px] z-0 ${
-                          selectedPermitTimeline[idx+1].isDone ? 'bg-gradient-to-r from-primaryEmerald to-primaryAqua' : 'bg-gray-850'
+                          selectedPermitTimeline[idx+1].isDone ? 'bg-green-600' : 'bg-slate-100'
                         }`} />
                       )}
 
@@ -721,22 +720,22 @@ const PermitTracker = () => {
                       <span className={`relative z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[10px] font-extrabold ${
                         step.isActive 
                           ? step.isError 
-                            ? 'bg-red-950 text-alertRed border-alertRed shadow-redGlow animate-bounce'
-                            : 'bg-cyan-950 text-primaryAqua border-primaryAqua shadow-aquaGlow animate-pulse'
+                            ? 'bg-red-50 text-[#DC2626] border-[#DC2626] animate-bounce'
+                            : 'bg-teal-50 text-[#0F766E] border-[#0F766E]'
                           : step.isDone
-                            ? 'bg-emerald-950 text-primaryEmerald border-primaryEmerald'
-                            : 'bg-gray-900 text-gray-600 border-gray-800'
+                            ? 'bg-green-50 text-green-600 border-green-200'
+                            : 'bg-slate-100 text-slate-400 border-slate-200'
                       }`}>
                         {step.isDone ? <CheckCircle className="h-3.5 w-3.5" /> : idx + 1}
                       </span>
 
                       <div className="space-y-0.5 max-w-[150px]">
-                        <h4 className={`text-xs font-bold ${
+                        <h4 className={`text-xs font-semibold ${
                           step.isActive 
-                            ? step.isError ? 'text-alertRed' : 'text-primaryAqua' 
-                            : step.isDone ? 'text-white' : 'text-gray-500'
+                            ? step.isError ? 'text-[#DC2626]' : 'text-[#0F766E]' 
+                            : step.isDone ? 'text-[#0F172A]' : 'text-slate-450'
                         }`}>{step.title}</h4>
-                        <p className="text-[9px] text-gray-400 leading-snug line-clamp-3">{step.desc}</p>
+                        <p className="text-[9px] text-[#64748B] leading-normal line-clamp-3">{step.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -747,75 +746,75 @@ const PermitTracker = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 
                 {/* Parameters panel */}
-                <div className="glass-panel rounded-2xl p-5 border border-gray-800 space-y-4 flex flex-col justify-between">
+                <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 space-y-4 flex flex-col justify-between">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Specifications</span>
-                      <span className="text-xs font-mono text-primaryAqua font-bold">#{selectedPermit.id}</span>
+                      <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider">Specifications</span>
+                      <span className="text-xs font-semibold font-mono text-[#0F766E]">#{selectedPermit.id}</span>
                     </div>
 
-                    <div className="h-[1px] bg-gray-800/80"></div>
+                    <div className="h-[1px] bg-slate-100"></div>
 
                     <div className="space-y-3 text-xs">
                       <div>
-                        <p className="text-gray-500 uppercase font-bold text-[9px] mb-0.5">Project Title</p>
-                        <p className="text-white font-bold leading-relaxed">{selectedPermit.title}</p>
+                        <p className="text-[#64748B] uppercase font-bold text-[9px] mb-0.5">Project Title</p>
+                        <p className="text-[#0F172A] font-semibold leading-normal">{selectedPermit.title}</p>
                       </div>
 
                       <div>
-                        <p className="text-gray-500 uppercase font-bold text-[9px] mb-0.5">Requesting Agency</p>
-                        <p className="text-primaryEmerald font-bold uppercase">{selectedPermit.agency_name}</p>
+                        <p className="text-[#64748B] uppercase font-bold text-[9px] mb-0.5">Requesting Agency</p>
+                        <p className="text-green-700 font-bold uppercase">{selectedPermit.agency_name}</p>
                       </div>
 
                       <div>
-                        <p className="text-gray-500 uppercase font-bold text-[9px] mb-0.5">Work Type / Category</p>
-                        <p className="text-gray-300 font-bold uppercase">{selectedPermit.work_type}</p>
+                        <p className="text-[#64748B] uppercase font-bold text-[9px] mb-0.5">Work Type / Category</p>
+                        <p className="text-slate-700 font-bold uppercase">{selectedPermit.work_type}</p>
                       </div>
 
                       <div>
-                        <p className="text-gray-500 uppercase font-bold text-[9px] mb-0.5">Excavation Depth</p>
-                        <p className="text-white font-bold font-mono">{selectedPermit.depth_meters} meters</p>
+                        <p className="text-[#64748B] uppercase font-bold text-[9px] mb-0.5">Excavation Depth</p>
+                        <p className="text-[#0F172A] font-bold font-mono">{selectedPermit.depth_meters} meters</p>
                       </div>
 
                       <div>
-                        <p className="text-gray-500 uppercase font-bold text-[9px] mb-0.5">Work Schedule Window</p>
-                        <div className="flex items-center gap-1 mt-0.5 text-gray-300 font-semibold">
-                          <Calendar className="h-3.5 w-3.5 text-primaryAqua shrink-0" />
+                        <p className="text-[#64748B] uppercase font-bold text-[9px] mb-0.5">Work Schedule Window</p>
+                        <div className="flex items-center gap-1 mt-0.5 text-slate-800 font-semibold">
+                          <Calendar className="h-3.5 w-3.5 text-[#0F766E] shrink-0" />
                           <span>{selectedPermit.start_date}</span>
-                          <ArrowRight className="h-3 w-3 text-gray-500" />
+                          <ArrowRight className="h-3 w-3 text-[#94A3B8]" />
                           <span>{selectedPermit.end_date}</span>
                         </div>
-                        <p className="text-[10px] text-gray-500 mt-1 font-medium">
-                          Total work duration: <span className="text-white font-bold font-mono">{getDurationDays(selectedPermit.start_date, selectedPermit.end_date)} days</span>
+                        <p className="text-[10px] text-[#64748B] mt-1 font-medium">
+                          Total work duration: <span className="text-[#0F172A] font-bold font-mono">{getDurationDays(selectedPermit.start_date, selectedPermit.end_date)} days</span>
                         </p>
                       </div>
                     </div>
                   </div>
 
                   <div className="pt-2">
-                    <p className="text-gray-505 uppercase font-bold text-[9px] mb-1">Geospatial Geometry (WKT)</p>
-                    <div className="text-[9px] font-mono text-gray-500 bg-gray-950/60 p-2 rounded-lg border border-gray-850 break-all leading-normal max-h-16 overflow-y-auto">
+                    <p className="text-[#64748B] uppercase font-bold text-[9px] mb-1">Geospatial Geometry (WKT)</p>
+                    <div className="text-[9px] font-mono text-[#64748B] bg-slate-50 p-2 rounded-lg border border-[#E2E8F0] break-all leading-normal max-h-16 overflow-y-auto">
                       {selectedPermit.wkt_geometry}
                     </div>
                   </div>
 
                   {/* Render Authorization info if available */}
                   {selectedPermit.authorized_at && (
-                    <div className="pt-3 border-t border-gray-800/60 space-y-2 text-xs">
+                    <div className="pt-3 border-t border-slate-100 space-y-2 text-xs">
                       <div>
-                        <p className="text-gray-550 uppercase font-bold text-[9px] mb-0.5">Authorization Order</p>
-                        <p className="text-white font-semibold">
-                          Officer: <span className="font-bold text-purple-400">{selectedPermit.authorized_by}</span>
+                        <p className="text-[#64748B] uppercase font-bold text-[9px] mb-0.5">Authorization Order</p>
+                        <p className="text-[#0F172A] font-semibold">
+                          Officer: <span className="font-bold text-purple-700">{selectedPermit.authorized_by}</span>
                         </p>
-                        <p className="text-gray-400 text-[10px] font-medium font-mono">
+                        <p className="text-[#64748B] text-[10px] font-medium font-mono">
                           Date: {new Date(selectedPermit.authorized_at).toLocaleString()}
                         </p>
                       </div>
 
                       {selectedPermit.restoration_deadline && (
                         <div>
-                          <p className="text-gray-555 uppercase font-bold text-[9px] mb-0.5">Restoration Deadline</p>
-                          <p className="text-alertRed font-extrabold font-mono">{selectedPermit.restoration_deadline}</p>
+                          <p className="text-[#64748B] uppercase font-bold text-[9px] mb-0.5">Restoration Deadline</p>
+                          <p className="text-[#DC2626] font-bold font-mono">{selectedPermit.restoration_deadline}</p>
                         </div>
                       )}
                     </div>
@@ -823,15 +822,15 @@ const PermitTracker = () => {
 
                   {/* Render Completion info if available */}
                   {selectedPermit.completed_at && (
-                    <div className="pt-3 border-t border-gray-800/60 space-y-1 text-xs">
-                      <p className="text-gray-500 uppercase font-bold text-[9px] mb-0.5">Excavation Completion Log</p>
-                      <p className="text-white font-semibold">
-                        Actor: <span className="font-bold text-warningYellow">{selectedPermit.completed_by}</span>
+                    <div className="pt-3 border-t border-slate-100 space-y-1 text-xs">
+                      <p className="text-[#64748B] uppercase font-bold text-[9px] mb-0.5">Excavation Completion Log</p>
+                      <p className="text-[#0F172A] font-semibold">
+                        Actor: <span className="font-bold text-yellow-750">{selectedPermit.completed_by}</span>
                       </p>
-                      <p className="text-gray-400 text-[10px] font-medium font-mono">
+                      <p className="text-[#64748B] text-[10px] font-medium font-mono">
                         Date: {new Date(selectedPermit.completed_at).toLocaleString()}
                       </p>
-                      <p className="text-gray-400 text-[10px] italic">
+                      <p className="text-[#64748B] text-[10px] italic">
                         Notes: "{selectedPermit.completion_notes || 'None'}"
                       </p>
                     </div>
@@ -839,15 +838,15 @@ const PermitTracker = () => {
 
                   {/* Render Verification info if available */}
                   {selectedPermit.restoration_verified_at && (
-                    <div className="pt-3 border-t border-gray-800/60 space-y-1 text-xs">
-                      <p className="text-gray-500 uppercase font-bold text-[9px] mb-0.5">GHMC Verification Details</p>
-                      <p className="text-white font-semibold">
-                        Inspector: <span className="font-bold text-primaryEmerald">{selectedPermit.restoration_verified_by}</span>
+                    <div className="pt-3 border-t border-slate-100 space-y-1 text-xs">
+                      <p className="text-[#64748B] uppercase font-bold text-[9px] mb-0.5">GHMC Verification Details</p>
+                      <p className="text-[#0F172A] font-semibold">
+                        Inspector: <span className="font-bold text-green-700">{selectedPermit.restoration_verified_by}</span>
                       </p>
-                      <p className="text-gray-400 text-[10px] font-medium font-mono">
+                      <p className="text-[#64748B] text-[10px] font-medium font-mono">
                         Date: {new Date(selectedPermit.restoration_verified_at).toLocaleString()}
                       </p>
-                      <p className="text-gray-400 text-[10px] italic">
+                      <p className="text-[#64748B] text-[10px] italic">
                         Remarks: "{selectedPermit.restoration_remarks || 'None'}"
                       </p>
                     </div>
@@ -855,12 +854,12 @@ const PermitTracker = () => {
 
                   {/* Render Closure info if available */}
                   {selectedPermit.closed_at && (
-                    <div className="pt-3 border-t border-gray-800/60 space-y-1 text-xs">
-                      <p className="text-gray-500 uppercase font-bold text-[9px] mb-0.5">Project Closure Stamp</p>
-                      <p className="text-white font-semibold">
-                        Manager: <span className="font-bold text-teal-400">{selectedPermit.closed_by}</span>
+                    <div className="pt-3 border-t border-slate-100 space-y-1 text-xs">
+                      <p className="text-[#64748B] uppercase font-bold text-[9px] mb-0.5">Project Closure Stamp</p>
+                      <p className="text-[#0F172A] font-semibold">
+                        Manager: <span className="font-bold text-teal-600">{selectedPermit.closed_by}</span>
                       </p>
-                      <p className="text-gray-400 text-[10px] font-medium font-mono">
+                      <p className="text-[#64748B] text-[10px] font-medium font-mono">
                         Date: {new Date(selectedPermit.closed_at).toLocaleString()}
                       </p>
                     </div>
@@ -868,11 +867,11 @@ const PermitTracker = () => {
 
                   {/* Action Controls for Excavation authorization (Admin only) */}
                   {user && user.role === 'ADMIN' && selectedPermit.status === 'APPROVED' && (
-                    <div className="pt-4 border-t border-gray-850 space-y-2">
-                      <p className="text-[9px] font-bold text-gray-550 uppercase tracking-wider">Administrative Controls</p>
+                    <div className="pt-4 border-t border-slate-100 space-y-2">
+                      <p className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider">Administrative Controls</p>
                       <button
                         onClick={() => handleAuthorizeExcavation(selectedPermit.id)}
-                        className="w-full rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 py-2.5 text-xs font-bold text-white shadow-[0_0_15px_rgba(147,51,234,0.4)] transition duration-300 flex items-center justify-center gap-1.5 border border-purple-500/30"
+                        className="w-full rounded-lg bg-purple-600 hover:bg-purple-700 py-2.5 text-xs font-semibold text-white shadow-sm transition duration-200 flex items-center justify-center gap-1.5"
                       >
                         <CheckCircle className="h-4 w-4" />
                         Authorize Excavation
@@ -882,11 +881,11 @@ const PermitTracker = () => {
 
                   {/* Action Controls for Starting physical excavation (Utility only) */}
                   {user && user.role === 'UTILITY' && selectedPermit.status === 'AUTHORIZED_EXCAVATION' && selectedPermit.agency_name === user.agency_name && (
-                    <div className="pt-4 border-t border-gray-850 space-y-2">
-                      <p className="text-[9px] font-bold text-gray-555 uppercase tracking-wider">Utility Field Actions</p>
+                    <div className="pt-4 border-t border-slate-100 space-y-2">
+                      <p className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider">Utility Field Actions</p>
                       <button
                         onClick={() => handleStartExcavation(selectedPermit.id)}
-                        className="w-full rounded-xl bg-gradient-to-r from-orange-600 to-amber-600 hover:from-orange-500 hover:to-amber-500 py-2.5 text-xs font-bold text-white shadow-[0_0_15px_rgba(249,115,22,0.4)] transition duration-300 flex items-center justify-center gap-1.5 border border-orange-500/30"
+                        className="w-full rounded-lg bg-purple-600 hover:bg-purple-700 py-2.5 text-xs font-semibold text-white shadow-sm transition duration-200 flex items-center justify-center gap-1.5"
                       >
                         <CheckCircle className="h-4 w-4" />
                         Start Excavation
@@ -896,27 +895,27 @@ const PermitTracker = () => {
 
                   {/* Action Controls for Utility marking excavation complete */}
                   {user && user.role === 'UTILITY' && selectedPermit.status === 'IN_PROGRESS' && selectedPermit.agency_name === user.agency_name && (
-                    <div className="pt-4 border-t border-gray-850 space-y-3">
-                      <p className="text-[9px] font-bold text-gray-555 uppercase tracking-wider">Utility Field Actions</p>
+                    <div className="pt-4 border-t border-slate-100 space-y-3">
+                      <p className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider">Utility Field Actions</p>
                       {actionError && (
-                        <p className="text-[10px] text-alertRed font-bold">{actionError}</p>
+                        <p className="text-[10px] text-[#DC2626] font-bold">{actionError}</p>
                       )}
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Excavation Notes</label>
+                        <label className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider">Excavation Notes</label>
                         <textarea
                           value={completionNotes}
                           onChange={(e) => setCompletionNotes(e.target.value)}
                           placeholder="Record completed trench dimensions, backfilling completion, etc."
-                          className="w-full rounded-xl bg-gray-950 border border-gray-800 px-3 py-2 text-xs text-white placeholder-gray-600 focus:outline-none focus:border-primaryAqua min-h-[50px]"
+                          className="w-full rounded-lg bg-white border border-[#E2E8F0] px-3 py-2 text-xs text-[#0F172A] placeholder-slate-400 focus:outline-none focus:border-[#0F766E] min-h-[50px]"
                         />
                       </div>
                       <button
                         onClick={() => handleCompleteExcavation(selectedPermit.id)}
                         disabled={actionLoading || !completionNotes.trim()}
-                        className={`w-full rounded-xl py-2.5 text-xs font-bold transition duration-300 flex items-center justify-center gap-1.5 border ${
+                        className={`w-full rounded-lg py-2.5 text-xs font-semibold transition duration-200 flex items-center justify-center gap-1.5 ${
                           completionNotes.trim()
-                            ? 'bg-gradient-to-r from-yellow-600 to-amber-600 hover:from-yellow-500 hover:to-amber-500 text-white shadow-[0_0_15px_rgba(245,158,11,0.3)] border-yellow-500/30'
-                            : 'bg-gray-900 border border-gray-800 text-gray-600 cursor-not-allowed'
+                            ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-sm'
+                            : 'bg-slate-100 border border-[#E2E8F0] text-slate-400 cursor-not-allowed'
                         }`}
                       >
                         <CheckCircle className="h-4 w-4" />
@@ -927,25 +926,25 @@ const PermitTracker = () => {
 
                   {/* Action Controls for Admin Verification and Rework (Admin only) */}
                   {user && user.role === 'ADMIN' && selectedPermit.status === 'EXCAVATION_COMPLETED' && (
-                    <div className="pt-4 border-t border-gray-850 space-y-3">
-                      <p className="text-[9px] font-bold text-gray-550 uppercase tracking-wider">Administrative Actions</p>
+                    <div className="pt-4 border-t border-slate-100 space-y-3">
+                      <p className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider">Administrative Actions</p>
                       {actionError && (
-                        <p className="text-[10px] text-alertRed font-bold">{actionError}</p>
+                        <p className="text-[10px] text-[#DC2626] font-bold">{actionError}</p>
                       )}
                       <div className="space-y-1.5">
-                        <label className="text-[9px] font-bold text-gray-400 uppercase tracking-wider">Verification Remarks</label>
+                        <label className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider">Verification Remarks</label>
                         <textarea
                           value={remarks}
                           onChange={(e) => setRemarks(e.target.value)}
                           placeholder="Provide details about road quality, restoration finish, or reason for rework..."
-                          className="w-full rounded-xl bg-gray-950 border border-gray-800 px-3 py-2 text-xs text-white placeholder-gray-650 focus:outline-none focus:border-primaryAqua min-h-[50px]"
+                          className="w-full rounded-lg bg-white border border-[#E2E8F0] px-3 py-2 text-xs text-[#0F172A] placeholder-slate-450 focus:outline-none focus:border-[#0F766E] min-h-[50px]"
                         />
                       </div>
                       <div className="grid grid-cols-2 gap-2">
                         <button
                           onClick={() => handleVerifyRestoration(selectedPermit.id)}
                           disabled={actionLoading}
-                          className="rounded-xl bg-emerald-950/40 hover:bg-emerald-950/70 border border-emerald-900/40 py-2 text-xs font-bold text-primaryEmerald transition duration-300 flex items-center justify-center gap-1 shadow-[0_0_10px_rgba(16,185,129,0.15)]"
+                          className="rounded-lg bg-green-600 hover:bg-green-700 py-2 text-xs font-semibold text-white transition duration-200 flex items-center justify-center gap-1 shadow-sm"
                         >
                           <CheckCircle className="h-3.5 w-3.5" />
                           Verify
@@ -953,10 +952,10 @@ const PermitTracker = () => {
                         <button
                           onClick={() => handleRequestRework(selectedPermit.id)}
                           disabled={actionLoading || !remarks.trim()}
-                          className={`rounded-xl py-2 text-xs font-bold transition duration-300 flex items-center justify-center gap-1 ${
+                          className={`rounded-lg py-2 text-xs font-semibold transition duration-200 flex items-center justify-center gap-1 ${
                             remarks.trim() 
-                              ? 'bg-red-950/40 hover:bg-red-950/70 border border-red-900/40 text-alertRed shadow-[0_0_10px_rgba(239,68,68,0.15)]'
-                              : 'bg-gray-900 border border-gray-800 text-gray-650 cursor-not-allowed'
+                              ? 'bg-red-600 hover:bg-red-700 text-white shadow-sm'
+                              : 'bg-slate-100 border border-[#E2E8F0] text-slate-400 cursor-not-allowed'
                           }`}
                         >
                           <XCircle className="h-3.5 w-3.5" />
@@ -968,15 +967,15 @@ const PermitTracker = () => {
 
                   {/* Action Controls for Admin Project Closure (Admin only) */}
                   {user && user.role === 'ADMIN' && selectedPermit.status === 'ROAD_RESTORED' && (
-                    <div className="pt-4 border-t border-gray-850 space-y-2">
-                      <p className="text-[9px] font-bold text-gray-555 uppercase tracking-wider">Administrative Actions</p>
+                    <div className="pt-4 border-t border-slate-100 space-y-2">
+                      <p className="text-[9px] font-bold text-[#64748B] uppercase tracking-wider">Administrative Actions</p>
                       {actionError && (
-                        <p className="text-[10px] text-alertRed font-bold">{actionError}</p>
+                        <p className="text-[10px] text-[#DC2626] font-bold">{actionError}</p>
                       )}
                       <button
                         onClick={() => handleCloseProject(selectedPermit.id)}
                         disabled={actionLoading}
-                        className="w-full rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 py-2.5 text-xs font-bold text-white shadow-[0_0_15px_rgba(16,185,129,0.4)] transition duration-300 flex items-center justify-center gap-1.5 border border-emerald-500/30"
+                        className="w-full rounded-lg bg-green-600 hover:bg-green-700 py-2.5 text-xs font-semibold text-white shadow-sm transition duration-200 flex items-center justify-center gap-1.5"
                       >
                         <CheckCircle className="h-4 w-4" />
                         Close Project
@@ -986,16 +985,16 @@ const PermitTracker = () => {
                 </div>
 
                 {/* Map panel */}
-                <div className="md:col-span-2 glass-panel rounded-2xl p-4 border border-gray-800 space-y-3">
-                  <div className="flex justify-between items-center text-xs font-bold text-white uppercase tracking-wider">
+                <div className="md:col-span-2 bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4 space-y-3">
+                  <div className="flex justify-between items-center text-xs font-bold text-[#0F172A] uppercase tracking-wider">
                     <div className="flex items-center gap-1">
-                      <MapPin className="h-4.5 w-4.5 text-primaryAqua" />
+                      <MapPin className="h-4.5 w-4.5 text-[#0F766E]" />
                       <span>Focus Excavation Segment Map</span>
                     </div>
-                    <span className="text-[9px] font-bold text-gray-500">ZOOM TO COORDINATE NODES</span>
+                    <span className="text-[9px] font-bold text-[#64748B]">ZOOM TO COORDINATE NODES</span>
                   </div>
 
-                  <div className="h-[310px] rounded-xl overflow-hidden border border-gray-850">
+                  <div className="h-[310px] rounded-xl overflow-hidden border border-[#E2E8F0] shadow-sm">
                     <HyderabadMap
                       permits={[selectedPermit]}
                       complaints={linkedComplaints}
@@ -1008,9 +1007,9 @@ const PermitTracker = () => {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 
                 {/* Clash panel if present */}
-                <div className="glass-panel rounded-2xl p-5 border border-gray-800 space-y-4">
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                    <ShieldAlert className="h-4.5 w-4.5 text-alertRed" />
+                <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 space-y-4">
+                  <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
+                    <ShieldAlert className="h-4.5 w-4.5 text-[#DC2626]" />
                     Spatial Conflict Analyzer
                   </h3>
 
@@ -1021,29 +1020,29 @@ const PermitTracker = () => {
                         return (
                           <div 
                             key={idx} 
-                            className={`rounded-xl border p-4 space-y-2 ${
+                            className={`rounded-xl border p-4 space-y-2 bg-white shadow-sm ${
                               isRoadLock 
-                                ? 'bg-red-950/10 border-red-900/30' 
-                                : 'bg-yellow-950/10 border-yellow-900/30'
+                                ? 'border-red-200' 
+                                : 'border-amber-200'
                             }`}
                           >
                             <div className="flex justify-between items-center text-[9px] font-bold uppercase tracking-wider">
-                              <span className={isRoadLock ? 'text-alertRed' : 'text-warningYellow'}>
+                              <span className={isRoadLock ? 'text-[#DC2626]' : 'text-[#D97706]'}>
                                 {isRoadLock ? 'GHMC RESURFACING PROTECTION LOCK' : 'JOINT COLLISION DETECTED'}
                               </span>
                               {!isRoadLock && (
-                                <span className="text-gray-500 font-mono">Overlap: {clash.overlap_percentage}%</span>
+                                <span className="text-[#64748B] font-mono">Overlap: {clash.overlap_percentage}%</span>
                               )}
                             </div>
                             
-                            <h4 className="text-xs font-bold text-white">{clash.conflicting_title}</h4>
-                            <p className="text-[11px] text-gray-300 leading-relaxed font-semibold">{clash.recommendation_text}</p>
+                            <h4 className="text-xs font-bold text-[#0F172A]">{clash.conflicting_title}</h4>
+                            <p className="text-[11px] text-[#64748B] leading-normal font-medium">{clash.recommendation_text}</p>
 
                             {!isRoadLock && clash.estimated_savings > 0 && (
-                              <div className="flex items-center gap-1.5 bg-emerald-950/30 border border-emerald-900/30 rounded-lg p-2.5 mt-1.5 text-[10px]">
-                                <TrendingUp className="h-4 w-4 text-primaryEmerald shrink-0" />
-                                <span className="text-gray-300">
-                                  Estimated cost-sharing savings: <span className="font-extrabold text-primaryEmerald font-mono">₹{clash.estimated_savings.toLocaleString()} INR</span>
+                              <div className="flex items-center gap-1.5 bg-green-50 border border-green-100 rounded-lg p-2.5 mt-1.5 text-[10px]">
+                                <TrendingUp className="h-4 w-4 text-green-600 shrink-0" />
+                                <span className="text-[#64748B] font-medium">
+                                  Estimated cost-sharing savings: <span className="font-bold text-green-700 font-mono">₹{clash.estimated_savings.toLocaleString()} INR</span>
                                 </span>
                               </div>
                             )}
@@ -1052,43 +1051,43 @@ const PermitTracker = () => {
                       })}
                     </div>
                   ) : (
-                    <div className="text-center py-10 flex flex-col items-center justify-center space-y-2 bg-emerald-950/10 rounded-xl border border-emerald-900/20">
-                      <CheckCircle className="h-8 w-8 text-primaryEmerald animate-bounce" />
-                      <p className="text-xs text-primaryEmerald font-bold">No Spatial Conflicts Registered</p>
-                      <p className="text-[10px] text-gray-400 max-w-[200px]">Geospatial check passed. Excavation path is clear of direct utility clashes.</p>
+                    <div className="text-center py-10 flex flex-col items-center justify-center space-y-2 bg-green-50/50 rounded-xl border border-green-100 p-4">
+                      <CheckCircle className="h-8 w-8 text-green-600" />
+                      <p className="text-xs text-green-700 font-bold">No Spatial Conflicts Registered</p>
+                      <p className="text-[10px] text-[#64748B] max-w-[200px]">Geospatial check passed. Excavation path is clear of direct utility clashes.</p>
                     </div>
                   )}
                 </div>
 
                 {/* Citizen complaints logged panel */}
-                <div className="glass-panel rounded-2xl p-5 border border-gray-800 space-y-4">
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                    <AlertTriangle className="h-4.5 w-4.5 text-orange-400" />
-                    Associated Citizen Safety Hazards
+                <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 space-y-4">
+                  <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
+                    <AlertTriangle className="h-4.5 w-4.5 text-amber-550" />
+                    Associated Citizen Hazards
                   </h3>
 
                   {linkedComplaints.length === 0 ? (
-                    <div className="text-center py-10 flex flex-col items-center justify-center space-y-2 bg-slate-950/20 rounded-xl border border-slate-900/30">
-                      <CheckCircle className="h-8 w-8 text-primaryEmerald" />
-                      <p className="text-xs text-gray-400 font-bold">No Open Hazards Registered</p>
-                      <p className="text-[10px] text-gray-505">Citizen complaints linked to this permit will be logged here in real-time.</p>
+                    <div className="text-center py-10 flex flex-col items-center justify-center space-y-2 bg-slate-50 rounded-xl border border-slate-100 p-4">
+                      <CheckCircle className="h-8 w-8 text-green-600" />
+                      <p className="text-xs text-[#64748B] font-bold">No Open Hazards Registered</p>
+                      <p className="text-[10px] text-slate-400">Citizen complaints linked to this permit will be logged here in real-time.</p>
                     </div>
                   ) : (
                     <div className="space-y-3.5 max-h-[220px] overflow-y-auto pr-1">
                       {linkedComplaints.map((complaint) => (
-                        <div key={complaint.id} className="rounded-xl border border-gray-850 bg-gray-900/20 p-3.5 space-y-2.5">
+                        <div key={complaint.id} className="rounded-xl border border-[#E2E8F0] bg-slate-50 p-3.5 space-y-2.5">
                           <div className="flex items-center justify-between text-[9px] font-bold">
-                            <span className="uppercase text-alertRed font-mono">#{complaint.complaint_type.replace('_', ' ')}</span>
-                            <span className={`px-2 py-0.5 rounded ${
-                              complaint.status === 'RESOLVED' ? 'bg-emerald-950/40 text-primaryEmerald' : 'bg-red-950/40 text-alertRed animate-pulse'
+                            <span className="uppercase text-[#DC2626] font-mono">#{complaint.complaint_type.replace('_', ' ')}</span>
+                            <span className={`px-2 py-0.5 rounded-full border ${
+                              complaint.status === 'RESOLVED' ? 'bg-green-50 text-green-700 border-green-100' : 'bg-red-50 text-[#DC2626] border-red-100'
                             }`}>
                               {complaint.status}
                             </span>
                           </div>
 
-                          <p className="text-[11px] text-gray-300 leading-normal font-medium">{complaint.description}</p>
+                          <p className="text-[11px] text-[#0F172A] leading-normal font-medium">{complaint.description}</p>
                           
-                          <div className="flex justify-between items-center text-[9px] text-gray-500 font-bold">
+                          <div className="flex justify-between items-center text-[9px] text-[#64748B] font-semibold">
                             <span>Reporter: {complaint.citizen_name}</span>
                             <span>Logged: {new Date(complaint.created_at).toLocaleDateString()}</span>
                           </div>
@@ -1099,35 +1098,35 @@ const PermitTracker = () => {
                 </div>
 
                 {/* Chronological Activity Log Panel */}
-                <div className="glass-panel rounded-2xl p-5 border border-gray-800 space-y-4">
-                  <h3 className="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-                    <Clock className="h-4.5 w-4.5 text-purple-400" />
+                <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 space-y-4">
+                  <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
+                    <Clock className="h-4.5 w-4.5 text-purple-700" />
                     Permit Activity Ledger
                   </h3>
 
                   {!selectedPermit.audit_logs || selectedPermit.audit_logs.length === 0 ? (
-                    <div className="text-center py-10 flex flex-col items-center justify-center space-y-2 bg-slate-950/20 rounded-xl border border-slate-900/30">
-                      <Clock className="h-8 w-8 text-gray-600 mx-auto animate-pulse" />
-                      <p className="text-xs text-gray-400 font-bold">No Activity Logs Found</p>
-                      <p className="text-[10px] text-gray-500">Historical state changes and audit events will render here.</p>
+                    <div className="text-center py-10 flex flex-col items-center justify-center space-y-2 bg-slate-50 rounded-xl border border-slate-100 p-4">
+                      <Clock className="h-8 w-8 text-[#94A3B8] mx-auto" />
+                      <p className="text-xs text-[#64748B] font-bold">No Activity Logs Found</p>
+                      <p className="text-[10px] text-slate-400">Historical state changes and audit events will render here.</p>
                     </div>
                   ) : (
-                    <div className="space-y-4 max-h-[220px] overflow-y-auto pr-1 scrollbar-thin">
-                      <div className="relative pl-4 border-l border-gray-800 space-y-4">
+                    <div className="space-y-4 max-h-[220px] overflow-y-auto pr-1">
+                      <div className="relative pl-4 border-l border-slate-100 space-y-4">
                         {selectedPermit.audit_logs.map((log) => (
                           <div key={log.id} className="relative space-y-1">
                             {/* Dot */}
-                            <span className="absolute -left-[21.5px] top-1.5 h-2.5 w-2.5 rounded-full bg-purple-500 border-2 border-slate-900 shadow-[0_0_8px_rgba(168,85,247,0.5)]" />
+                            <span className="absolute -left-[21.5px] top-1.5 h-2.5 w-2.5 rounded-full bg-purple-600 border-2 border-white" />
                             
                             <div className="flex items-center justify-between text-[9px] font-mono">
-                              <span className="font-extrabold text-purple-400 uppercase tracking-wider">{log.event_type}</span>
-                              <span className="text-gray-550 font-semibold">{new Date(log.created_at).toLocaleDateString()}</span>
+                              <span className="font-bold text-purple-700 uppercase tracking-wider">{log.event_type}</span>
+                              <span className="text-[#64748B] font-semibold">{new Date(log.created_at).toLocaleDateString()}</span>
                             </div>
                             
-                            <p className="text-[10.5px] text-gray-300 leading-normal font-medium">{log.description}</p>
+                            <p className="text-[10.5px] text-[#0F172A] leading-normal font-medium">{log.description}</p>
                             
                             {log.username && (
-                              <p className="text-[8px] text-gray-505 font-bold uppercase">Actor: {log.username}</p>
+                              <p className="text-[8px] text-[#64748B] font-bold uppercase">Actor: {log.username}</p>
                             )}
                           </div>
                         ))}

@@ -9,8 +9,7 @@ import {
   ClipboardCheck, 
   AlertOctagon, 
   LogOut, 
-  User as UserIcon,
-  BellRing
+  User as UserIcon
 } from 'lucide-react';
 
 const Layout = ({ children }) => {
@@ -61,17 +60,17 @@ const Layout = ({ children }) => {
   const navLinks = getNavLinks();
 
   return (
-    <div className="flex min-h-screen bg-darkBg animated-gradient">
+    <div className="flex min-h-screen bg-[#F8FAFC]">
       {/* Sidebar */}
-      <aside className="fixed bottom-0 left-0 top-0 z-30 w-64 glass-panel border-r border-gray-800 p-4 transition-transform duration-300 md:translate-x-0">
+      <aside className="fixed bottom-0 left-0 top-0 z-30 w-64 bg-white border-r border-[#E2E8F0] p-4 transition-transform duration-300 md:translate-x-0">
         {/* Logo */}
         <div className="mb-8 flex items-center gap-3 px-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-primaryAqua to-primaryEmerald text-black font-extrabold shadow-aquaGlow">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-[#0F766E] to-[#059669] text-white font-extrabold shadow-sm text-sm">
             DA
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-wider text-white">DigAlert</h1>
-            <p className="text-[10px] uppercase tracking-widest text-primaryAqua font-semibold">Hyderabad GHMC</p>
+            <h1 className="text-lg font-bold tracking-wide text-[#0F172A]">DigAlert</h1>
+            <p className="text-[10px] uppercase tracking-widest text-[#0F766E] font-semibold">Hyderabad Civic Platform</p>
           </div>
         </div>
 
@@ -84,13 +83,13 @@ const Layout = ({ children }) => {
               <button
                 key={link.path}
                 onClick={() => navigate(link.path)}
-                className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-300 ${
+                className={`flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-gradient-to-r from-cyan-950 to-emerald-950 text-primaryAqua border border-cyan-800 shadow-aquaGlow'
-                    : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
+                    ? 'bg-[#F0FDFA] text-[#0F766E] border-l-[3px] border-[#0F766E] font-semibold'
+                    : 'text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#0F172A]'
                 }`}
               >
-                <Icon className={`h-5 w-5 ${isActive ? 'text-primaryAqua' : 'text-gray-400'}`} />
+                <Icon className={`h-[18px] w-[18px] ${isActive ? 'text-[#0F766E]' : 'text-[#94A3B8]'}`} />
                 {link.label}
               </button>
             );
@@ -100,29 +99,29 @@ const Layout = ({ children }) => {
         {/* Footer Area */}
         <div className="absolute bottom-4 left-4 right-4 space-y-3">
           {user ? (
-            <div className="glass-panel rounded-xl p-3 border border-gray-800/80">
+            <div className="bg-[#F8FAFC] rounded-xl p-3 border border-[#E2E8F0]">
               <div className="flex items-center gap-3 mb-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-800 text-gray-300 border border-gray-700">
-                  <UserIcon className="h-5 w-5 text-primaryAqua" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F0FDFA] text-[#0F766E] border border-[#E2E8F0]">
+                  <UserIcon className="h-5 w-5" />
                 </div>
                 <div className="overflow-hidden">
-                  <h4 className="text-xs font-semibold text-white truncate">{user.username}</h4>
-                  <p className="text-[9px] uppercase tracking-wider text-primaryEmerald font-semibold">{user.role}</p>
+                  <h4 className="text-xs font-semibold text-[#0F172A] truncate">{user.username}</h4>
+                  <p className="text-[9px] uppercase tracking-wider text-[#0F766E] font-semibold">{user.role}</p>
                 </div>
               </div>
-              <p className="text-[10px] text-gray-500 mb-2 truncate">Agency: {user.agency_name}</p>
+              <p className="text-[10px] text-[#94A3B8] mb-2 truncate">Agency: {user.agency_name}</p>
               <button
                 onClick={handleLogout}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-red-950/20 border border-red-900/30 px-3 py-1.5 text-xs font-semibold text-alertRed hover:bg-red-950/40 transition duration-300"
+                className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#FCA5A5] bg-[#FEF2F2] px-3 py-1.5 text-xs font-semibold text-[#DC2626] hover:bg-[#FEE2E2] transition duration-200"
               >
                 <LogOut className="h-3.5 w-3.5" />
-                Disconnect
+                Sign Out
               </button>
             </div>
           ) : (
             <button
               onClick={() => navigate('/login')}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primaryAqua to-primaryEmerald px-4 py-3 text-sm font-bold text-black hover:opacity-90 shadow-aquaGlow transition duration-300"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0F766E] hover:bg-[#115E59] px-4 py-3 text-sm font-bold text-white shadow-sm transition duration-200"
             >
               <UserIcon className="h-4 w-4" />
               Utility Login
@@ -134,26 +133,21 @@ const Layout = ({ children }) => {
       {/* Main Content Area */}
       <div className="flex-1 pl-64 min-h-screen flex flex-col">
         {/* Top Header */}
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-gray-800/60 bg-darkBg/80 px-6 backdrop-blur-md">
+        <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[#E2E8F0] bg-white px-6">
           <div className="flex items-center gap-3">
-            <span className="flex h-2.5 w-2.5 rounded-full bg-primaryEmerald animate-ping"></span>
-            <h2 className="text-sm font-semibold tracking-wider uppercase text-gray-400">
-              GHMC Central Control Grid • <span className="text-white">Active Area: Hyderabad (Zones 1-6)</span>
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#16A34A] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#16A34A]"></span>
+            </span>
+            <h2 className="text-sm font-semibold tracking-wide uppercase text-[#94A3B8]">
+              GHMC Central Control Grid • <span className="text-[#0F172A]">Active Area: Hyderabad (Zones 1-6)</span>
             </h2>
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Realtime Alert Center Widget */}
-            <div className="relative cursor-pointer hover:text-white text-gray-400 p-2 rounded-lg hover:bg-gray-800/40 transition duration-300">
-              <BellRing className="h-5 w-5 hover:text-primaryAqua transition duration-300" />
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-alertRed"></span>
-            </div>
-
-            <div className="h-8 w-[1px] bg-gray-800"></div>
-
             <div className="text-right">
-              <p className="text-xs text-gray-500 font-semibold">Server Connection</p>
-              <p className="text-xs font-bold text-primaryEmerald uppercase">Operational</p>
+              <p className="text-xs text-[#94A3B8] font-medium">Server Connection</p>
+              <p className="text-xs font-bold text-[#16A34A] uppercase">Operational</p>
             </div>
           </div>
         </header>
