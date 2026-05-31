@@ -555,13 +555,13 @@ const PermitTracker = () => {
             <div className="space-y-3 shrink-0">
               {/* Search text */}
               <div className="relative">
-                <Search className="absolute left-3.5 top-2.5 h-4.5 w-4.5 text-[#94A3B8]" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#94A3B8]" />
                 <input
                   type="text"
                   placeholder="Search ID or Title..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg bg-white border border-[#E2E8F0] pl-10 pr-4 py-2 text-xs text-[#0F172A] focus:outline-none focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/10 transition duration-200 placeholder-slate-450"
+                  className="w-full rounded-lg bg-white border border-[#E2E8F0] pl-9 pr-4 py-2 text-xs text-[#0F172A] focus:outline-none focus:border-[#0F766E] focus:ring-2 focus:ring-[#0F766E]/10 transition duration-200 placeholder-slate-450"
                 />
               </div>
 
@@ -723,9 +723,9 @@ const PermitTracker = () => {
                         {step.isDone ? <Check className="h-3.5 w-3.5 stroke-[3px]" /> : idx + 1}
                       </span>
 
-                      {/* Connection Line (Placed after span to avoid Tailwind space-y misalignment bug) */}
+                      {/* Connection Line (Placed after span with absolute centering and space-y bypass) */}
                       {idx < 7 && (
-                        <div className={`hidden md:block absolute top-3 left-3 w-full h-[2px] z-0 ${
+                        <div className={`hidden md:block absolute top-[11px] left-3 w-full h-[2px] z-0 !mt-0 ${
                           selectedPermitTimeline[idx+1].isDone ? 'bg-green-600' : 'bg-slate-100'
                         }`} />
                       )}
