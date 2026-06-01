@@ -104,7 +104,7 @@ const Layout = ({ children }) => {
       <div className="relative">
         <button
           onClick={() => setIsNotifDropdownOpen(!isNotifDropdownOpen)}
-          className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-slate-50 border border-[#E2E8F0] text-slate-600 hover:bg-[#F0FDFA] hover:text-[#0F766E] transition active:scale-95 shadow-sm"
+          className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-[#F0FDF4] border border-[#BBF7D0] text-[#16A34A] hover:bg-[#DCFCE7] hover:text-[#15803d] transition active:scale-95 shadow-sm"
           aria-label="View notifications"
         >
           <Bell className="h-4.5 w-4.5" />

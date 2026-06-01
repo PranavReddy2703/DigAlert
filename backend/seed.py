@@ -358,7 +358,7 @@ def seed_data():
                 description="Huge water leakage bubbling up from the middle of the road. Thousands of liters of drinking water being wasted daily.",
                 latitude=17.4320,
                 longitude=78.4110,
-                photo_url="https://images.unsplash.com/photo-1542013936693-8848e5740a7a?auto=format&fit=crop&w=600&q=80",
+                photo_url="https://images.unsplash.com/photo-1527181152855-fc03fc7949c8?auto=format&fit=crop&w=600&q=80",
                 status="OPEN",
                 agency_assigned="HMWSSB"
             )
