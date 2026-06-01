@@ -53,7 +53,7 @@ Three stakeholders are served by one unified platform:
 │                               │                                              │
 │                ┌──────────────▼──────────────┐                               │
 │                │   React 18 + Vite Frontend  │                               │
-│                │ TypeScript · Tailwind       │                               │
+│                │ JavaScript (ES6+) · Tailwind│                               │
 │                │ Framer Motion · React Router│                               │
 │                │ TanStack Query · Recharts   │                               │
 │                │ Leaflet                     │                               │
@@ -103,12 +103,14 @@ Three stakeholders are served by one unified platform:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-org/digalert.git
-cd digalert
+git clone https://github.com/PranavReddy2703/DigAlert.git
+# or Swecha GitLab remote
+git clone https://code.swecha.org/Sathwiknaag12/digalert.git
+cd DigAlert
 
 # 2. Create and activate a virtual environment
 cd backend
-python -m venv venv
+python3 -m venv venv
 
 # Windows
 venv\Scripts\activate
@@ -122,19 +124,36 @@ pip install -r requirements.txt
 cp .env.example .env
 # Edit .env to set JWT_SECRET and any optional SMTP settings
 
-# 5. Start the API server
+# 5. Seed the database with mock Hyderabad data (Critical step)
+# This populates permits, clashes, road segments, and complaints.
+PYTHONPATH=.. python seed.py
+
+# 6. Start the API server
 uvicorn main:app --reload
 # API available at http://localhost:8000
 # Interactive docs at http://localhost:8000/docs
 ```
 
-**SQLite (zero-config default):** The database file `digalert.db` is created automatically in `backend/` on first run. Sample seed data including deliberate clashes is inserted on startup.
+**SQLite (zero-config default):** The database file `digalert.db` is created in the project root directory once you run the seed script or start the server.
 
 **Switch to PostgreSQL:** Set `DATABASE_URL` in your `.env`:
 ```
 DATABASE_URL=postgresql://user:password@localhost:5432/digalert
 ```
 No other changes required — all queries use SQLAlchemy ORM.
+
+### Default Test Credentials
+
+The database seeding script configures standard users with specific roles to let you explore the full platform features:
+
+| Username | Password | Role | Agency | Platform Features |
+|---|---|---|---|---|
+| `admin` | `admin123` | `ADMIN` | GHMC | Full permit reviews, clash resolution, verification center, complaints supervisor |
+| `tsspdcl` | `tsspdcl123` | `UTILITY` | TSSPDCL | Power cable excavation permits, tracker, status updates |
+| `hmwssb` | `hmwssb123` | `UTILITY` | HMWSSB | Water/sewerage excavations, apply permit, resolve clashes |
+| `airtel` | `airtel123` | `UTILITY` | Airtel | Telecom 5G FTTH deployments, apply permit |
+| `bsnl` | `bsnl123` | `UTILITY` | BSNL | Telecom exchange upgrades, apply permit |
+| `citizen` | `citizen123` | `CITIZEN` | Citizen | File a public safety ticket, track complaint status |
 
 ### Frontend
 
@@ -278,7 +297,7 @@ Full reference in [docs/API.md](docs/API.md). Quick summary:
 ### Frontend
 - **React 18** — UI framework
 - **Vite** — build tool and dev server
-- **TypeScript** — static typing
+- **JavaScript (ES6+)** — client-side logic
 - **Tailwind CSS** — utility-first styling
 - **Framer Motion** — animations
 - **React Router v6** — client-side routing
