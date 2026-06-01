@@ -11,7 +11,7 @@ const FileComplaint = () => {
   
   // States
   const [citizenName, setCitizenName] = useState('');
-  const [complaintType, setComplaintType] = useState('OPEN_TRENCH');
+  const [complaintType, setComplaintType] = useState('WATER');
   const [description, setDescription] = useState('');
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
@@ -208,12 +208,9 @@ const FileComplaint = () => {
                 onChange={(e) => setComplaintType(e.target.value)}
                 className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-2.5 text-xs text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition"
               >
-                <option value="OPEN_TRENCH">Open Trench (No covering)</option>
-                <option value="UNSAFE_BARRICADING">Unsafe / Missing Barricading</option>
-                <option value="ROAD_NOT_RESTORED">Road Not Restored (Tarring missing)</option>
-                <option value="ABANDONED_WORK">Abandoned Digging Debris</option>
-                <option value="WATER_LEAKAGE">Water Line Pipeline Leakage</option>
-                <option value="TRAFFIC_OBSTRUCTION">Severe Traffic Obstruction</option>
+                <option value="WATER">Water Supply & Sewerage Infrastructure</option>
+                <option value="TELECOM">Telecommunications & Fiber Optic Grid</option>
+                <option value="ELECTRICITY">Power Grid & Electrical Distribution</option>
               </select>
             </div>
 

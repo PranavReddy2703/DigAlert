@@ -23,9 +23,11 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 // Custom styling icons for different complaint types
 const getComplaintIcon = (type) => {
-  let color = '#DC2626'; // Red default
-  if (type === 'WATER_LEAKAGE') color = '#0284C7';
-  if (type === 'TRAFFIC_OBSTRUCTION') color = '#D97706';
+  let color = '#FF3366'; // Red default
+  if (type === 'WATER_LEAKAGE' || type === 'WATER') color = '#00F2FE'; // Cyan/Blue
+  if (type === 'TELECOM') color = '#EC4899'; // Pink/Magenta
+  if (type === 'ELECTRICITY') color = '#FFD000'; // Amber/Yellow
+  if (type === 'TRAFFIC_OBSTRUCTION') color = '#F97316'; // Orange
   
   return L.divIcon({
     html: `<span style="background-color: ${color}; width: 12px; height: 12px; display: block; border-radius: 50%; border: 2px solid white; box-shadow: 0 1px 4px rgba(0,0,0,0.3)"></span>`,

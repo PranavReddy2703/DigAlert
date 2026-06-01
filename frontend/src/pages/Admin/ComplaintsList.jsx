@@ -63,6 +63,8 @@ const ComplaintsList = () => {
       const detail = err?.response?.data?.detail;
       if (err?.response?.status === 401) {
         showError("Session expired. Please log out and log in again.");
+      } else if (err?.response?.status === 403) {
+        showError(detail || "Only GHMC administrators or utility agencies can assign complaints.");
       } else {
         showError(detail || "Failed to assign agency. Please try again.");
       }
@@ -183,10 +185,9 @@ const ComplaintsList = () => {
                       className="w-full rounded-lg bg-white border border-[#E2E8F0] px-3 py-2 text-[10px] text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition"
                     >
                       <option value="">Unassigned</option>
-                      <option value="TSSPDCL">TSSPDCL (Electricity)</option>
-                      <option value="HMWSSB">HMWSSB (Water Grid)</option>
-                      <option value="Airtel">Airtel Fiber</option>
-                      <option value="BSNL">BSNL Broadband</option>
+                      <option value="TSSPDCL">TSSPDCL (Power Distribution Grid)</option>
+                      <option value="HMWSSB">HMWSSB (Water Supply & Sewerage)</option>
+                      <option value="Telecom">Telecom (Airtel, BSNL Fiber Grid)</option>
                     </select>
                   </div>
 
