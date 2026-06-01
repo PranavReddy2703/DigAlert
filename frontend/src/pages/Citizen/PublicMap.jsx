@@ -54,13 +54,13 @@ const PublicMap = () => {
   return (
     <div className="space-y-6">
       {/* Intro Card */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0F766E] rounded-2xl p-6 border border-[#0D9488] shadow-card">
         <div>
-          <h2 className="text-2xl font-bold text-[#0F172A] tracking-wide">Hyderabad Road Work Grid</h2>
-          <p className="text-[#64748B] text-sm mt-1">Real-time public portal tracking GHMC road cutting permissions and citizen reports.</p>
+          <h2 className="text-2xl font-bold text-white tracking-wide">Hyderabad Road Work Grid</h2>
+          <p className="text-[#A7F3D0] text-sm mt-1">Real-time public portal tracking GHMC road cutting permissions and citizen reports.</p>
         </div>
         {isCitizenUser && (
-          <div className="flex gap-2">
+          <div className="flex gap-2 text-left">
             <button
               onClick={() => navigate('/citizen/report')}
               className="rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition duration-200"
@@ -69,7 +69,7 @@ const PublicMap = () => {
             </button>
             <button
               onClick={() => navigate('/citizen/track')}
-              className="rounded-xl bg-white hover:bg-[#F8FAFC] border border-[#E2E8F0] px-4 py-2.5 text-xs font-bold text-[#64748B] hover:text-[#0F172A] transition duration-200"
+              className="rounded-xl bg-white hover:bg-[#F0FDF4] px-4 py-2.5 text-xs font-bold text-[#0F172A] hover:text-[#0F766E] shadow-sm transition duration-200"
             >
               Track My Complaint
             </button>

@@ -51,23 +51,23 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Top Banner Dashboard Intro */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0F766E] rounded-2xl p-6 border border-[#0D9488] shadow-card">
         <div>
-          <h2 className="text-2xl font-bold text-[#0F172A] tracking-wide">GHMC Central Excavation Control</h2>
-          <p className="text-[#64748B] text-sm mt-1">
+          <h2 className="text-2xl font-bold text-white tracking-wide">GHMC Central Excavation Control</h2>
+          <p className="text-[#A7F3D0] text-sm mt-1">
             Hyderabad Road Integrity Grid. Real-time clash detection analytics, citizen complaint routing, and monetary savings tracker.
           </p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => navigate('/admin/permits')}
-            className="rounded-xl bg-white hover:bg-[#F8FAFC] border border-[#E2E8F0] px-4 py-2.5 text-xs font-bold text-[#64748B] hover:text-[#0F172A] transition duration-200"
+            className="rounded-xl bg-white hover:bg-[#F0FDF4] border border-white/20 px-4 py-2.5 text-xs font-bold text-[#0F172A] hover:text-[#0F766E] transition duration-200"
           >
             Review Permit Queue
           </button>
           <button
             onClick={() => navigate('/admin/conflicts')}
-            className="rounded-xl bg-[#0F766E] hover:bg-[#115E59] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition duration-200"
+            className="rounded-xl bg-white hover:bg-[#F0FDF4] border border-white/20 px-4 py-2.5 text-xs font-bold text-[#0F766E] shadow-sm transition duration-200"
           >
             Resolve Active Clashes
           </button>

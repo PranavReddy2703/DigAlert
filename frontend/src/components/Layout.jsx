@@ -241,19 +241,19 @@ const Layout = ({ children }) => {
       )}
 
       {/* Sidebar */}
-      <aside className={`fixed bottom-0 left-0 top-0 z-[9999] w-64 bg-white border-r border-[#E2E8F0] p-4 transition-transform duration-300 md:translate-x-0 ease-in-out ${
+      <aside className={`fixed bottom-0 left-0 top-0 z-[9999] w-64 bg-gradient-to-b from-[#115E59] to-[#0A2F2D] p-4 transition-transform duration-300 md:translate-x-0 ease-in-out ${
         isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}>
         {/* Logo */}
-        <div className="mb-8 flex items-center gap-3 px-2">
+        <div className="mb-8 bg-white rounded-2xl p-3 shadow-md border border-[#0D9488]/10 flex items-center gap-3">
           <img 
             src={digalertLogo} 
             alt="DigAlert Logo" 
-            className="h-10 w-10 object-contain rounded-xl shadow-sm"
+            className="h-10 w-10 object-contain rounded-xl p-0.5 bg-slate-50 border border-slate-100"
           />
           <div>
-            <h1 className="text-lg font-bold tracking-wide text-[#0F172A]">DigAlert</h1>
-            <p className="text-[10px] uppercase tracking-widest text-[#0F766E] font-semibold">Hyderabad Civic Platform</p>
+            <h1 className="text-lg font-extrabold tracking-tight text-[#0F766E]">DigAlert</h1>
+            <p className="text-[9px] uppercase tracking-wider text-[#0D9488] font-extrabold leading-none mt-0.5">Hyderabad Civic Platform</p>
           </div>
         </div>
 
@@ -271,11 +271,11 @@ const Layout = ({ children }) => {
                 }}
                 className={`flex w-full items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-[#F0FDFA] text-[#0F766E] border-l-[3px] border-[#0F766E] font-semibold'
-                    : 'text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#0F172A]'
+                    ? 'bg-white/20 text-white border-l-[3px] border-white font-semibold'
+                    : 'text-[#A7F3D0] hover:bg-white/10 hover:text-white'
                 }`}
               >
-                <Icon className={`h-[18px] w-[18px] ${isActive ? 'text-[#0F766E]' : 'text-[#94A3B8]'}`} />
+                <Icon className={`h-[18px] w-[18px] ${isActive ? 'text-white' : 'text-[#A7F3D0]'}`} />
                 {link.label}
               </button>
             );
@@ -285,17 +285,17 @@ const Layout = ({ children }) => {
         {/* Footer Area */}
         <div className="absolute bottom-4 left-4 right-4 space-y-3">
           {user ? (
-            <div className="bg-[#F8FAFC] rounded-xl p-3 border border-[#E2E8F0]">
+            <div className="bg-white rounded-xl p-3 border border-[#E2E8F0] shadow-md">
               <div className="flex items-center gap-3 mb-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#F0FDFA] text-[#0F766E] border border-[#E2E8F0]">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-100 text-[#0F766E] border border-slate-200">
                   <UserIcon className="h-5 w-5" />
                 </div>
                 <div className="overflow-hidden">
-                  <h4 className="text-xs font-semibold text-[#0F172A] truncate">{user.username}</h4>
-                  <p className="text-[9px] uppercase tracking-wider text-[#0F766E] font-semibold">{user.role}</p>
+                  <h4 className="text-xs font-bold text-[#0F172A] truncate">{user.username}</h4>
+                  <p className="text-[9px] uppercase tracking-wider text-[#0F766E] font-bold">{user.role}</p>
                 </div>
               </div>
-              <p className="text-[10px] text-[#94A3B8] mb-2 truncate">Agency: {user.agency_name}</p>
+              <p className="text-[10px] text-slate-500 font-semibold mb-2 truncate">Agency: {user.agency_name}</p>
               <button
                 onClick={handleLogout}
                 className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#FCA5A5] bg-[#FEF2F2] px-3 py-1.5 text-xs font-semibold text-[#DC2626] hover:bg-[#FEE2E2] transition duration-200"
@@ -310,7 +310,7 @@ const Layout = ({ children }) => {
                 navigate('/login');
                 setIsSidebarOpen(false);
               }}
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0F766E] hover:bg-[#115E59] px-4 py-3 text-sm font-bold text-white shadow-sm transition duration-200"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-white hover:bg-[#F0FDF4] px-4 py-3 text-sm font-bold text-[#0F766E] shadow-sm transition duration-200"
             >
               <UserIcon className="h-4 w-4" />
               Utility Login

@@ -41,14 +41,14 @@ const ConflictManager = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0F766E] rounded-2xl p-6 border border-[#0D9488] shadow-card">
         <div>
-          <h2 className="text-2xl font-bold text-[#0F172A] tracking-wide">Conflict Management Center</h2>
-          <p className="text-[#64748B] text-sm mt-1">Review overlapping excavations, inspect temporal date collisions, and approve joint co-dig coordination operations.</p>
+          <h2 className="text-2xl font-bold text-white tracking-wide">Conflict Management Center</h2>
+          <p className="text-[#A7F3D0] text-sm mt-1">Review overlapping excavations, inspect temporal date collisions, and approve joint co-dig coordination operations.</p>
         </div>
         <button
           onClick={loadConflictPermits}
-          className="flex items-center gap-1.5 rounded-xl bg-white hover:bg-[#F8FAFC] border border-[#E2E8F0] px-4 py-2.5 text-xs font-bold text-[#64748B] transition duration-200"
+          className="flex items-center gap-1.5 rounded-xl bg-white hover:bg-[#F0FDF4] border border-white/20 px-4 py-2.5 text-xs font-bold text-[#0F172A] hover:text-[#0F766E] transition duration-200"
         >
           <RefreshCw className="h-3.5 w-3.5" />
           Refresh Registry

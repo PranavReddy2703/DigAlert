@@ -47,12 +47,12 @@ const RestorationVerification = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0F766E] rounded-2xl p-6 border border-[#0D9488] shadow-card">
         <div>
-          <h2 className="text-2xl font-bold text-[#0F172A] tracking-wide">Restoration Verification Center</h2>
-          <p className="text-xs text-[#64748B] mt-1">Review completed excavations, inspect physical road restorations, verify asphalt concrete density, and authorize rework loops.</p>
+          <h2 className="text-2xl font-bold text-white tracking-wide">Restoration Verification Center</h2>
+          <p className="text-[#A7F3D0] text-xs mt-1">Review completed excavations, inspect physical road restorations, verify asphalt concrete density, and authorize rework loops.</p>
         </div>
-        <button onClick={loadVerificationQueue} className="flex items-center gap-1.5 rounded-xl bg-white hover:bg-[#F8FAFC] border border-[#E2E8F0] px-4 py-2.5 text-xs font-bold text-[#64748B] transition duration-200 shrink-0">
+        <button onClick={loadVerificationQueue} className="flex items-center gap-1.5 rounded-xl bg-white hover:bg-[#F0FDF4] border border-white/20 px-4 py-2.5 text-xs font-bold text-[#0F172A] hover:text-[#0F766E] transition duration-200 shrink-0">
           <RefreshCw className="h-4 w-4 text-[#D97706]" /> Sync Queue Feed
         </button>
       </div>

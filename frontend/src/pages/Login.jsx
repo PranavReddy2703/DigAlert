@@ -74,17 +74,15 @@ const Login = () => {
       }} />
 
       {/* Top-left city branding */}
-      <div style={{ position: 'absolute', top: 28, left: 32 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <img 
-            src={digalertLogo} 
-            alt="DigAlert Logo" 
-            style={{ width: 34, height: 34, objectFit: 'contain', borderRadius: 8, boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}
-          />
-          <div>
-            <p style={{ color: 'white', fontWeight: 700, fontSize: 14, lineHeight: 1.2, margin: 0 }}>DigAlert</p>
-            <p style={{ color: '#34D399', fontWeight: 600, fontSize: 10, textTransform: 'uppercase', letterSpacing: 2, margin: 0 }}>Hyderabad Civic Platform</p>
-          </div>
+      <div style={{ position: 'absolute', top: 24, left: 32 }} className="bg-white rounded-2xl p-2.5 shadow-md border border-[#0D9488]/10 flex items-center gap-3">
+        <img 
+          src={digalertLogo} 
+          alt="DigAlert Logo" 
+          className="h-9 w-9 object-contain rounded-xl p-0.5 bg-slate-50 border border-slate-100"
+        />
+        <div>
+          <p className="font-extrabold text-[#0F766E] text-sm leading-none m-0">DigAlert</p>
+          <p className="text-[8px] uppercase tracking-wider text-[#0D9488] font-extrabold leading-none mt-1 m-0">Hyderabad Civic Platform</p>
         </div>
       </div>
 

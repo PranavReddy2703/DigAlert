@@ -144,9 +144,9 @@ const FileComplaint = () => {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Intro Header */}
-      <div>
-        <h2 className="text-2xl font-bold text-[#0F172A] tracking-wide">File Complaint</h2>
-        <p className="text-sm text-[#64748B] mt-1">
+      <div className="bg-[#0F766E] rounded-2xl p-6 border border-[#0D9488] shadow-card">
+        <h2 className="text-2xl font-bold text-white tracking-wide">File Complaint</h2>
+        <p className="text-sm text-[#A7F3D0] mt-1">
           Report hazards, road issues, utility complaints, and public safety concerns. DigAlert routes your ticket directly to the responsible utility.
         </p>
       </div>
