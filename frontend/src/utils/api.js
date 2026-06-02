@@ -49,6 +49,13 @@ export const permitsAPI = {
     const response = await api.get('/api/permits', { params });
     return response.data;
   },
+  listAdmin: async (status, agency) => {
+    const params = {};
+    if (status) params.status = status;
+    if (agency) params.agency = agency;
+    const response = await api.get('/api/admin/permits', { params });
+    return response.data;
+  },
   get: async (id) => {
     const response = await api.get(`/api/permits/${id}`);
     return response.data;

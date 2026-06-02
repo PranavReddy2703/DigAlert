@@ -45,6 +45,7 @@ app.add_middleware(
 # Mount APIRouters
 app.include_router(auth.router)
 app.include_router(permits.router)
+app.include_router(permits.admin_router)
 app.include_router(complaints.router)
 app.include_router(analytics.router)
 app.include_router(notifications.router)

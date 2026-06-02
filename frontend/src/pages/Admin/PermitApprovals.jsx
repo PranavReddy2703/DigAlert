@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { permitsAPI } from '../../utils/api';
 import HyderabadMap from '../../components/HyderabadMap';
 import { ShieldAlert, CheckCircle, XCircle, Info, Calendar, Layers, Map, RefreshCw } from 'lucide-react';
 
 const PermitApprovals = () => {
+  const location = useLocation();
   const [permits, setPermits] = useState([]);
   const [selectedPermit, setSelectedPermit] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -25,7 +27,25 @@ const PermitApprovals = () => {
     }
   };
 
-  useEffect(() => { loadPermitQueue(); }, []);
+  useEffect(() => {
+    const init = async () => {
+      await loadPermitQueue();
+      if (location.state?.selectedPermitId) {
+        try {
+          const fullDetail = await permitsAPI.get(location.state.selectedPermitId);
+          setSelectedPermit(fullDetail);
+          if (['EXCAVATION_COMPLETED', 'ROAD_RESTORED'].includes(fullDetail.status)) {
+            setActiveTab('verifications');
+          } else {
+            setActiveTab('applications');
+          }
+        } catch (err) {
+          console.error("Failed to auto-select permit", err);
+        }
+      }
+    };
+    init();
+  }, [location.state]);
 
   const handleSelectPermit = async (permit) => {
     try {

@@ -912,3 +912,96 @@ def close_permit_project(
     db.commit()
     
     return get_permit(permit_id, db)
+
+
+# ==========================================
+# ADMIN ENDPOINTS
+# ==========================================
+
+admin_router = APIRouter(prefix="/api/admin/permits", tags=["admin-permits"])
+
+@admin_router.get("", response_model=List[PermitResponse])
+def list_admin_permits(
+    status: Optional[str] = None,
+    agency: Optional[str] = None,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    if current_user.role != "ADMIN":
+        raise HTTPException(
+            status_code=403,
+            detail="Only GHMC administrators can access admin permit lists"
+        )
+    
+    query = db.query(Permit)
+    if status:
+        if "," in status:
+            status_list = [s.strip() for s in status.split(",") if s.strip()]
+            query = query.filter(Permit.status.in_(status_list))
+        else:
+            query = query.filter(Permit.status == status)
+            
+    if agency:
+        query = query.filter(Permit.agency_name == agency)
+            
+    permits = query.order_by(Permit.created_at.desc()).all()
+    
+    responses = []
+    for permit in permits:
+        clashes = db.query(Clash).filter(Clash.permit_id == permit.id).all()
+        clash_responses = []
+        for clash in clashes:
+            if clash.conflicting_permit_id is None:
+                conflicting_agency = "GHMC"
+                conflicting_title = "Locked Resurfaced Road"
+            else:
+                other_p = db.query(Permit).filter(
+                    Permit.id == clash.conflicting_permit_id).first()
+                conflicting_agency = other_p.agency_name if other_p else "Unknown Agency"
+                conflicting_title = other_p.title if other_p else "Excavation"
+
+            clash_responses.append(
+                ClashResponse(
+                    id=clash.id,
+                    permit_id=clash.permit_id,
+                    conflicting_permit_id=clash.conflicting_permit_id,
+                    conflicting_agency=conflicting_agency,
+                    conflicting_title=conflicting_title,
+                    overlap_percentage=clash.overlap_percentage,
+                    overlap_days=clash.overlap_days,
+                    estimated_savings=clash.estimated_savings,
+                    recommendation_text=clash.recommendation_text,
+                    resolved=clash.resolved
+                )
+            )
+        responses.append(
+            PermitResponse(
+                id=permit.id,
+                title=permit.title,
+                description=permit.description,
+                utility_id=permit.utility_id,
+                agency_name=permit.agency_name,
+                status=permit.status,
+                wkt_geometry=permit.wkt_geometry,
+                depth_meters=permit.depth_meters,
+                work_type=permit.work_type,
+                start_date=permit.start_date,
+                end_date=permit.end_date,
+                authorized_at=permit.authorized_at,
+                authorized_by=permit.authorized_by,
+                restoration_deadline=permit.restoration_deadline,
+                completed_at=permit.completed_at,
+                completed_by=permit.completed_by,
+                completion_notes=permit.completion_notes,
+                restoration_verified_at=permit.restoration_verified_at,
+                restoration_verified_by=permit.restoration_verified_by,
+                restoration_remarks=permit.restoration_remarks,
+                closed_at=permit.closed_at,
+                closed_by=permit.closed_by,
+                created_at=permit.created_at,
+                clashes=clash_responses,
+                audit_logs=permit.audit_logs
+            )
+        )
+    return responses
+
