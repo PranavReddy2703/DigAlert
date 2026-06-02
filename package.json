@@ -1,0 +1,22 @@
+{
+  "name": "digalert",
+  "version": "1.1.0",
+  "description": "Smart Permit Intelligence for Coordinated Urban Excavation",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PranavReddy2703/DigAlert.git"
+  },
+  "keywords": [
+    "civictech",
+    "excavation",
+    "permit",
+    "co-dig",
+    "spatial-analysis"
+  ],
+  "author": "Sathwik Naag & Pranav Reddy",
+  "license": "AGPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/PranavReddy2703/DigAlert/issues"
+  },
+  "homepage": "https://github.com/PranavReddy2703/DigAlert#readme"
+}

@@ -1,3 +1,21 @@
+[project]
+name = "digalert"
+version = "1.1.0"
+description = "Smart Permit Intelligence for Coordinated Urban Excavation"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "AGPL-3.0-only"}
+authors = [
+    {name = "Sathwik Naag", email = "sathwiknaag12@gmail.com"},
+    {name = "Pranav Reddy", email = "atakulapranav.official@gmail.com"}
+]
+keywords = ["civictech", "excavation", "permit", "co-dig", "spatial-analysis"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU Affero General Public License v3 (AGPLv3)",
+    "Operating System :: OS Independent",
+]
+
 [tool.ruff]
 line-length = 88
 target-version = "py310"
