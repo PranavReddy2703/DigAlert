@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+.github
+
+# Spec Kit
+.specify
+specs/
+
+# Python environment and cache
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+venv/
+backend/venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Databases (Local SQLite)
+*.db
+*.db-journal
+
+# Node / Frontend
+**/node_modules/
+**/dist/
+frontend/dist/
+.npm/
+
+# macOS system files
+.DS_Store
+
+# Environment and Secrets
+.env
+.env.*
+!.env.example
+secrets.json
+*.key
+*.pem

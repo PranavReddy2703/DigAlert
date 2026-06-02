@@ -1,0 +1,19 @@
+# Gitleaks configuration file
+# For details, see https://github.com/zricethezav/gitleaks
+
+[allowlist]
+description = "Global allowlist"
+paths = [
+    '''poetry\.lock''',
+    '''package-lock\.json''',
+    '''yarn\.lock''',
+    '''pnpm-lock\.yaml''',
+]
+
+[rules]
+[[rules]]
+description = "Generic API Key"
+id = "generic-api-key"
+regex = '''(?i)(key|api|token|secret|password|passwd|auth)[a-z0-9_.\-\~]{0,25}\s*=\s*['"]?[a-z0-9_.\-\~]{16,64}['"]?'''
+entropy = 3.5
+secretGroup = 1
