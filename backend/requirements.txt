@@ -8,3 +8,11 @@ pydantic==2.6.4
 email-validator==2.1.1
 python-multipart==0.0.29
 psycopg2-binary==2.9.7
+
+# Dev and Quality Tools
+ruff==0.3.4
+mypy==1.9.0
+types-python-dateutil==2.9.0.20240316
+types-passlib==1.7.7.20240327
+
+
