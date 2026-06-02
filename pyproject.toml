@@ -49,3 +49,8 @@ strict_optional = true
 [[tool.mypy.overrides]]
 module = ["shapely.*", "jose.*", "passlib.*", "dateutil.*", "sqlalchemy.*"]
 ignore_missing_imports = true
+
+[tool.bandit]
+exclude_dirs = ["venv", "backend/venv", "tests", "frontend"]
+skips = ["B101", "B601", "B104"]
+

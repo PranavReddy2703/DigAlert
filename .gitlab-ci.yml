@@ -1,0 +1,33 @@
+stages:
+  - test
+  - security
+
+gitleaks_scan:
+  stage: security
+  image: 
+    name: zricethezav/gitleaks:latest
+    entrypoint: [""]
+  script:
+    - gitleaks detect --verbose --source .
+
+dependency_audit_backend:
+  stage: security
+  image: python:3.10-slim
+  script:
+    - pip install --upgrade pip
+    - pip install pip-audit
+    - pip-audit -r backend/requirements.txt
+
+dependency_audit_frontend:
+  stage: security
+  image: node:18-alpine
+  script:
+    - cd frontend
+    - npm audit --audit-level=high
+
+static_analysis_bandit:
+  stage: security
+  image: python:3.10-slim
+  script:
+    - pip install bandit
+    - bandit -r backend/ -c pyproject.toml

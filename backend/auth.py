@@ -10,7 +10,7 @@ from backend.database import get_db
 from backend.models import User
 
 # Configuration
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "hyderabad_digalert_secret_key_2026_super_secure")
+SECRET_KEY = os.getenv("JWT_SECRET_KEY", "dev_fallback_key")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 240 # 4 hours for development ease
 
