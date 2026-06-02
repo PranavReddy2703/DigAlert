@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import digalertLogo from '../assets/digalert_logo.png';
-import { User, KeyRound, AlertTriangle } from 'lucide-react';
+import { User, KeyRound, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [statusText, setStatusText] = useState('');
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -16,13 +19,25 @@ const Login = () => {
     e.preventDefault();
 
     setError('');
+    setSuccess(false);
+    setIsLoading(true);
 
     try {
+      setStatusText('Validating credentials...');
+      // Simulated delay for premium feel
+      await new Promise((resolve) => setTimeout(resolve, 600));
+
+      setStatusText('Authenticating with server...');
       const user = await login(username, password);
+
+      setStatusText('Success! Redirecting...');
+      setSuccess(true);
 
       localStorage.setItem('role', user.role);
       localStorage.setItem('agency', user.agency_name || '');
       localStorage.setItem('username', user.username);
+
+      await new Promise((resolve) => setTimeout(resolve, 800));
 
       if (user.role === 'ADMIN') {
         navigate('/admin');
@@ -36,6 +51,9 @@ const Login = () => {
         err.response?.data?.detail ||
         'Authentication failed. Please verify credentials.'
       );
+      setIsLoading(false);
+      setSuccess(false);
+      setStatusText('');
     }
   };
 
@@ -160,11 +178,28 @@ const Login = () => {
           </p>
         </div>
 
-        {/* Error Box */}
+        {/* Status Alerts */}
         {error && (
           <div className="mb-6 flex items-start gap-2.5 rounded-xl border border-[#FECACA] bg-[#FEF2F2] p-4 text-xs font-semibold text-[#DC2626]">
             <AlertTriangle className="h-4 w-4 shrink-0" />
             <p>{error}</p>
+          </div>
+        )}
+
+        {success && (
+          <div className="mb-6 flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-xs font-semibold text-emerald-800">
+            <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
+            <p>{statusText}</p>
+          </div>
+        )}
+
+        {isLoading && !success && (
+          <div className="mb-6 flex items-center gap-2.5 rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-4 text-xs font-semibold text-[#64748B]">
+            <svg className="animate-spin h-4 w-4 text-[#0F766E] shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p>{statusText}</p>
           </div>
         )}
 
@@ -183,9 +218,10 @@ const Login = () => {
                 type="text"
                 placeholder="Enter username"
                 required
+                disabled={isLoading}
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-3 pl-10 text-sm text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition"
+                className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-3 pl-10 text-sm text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
           </div>
@@ -202,9 +238,10 @@ const Login = () => {
                 type="password"
                 placeholder="••••••••"
                 required
+                disabled={isLoading}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-3 pl-10 text-sm text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition"
+                className="w-full rounded-xl bg-white border border-[#E2E8F0] px-4 py-3 pl-10 text-sm text-[#0F172A] placeholder-[#94A3B8] focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20 focus:border-[#0F766E] transition disabled:opacity-50 disabled:cursor-not-allowed"
               />
             </div>
           </div>
@@ -212,16 +249,28 @@ const Login = () => {
           {/* Login Button */}
           <button
             type="submit"
-            className="w-full rounded-xl bg-[#0F766E] hover:bg-[#115E59] py-3 text-sm font-bold text-white transition-all shadow-sm"
+            disabled={isLoading}
+            className="w-full rounded-xl bg-[#0F766E] hover:bg-[#115E59] py-3 text-sm font-bold text-white transition-all shadow-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Sign In
+            {isLoading ? (
+              <>
+                <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Processing...</span>
+              </>
+            ) : (
+              'Sign In'
+            )}
           </button>
 
           {/* Citizen Complaint Button */}
           <button
             type="button"
+            disabled={isLoading}
             onClick={() => navigate('/citizen/report')}
-            className="w-full rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] py-3 text-sm font-bold text-white transition-all shadow-sm"
+            className="w-full rounded-xl bg-[#DC2626] hover:bg-[#B91C1C] py-3 text-sm font-bold text-white transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             File Complaint
           </button>
@@ -229,8 +278,9 @@ const Login = () => {
           {/* Citizen Tracking Button */}
           <button
             type="button"
+            disabled={isLoading}
             onClick={() => navigate('/citizen/track')}
-            className="w-full rounded-xl border border-[#E2E8F0] bg-white py-3 text-sm font-bold text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#0F172A] transition-all"
+            className="w-full rounded-xl border border-[#E2E8F0] bg-white py-3 text-sm font-bold text-[#64748B] hover:bg-[#F8FAFC] hover:text-[#0F172A] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Track Existing Complaint
           </button>

@@ -30,7 +30,7 @@ cd digalert
 
 ```bash
 cd backend
-python -m venv venv
+python3.11 -m venv venv
 
 # Windows
 venv\Scripts\activate
@@ -41,7 +41,7 @@ pip install -r requirements.txt
 cp .env.example .env
 # Open .env and set at minimum: JWT_SECRET=any-random-string
 
-uvicorn main:app --reload
+uvicorn backend.main:app --reload
 # Verify: http://localhost:8000/health -> {"status":"ok"}
 ```
 
