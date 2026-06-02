@@ -54,3 +54,20 @@ ignore_missing_imports = true
 exclude_dirs = ["venv", "backend/venv", "tests", "frontend"]
 skips = ["B101", "B601", "B104"]
 
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+python_files = ["test_*.py"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["backend"]
+omit = [
+    "backend/tests/*",
+    "backend/seed.py",
+]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 80
+
+
