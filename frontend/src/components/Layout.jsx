@@ -231,7 +231,7 @@ const Layout = ({ children }) => {
   const navLinks = getNavLinks();
 
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC]">
+    <div className="flex h-screen overflow-hidden bg-[#F8FAFC]">
       {/* Sidebar Overlay for Mobile */}
       {isSidebarOpen && (
         <div 
@@ -320,7 +320,7 @@ const Layout = ({ children }) => {
       </aside>
 
       {/* Main Content Area */}
-      <div className="flex-1 md:pl-64 pl-0 min-h-screen flex flex-col">
+      <div className="flex-1 md:pl-64 pl-0 h-screen overflow-hidden flex flex-col">
         {/* Mobile top header with hamburger menu trigger */}
         <header className="sticky top-0 z-[9990] flex md:hidden h-14 items-center justify-between border-b border-[#E2E8F0] bg-white px-4">
           <div className="flex items-center gap-2.5">
@@ -343,7 +343,7 @@ const Layout = ({ children }) => {
         </header>
 
         {/* Desktop Top Header */}
-        <header className="sticky top-0 z-20 hidden md:flex h-14 items-center justify-between border-b border-[#E2E8F0] bg-white px-6">
+        <header className="sticky top-0 z-20 hidden md:flex h-14 items-center justify-between border-b border-[#16A34A]/20 bg-[#16A34A]/[0.04] backdrop-blur-md px-6" style={{ boxShadow: '0 1px 12px 0 rgba(22,163,74,0.25)' }}>
           <div className="flex items-center gap-3">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#16A34A] opacity-75"></span>

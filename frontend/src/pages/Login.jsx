@@ -92,7 +92,7 @@ const Login = () => {
       }} />
 
       {/* Top-left city branding */}
-      <div style={{ position: 'absolute', top: 24, left: 32 }} className="bg-white rounded-2xl p-2.5 shadow-md border border-[#0D9488]/10 flex items-center gap-3">
+      <div style={{ position: 'absolute', top: 24, left: 32 }} className="bg-[#0F766E]/[0.05] rounded-2xl p-2.5 shadow-md border border-[#0F766E]/20 backdrop-blur-sm flex items-center gap-3">
         <img 
           src={digalertLogo} 
           alt="DigAlert Logo" 
@@ -159,7 +159,7 @@ const Login = () => {
       `}</style>
 
       {/* Login Card */}
-      <div className="relative z-10 w-full max-w-md bg-white rounded-2xl p-8 border border-[#E2E8F0] shadow-card">
+      <div className="relative z-10 w-full max-w-md bg-[#0F766E]/[0.03] rounded-2xl p-8 border border-[#0F766E]/20 shadow-card backdrop-blur-sm">
 
         {/* Logo */}
         <div className="mb-8 text-center">

@@ -10,28 +10,22 @@
   }
 }
 
-/* Professional card panel utility */
-.card-panel {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-}
-
-/* Keep glass-panel as an alias for backwards compat during migration */
+/* Professional glass-green card panel utility */
+.card-panel,
 .glass-panel {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F0;
+  background: rgba(15, 118, 110, 0.03);
+  border: 1px solid rgba(15, 118, 110, 0.20);
   border-radius: 12px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px 0 rgba(15, 118, 110, 0.10), 0 1px 4px 0 rgba(15, 118, 110, 0.06);
+  backdrop-filter: blur(4px);
 }
 
 .glass-panel-hover {
   @apply transition-all duration-200;
 }
 .glass-panel-hover:hover {
-  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
-  border-color: #CBD5E1;
+  box-shadow: 0 0 24px 0 rgba(15, 118, 110, 0.15), 0 2px 6px 0 rgba(15, 118, 110, 0.08);
+  border-color: rgba(15, 118, 110, 0.30);
 }
 
 /* Legacy glow classes — neutralized to subtle shadows */

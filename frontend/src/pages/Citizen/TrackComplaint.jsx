@@ -80,7 +80,7 @@ const TrackComplaint = () => {
       </div>
 
       {/* Search Input Card */}
-      <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card">
+      <div className="bg-[#0F766E]/[0.03] rounded-2xl p-6 border border-[#0F766E]/20 shadow-card backdrop-blur-sm">
         <form onSubmit={handleSearchSubmit} className="flex gap-3">
           <div className="relative flex-1">
             <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-[#94A3B8]" />
@@ -113,7 +113,7 @@ const TrackComplaint = () => {
       {complaint && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
           {/* Left panel: Ticket summary */}
-          <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-card space-y-4">
+          <div className="bg-[#0F766E]/[0.03] rounded-2xl p-5 border border-[#0F766E]/20 shadow-card backdrop-blur-sm space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-[10px] uppercase font-bold text-[#94A3B8]">Ticket ref</span>
               <span className="text-sm font-bold text-[#0F766E] font-mono">#{complaint.id}</span>
@@ -150,7 +150,7 @@ const TrackComplaint = () => {
           </div>
 
           {/* Right panel: Timeline of activities */}
-          <div className="md:col-span-2 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card space-y-6">
+          <div className="md:col-span-2 bg-[#0F766E]/[0.03] rounded-2xl p-6 border border-[#0F766E]/20 shadow-card backdrop-blur-sm space-y-6">
             <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider">Complaint Resolution Timeline</h3>
             
             <div className="relative border-l-2 border-[#E2E8F0] pl-6 ml-3 space-y-8">

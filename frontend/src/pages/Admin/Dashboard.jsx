@@ -76,7 +76,7 @@ const AdminDashboard = () => {
 
       {/* Loading Counter */}
       {loading ? (
-        <div className="flex h-32 items-center justify-center bg-white rounded-2xl border border-[#E2E8F0]">
+        <div className="flex h-32 items-center justify-center bg-[#0F766E]/[0.03] rounded-2xl border border-[#0F766E]/20 backdrop-blur-sm" style={{ boxShadow: '0 0 20px 0 rgba(15,118,110,0.10), 0 1px 4px 0 rgba(15,118,110,0.06)' }}>
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#E2E8F0] border-t-[#0F766E]"></div>
         </div>
       ) : (
@@ -84,7 +84,7 @@ const AdminDashboard = () => {
           {/* Central Metrics Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
             {/* Pending Permit Approvals */}
-            <div className="bg-white rounded-xl p-4 border border-[#E2E8F0] shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow duration-200">
+            <div className="bg-[#0284C7]/[0.04] rounded-xl p-4 border border-[#0284C7]/30 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300" style={{ boxShadow: '0 0 12px 0 rgba(2,132,199,0.10), 0 1px 3px 0 rgba(2,132,199,0.08)' }}>
               <div className="flex items-center justify-between text-[#94A3B8]">
                 <span className="text-[9px] uppercase font-bold tracking-wider">Pending Approvals</span>
                 <Lock className="h-4 w-4 text-[#0284C7]" />
@@ -96,7 +96,7 @@ const AdminDashboard = () => {
             </div>
 
             {/* Authorized Excavations */}
-            <div className="bg-white rounded-xl p-4 border border-[#E2E8F0] shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow duration-200">
+            <div className="bg-[#7C3AED]/[0.04] rounded-xl p-4 border border-[#7C3AED]/30 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300" style={{ boxShadow: '0 0 12px 0 rgba(124,58,237,0.10), 0 1px 3px 0 rgba(124,58,237,0.08)' }}>
               <div className="flex items-center justify-between text-[#94A3B8]">
                 <span className="text-[9px] uppercase font-bold tracking-wider">Authorized</span>
                 <Clock className="h-4 w-4 text-[#7C3AED]" />
@@ -108,7 +108,7 @@ const AdminDashboard = () => {
             </div>
 
             {/* Active Excavations */}
-            <div className="bg-white rounded-xl p-4 border border-[#E2E8F0] shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow duration-200">
+            <div className="bg-[#EA580C]/[0.04] rounded-xl p-4 border border-[#EA580C]/30 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300" style={{ boxShadow: '0 0 12px 0 rgba(234,88,12,0.10), 0 1px 3px 0 rgba(234,88,12,0.08)' }}>
               <div className="flex items-center justify-between text-[#94A3B8]">
                 <span className="text-[9px] uppercase font-bold tracking-wider">Active Digs</span>
                 <Activity className="h-4 w-4 text-[#EA580C]" />
@@ -120,7 +120,7 @@ const AdminDashboard = () => {
             </div>
 
             {/* Completed Excavations */}
-            <div className="bg-white rounded-xl p-4 border border-[#E2E8F0] shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow duration-200">
+            <div className="bg-[#D97706]/[0.04] rounded-xl p-4 border border-[#D97706]/30 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300" style={{ boxShadow: '0 0 12px 0 rgba(217,119,6,0.10), 0 1px 3px 0 rgba(217,119,6,0.08)' }}>
               <div className="flex items-center justify-between text-[#94A3B8]">
                 <span className="text-[9px] uppercase font-bold tracking-wider">Completed</span>
                 <CheckSquare className="h-4 w-4 text-[#D97706]" />
@@ -132,9 +132,9 @@ const AdminDashboard = () => {
             </div>
 
             {/* Awaiting Restoration Verification */}
-            <div className="bg-white rounded-xl p-4 border border-[#E2E8F0] shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow duration-200">
+            <div className="bg-[#D97706]/[0.04] rounded-xl p-4 border border-[#D97706]/30 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300" style={{ boxShadow: '0 0 12px 0 rgba(217,119,6,0.10), 0 1px 3px 0 rgba(217,119,6,0.08)' }}>
               <div className="flex items-center justify-between text-[#94A3B8]">
-                <span className="text-[9px] uppercase font-bold tracking-wider">Awaiting Verif</span>
+                <span className="text-[9px] uppercase font-bold tracking-wider">Awaiting Verification</span>
                 <Clock className="h-4 w-4 text-[#D97706]" />
               </div>
               <div className="mt-2">
@@ -144,7 +144,7 @@ const AdminDashboard = () => {
             </div>
 
             {/* Road Restored */}
-            <div className="bg-white rounded-xl p-4 border border-[#E2E8F0] shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow duration-200">
+            <div className="bg-[#16A34A]/[0.04] rounded-xl p-4 border border-[#16A34A]/30 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300" style={{ boxShadow: '0 0 12px 0 rgba(22,163,74,0.10), 0 1px 3px 0 rgba(22,163,74,0.08)' }}>
               <div className="flex items-center justify-between text-[#94A3B8]">
                 <span className="text-[9px] uppercase font-bold tracking-wider">Road Restored</span>
                 <CheckSquare className="h-4 w-4 text-[#16A34A]" />
@@ -156,7 +156,7 @@ const AdminDashboard = () => {
             </div>
 
             {/* Projects Closed */}
-            <div className="bg-white rounded-xl p-4 border border-[#E2E8F0] shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow duration-200">
+            <div className="bg-[#0F766E]/[0.04] rounded-xl p-4 border border-[#0F766E]/30 shadow-sm flex flex-col justify-between hover:shadow-md transition-all duration-300" style={{ boxShadow: '0 0 12px 0 rgba(15,118,110,0.10), 0 1px 3px 0 rgba(15,118,110,0.08)' }}>
               <div className="flex items-center justify-between text-[#94A3B8]">
                 <span className="text-[9px] uppercase font-bold tracking-wider">Projects Closed</span>
                 <CheckSquare className="h-4 w-4 text-[#0F766E]" />
@@ -171,57 +171,79 @@ const AdminDashboard = () => {
           {/* Leaderboard and SVG Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Leaderboard Table */}
-            <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card space-y-4">
-              <div className="flex items-center gap-2">
-                <Trophy className="h-5 w-5 text-[#D97706]" />
-                <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider">Utility Compliance Leaderboard</h3>
+            <div className="lg:col-span-2 min-w-0 bg-[#0F766E]/[0.03] rounded-2xl p-6 border border-[#0F766E]/20 shadow-card space-y-5 backdrop-blur-sm" style={{ boxShadow: '0 0 20px 0 rgba(15,118,110,0.10), 0 1px 4px 0 rgba(15,118,110,0.06)' }}>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#FEF3C7] to-[#FDE68A] shadow-sm">
+                    <Trophy className="h-5 w-5 text-[#D97706]" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider">Utility Compliance Leaderboard</h3>
+                    <p className="text-[9px] text-[#94A3B8] font-medium mt-0.5">Ranked by compliance performance score</p>
+                  </div>
+                </div>
               </div>
               
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs border-collapse">
                   <thead>
-                    <tr className="border-b border-[#E2E8F0] text-[#94A3B8] font-bold uppercase tracking-wider">
-                      <th className="pb-3 pr-2 text-center">Rank</th>
-                      <th className="pb-3">Utility Operator</th>
-                      <th className="pb-3 text-center">Permits</th>
-                      <th className="pb-3 text-center">Resolutions</th>
-                      <th className="pb-3 text-center">Complaints</th>
-                      <th className="pb-3 text-right">Compliance Rating</th>
+                    <tr className="bg-[#0F766E]/[0.06] border-b border-[#0F766E]/15">
+                      <th className="py-3 px-2 text-center text-[10px] text-[#0F766E] font-extrabold uppercase tracking-widest">Rank</th>
+                      <th className="py-3 text-[10px] text-[#0F766E] font-extrabold uppercase tracking-widest">Utility Operator</th>
+                      <th className="py-3 text-center text-[10px] text-[#0F766E] font-extrabold uppercase tracking-widest">Permits</th>
+                      <th className="py-3 text-center text-[10px] text-[#0F766E] font-extrabold uppercase tracking-widest">Resolutions</th>
+                      <th className="py-3 text-center text-[10px] text-[#0F766E] font-extrabold uppercase tracking-widest">Complaints</th>
+                      <th className="py-3 pr-2 text-right text-[10px] text-[#0F766E] font-extrabold uppercase tracking-widest">Compliance Rating</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#F1F5F9]">
-                    {leaderboard.map((item) => (
-                      <tr key={item.agency_name} className="hover:bg-[#F8FAFC]">
-                        <td className="py-4 text-center">
-                          <span className={`inline-flex items-center justify-center h-6 w-6 rounded-full font-bold text-[10px] ${
-                            item.rank === 1 ? 'bg-[#FEF3C7] text-[#D97706] border border-[#FDE68A]' :
-                            item.rank === 2 ? 'bg-[#F1F5F9] text-[#64748B]' :
-                            'bg-[#F8FAFC] text-[#94A3B8] border border-[#E2E8F0]'
-                          }`}>
-                            {item.rank}
-                          </span>
-                        </td>
-                        <td className="py-4 font-bold text-[#0F172A]">{item.agency_name}</td>
-                        <td className="py-4 text-center font-mono text-[#64748B]">{item.total_permits}</td>
-                        <td className="py-4 text-center font-mono text-[#64748B]">{item.conflicts_resolved}</td>
-                        <td className="py-4 text-center font-mono text-[#64748B]">{item.complaints_count}</td>
-                        <td className="py-4 text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <div className="w-20 bg-[#F1F5F9] rounded-full h-1.5 overflow-hidden">
-                              <div className="h-full bg-[#0F766E] rounded-full" style={{ width: `${item.compliance_score}%` }}></div>
+                  <tbody>
+                    {leaderboard.map((item, index) => {
+                      const barColor = item.compliance_score >= 80 ? '#0F766E' : item.compliance_score >= 50 ? '#D97706' : '#DC2626';
+                      const barBg = item.compliance_score >= 80 ? 'bg-gradient-to-r from-[#0F766E] to-[#16A34A]' : item.compliance_score >= 50 ? 'bg-gradient-to-r from-[#D97706] to-[#F59E0B]' : 'bg-gradient-to-r from-[#DC2626] to-[#F87171]';
+                      return (
+                        <tr key={item.agency_name} className={`group transition-all duration-200 hover:bg-[#F0FDFA]/60 ${index !== leaderboard.length - 1 ? 'border-b border-[#F1F5F9]' : ''}`}>
+                          <td className="py-4 text-center">
+                            <span className={`inline-flex items-center justify-center h-7 w-7 rounded-full font-extrabold text-[10px] transition-transform duration-200 group-hover:scale-110 ${
+                              item.rank === 1 ? 'bg-gradient-to-br from-[#FEF3C7] to-[#FDE68A] text-[#B45309] border border-[#FCD34D] shadow-sm' :
+                              item.rank === 2 ? 'bg-gradient-to-br from-[#F1F5F9] to-[#E2E8F0] text-[#475569] border border-[#CBD5E1] shadow-sm' :
+                              item.rank === 3 ? 'bg-gradient-to-br from-[#FED7AA] to-[#FDBA74] text-[#9A3412] border border-[#FB923C] shadow-sm' :
+                              'bg-[#F8FAFC] text-[#94A3B8] border border-[#E2E8F0]'
+                            }`}>
+                              {item.rank}
+                            </span>
+                          </td>
+                          <td className="py-4">
+                            <span className="font-bold text-[#0F172A] group-hover:text-[#0F766E] transition-colors duration-200">{item.agency_name}</span>
+                          </td>
+                          <td className="py-4 text-center">
+                            <span className="inline-flex items-center justify-center h-6 min-w-[28px] px-1.5 rounded-md bg-[#F1F5F9] font-mono font-bold text-[#475569] text-[11px]">{item.total_permits}</span>
+                          </td>
+                          <td className="py-4 text-center">
+                            <span className="inline-flex items-center justify-center h-6 min-w-[28px] px-1.5 rounded-md bg-[#F1F5F9] font-mono font-bold text-[#475569] text-[11px]">{item.conflicts_resolved}</span>
+                          </td>
+                          <td className="py-4 text-center">
+                            <span className={`inline-flex items-center justify-center h-6 min-w-[28px] px-1.5 rounded-md font-mono font-bold text-[11px] ${
+                              item.complaints_count > 0 ? 'bg-[#FEF2F2] text-[#DC2626]' : 'bg-[#F0FDF4] text-[#16A34A]'
+                            }`}>{item.complaints_count}</span>
+                          </td>
+                          <td className="py-4 text-right pr-1">
+                            <div className="flex items-center justify-end gap-2.5">
+                              <div className="w-24 bg-[#F1F5F9] rounded-full h-2 overflow-hidden">
+                                <div className={`h-full rounded-full ${barBg} transition-all duration-500`} style={{ width: `${item.compliance_score}%` }}></div>
+                              </div>
+                              <span className="font-extrabold font-mono text-[11px] min-w-[36px] text-right" style={{ color: barColor }}>{item.compliance_score}%</span>
                             </div>
-                            <span className="font-extrabold text-[#0F766E] font-mono text-[10px]">{item.compliance_score}%</span>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
             </div>
 
             {/* Custom SVG Data Visualization Chart */}
-            <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card space-y-4">
+            <div className="bg-[#0F766E]/[0.03] rounded-2xl p-6 border border-[#0F766E]/20 shadow-card space-y-4 backdrop-blur-sm" style={{ boxShadow: '0 0 20px 0 rgba(15,118,110,0.10), 0 1px 4px 0 rgba(15,118,110,0.06)' }}>
               <div className="flex items-center gap-2">
                 <LineChart className="h-5 w-5 text-[#0F766E]" />
                 <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider">Citizen Hazard Metrics</h3>

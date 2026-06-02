@@ -541,10 +541,10 @@ const PermitTracker = () => {
       </div>
 
       {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
         
         {/* Left Sidebar: Search, Filters & Permits List */}
-        <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 space-y-4 h-[750px] flex flex-col justify-between">
+        <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-5 space-y-4 h-full flex flex-col justify-between">
           <div className="space-y-4 flex-1 overflow-hidden flex flex-col">
             <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-2">
               <Filter className="h-4.5 w-4.5 text-[#0F766E]" />
@@ -685,9 +685,9 @@ const PermitTracker = () => {
         </div>
 
         {/* Right Panel: Permit full details */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 min-w-0 space-y-6">
           {!selectedPermit ? (
-            <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-8 text-center h-[750px] flex flex-col items-center justify-center space-y-3">
+            <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-8 text-center h-full flex flex-col items-center justify-center space-y-3 min-h-[750px]">
               <Layers className="h-14 w-14 text-[#0F766E] animate-pulse mb-2" />
               <h3 className="text-[#0F172A] font-bold text-base">No Excavation Permit Selected</h3>
               <p className="text-xs text-[#64748B] max-w-sm leading-normal">
@@ -743,11 +743,29 @@ const PermitTracker = () => {
                 </div>
               </div>
 
-              {/* Grid: Map & Parameters */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Map Panel (Full Width at Top of Details) */}
+              <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-4 space-y-3">
+                <div className="flex justify-between items-center text-xs font-bold text-[#0F172A] uppercase tracking-wider">
+                  <div className="flex items-center gap-1">
+                    <MapPin className="h-4.5 w-4.5 text-[#0F766E]" />
+                    <span>Focus Excavation Segment Map</span>
+                  </div>
+                  <span className="text-[9px] font-bold text-[#64748B]">ZOOM TO COORDINATE NODES</span>
+                </div>
+
+                <div className="h-[360px] rounded-xl overflow-hidden border border-[#E2E8F0] shadow-sm">
+                  <HyderabadMap
+                    permits={[selectedPermit]}
+                    complaints={linkedComplaints}
+                  />
+                </div>
+              </div>
+
+              {/* Grid Layout for Specifications and Detail Logs */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
                 
                 {/* Parameters panel */}
-                <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 space-y-4 flex flex-col justify-between">
+                <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-5 space-y-4 flex flex-col justify-between h-full">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider">Specifications</span>
@@ -985,37 +1003,17 @@ const PermitTracker = () => {
                   )}
                 </div>
 
-                {/* Map panel */}
-                <div className="md:col-span-2 bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4 space-y-3">
-                  <div className="flex justify-between items-center text-xs font-bold text-[#0F172A] uppercase tracking-wider">
-                    <div className="flex items-center gap-1">
-                      <MapPin className="h-4.5 w-4.5 text-[#0F766E]" />
-                      <span>Focus Excavation Segment Map</span>
-                    </div>
-                    <span className="text-[9px] font-bold text-[#64748B]">ZOOM TO COORDINATE NODES</span>
-                  </div>
-
-                  <div className="h-[310px] rounded-xl overflow-hidden border border-[#E2E8F0] shadow-sm">
-                    <HyderabadMap
-                      permits={[selectedPermit]}
-                      complaints={linkedComplaints}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Conflict warnings, citizen hazards, and chronological audit trail */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                {/* Clash panel if present */}
-                <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 space-y-4">
+                {/* Column 2: Conflicts & Associated Citizen Hazards */}
+                <div className="space-y-6 h-full flex flex-col">
+                  {/* Clash panel if present */}
+                  <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-5 space-y-4 flex-1 flex flex-col">
                   <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
                     <ShieldAlert className="h-4.5 w-4.5 text-[#DC2626]" />
                     Spatial Conflict Analyzer
                   </h3>
 
                   {selectedPermit.clashes && selectedPermit.clashes.length > 0 ? (
-                    <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1">
+                    <div className="space-y-3 flex-1 overflow-y-auto pr-1">
                       {selectedPermit.clashes.map((clash, idx) => {
                         const isRoadLock = clash.conflicting_permit_id < 0;
                         return (
@@ -1052,7 +1050,7 @@ const PermitTracker = () => {
                       })}
                     </div>
                   ) : (
-                    <div className="text-center py-10 flex flex-col items-center justify-center space-y-2 bg-green-50/50 rounded-xl border border-green-100 p-4">
+                    <div className="flex-1 flex flex-col items-center justify-center space-y-2 bg-green-50/50 rounded-xl border border-green-100 p-4 text-center">
                       <CheckCircle className="h-8 w-8 text-green-600" />
                       <p className="text-xs text-green-700 font-bold">No Spatial Conflicts Registered</p>
                       <p className="text-[10px] text-[#64748B] max-w-[200px]">Geospatial check passed. Excavation path is clear of direct utility clashes.</p>
@@ -1061,20 +1059,20 @@ const PermitTracker = () => {
                 </div>
 
                 {/* Citizen complaints logged panel */}
-                <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 space-y-4">
+                <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-5 space-y-4 flex-1 flex flex-col">
                   <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
                     <AlertTriangle className="h-4.5 w-4.5 text-amber-550" />
                     Associated Citizen Hazards
                   </h3>
 
                   {linkedComplaints.length === 0 ? (
-                    <div className="text-center py-10 flex flex-col items-center justify-center space-y-2 bg-slate-50 rounded-xl border border-slate-100 p-4">
+                    <div className="flex-1 flex flex-col items-center justify-center space-y-2 bg-slate-50 rounded-xl border border-slate-100 p-4 text-center">
                       <CheckCircle className="h-8 w-8 text-green-600" />
                       <p className="text-xs text-[#64748B] font-bold">No Open Hazards Registered</p>
                       <p className="text-[10px] text-slate-400">Citizen complaints linked to this permit will be logged here in real-time.</p>
                     </div>
                   ) : (
-                    <div className="space-y-3.5 max-h-[220px] overflow-y-auto pr-1">
+                    <div className="space-y-3.5 flex-1 overflow-y-auto pr-1">
                       {linkedComplaints.map((complaint) => (
                         <div key={complaint.id} className="rounded-xl border border-[#E2E8F0] bg-slate-50 p-3.5 space-y-2.5">
                           <div className="flex items-center justify-between text-[9px] font-bold">
@@ -1097,22 +1095,23 @@ const PermitTracker = () => {
                     </div>
                   )}
                 </div>
+                </div>
 
-                {/* Chronological Activity Log Panel */}
-                <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-5 space-y-4">
+                {/* Column 3: Chronological Activity Log Panel */}
+                <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-5 space-y-4 h-full flex flex-col">
                   <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-1.5">
                     <Clock className="h-4.5 w-4.5 text-purple-700" />
                     Permit Activity Ledger
                   </h3>
 
                   {!selectedPermit.audit_logs || selectedPermit.audit_logs.length === 0 ? (
-                    <div className="text-center py-10 flex flex-col items-center justify-center space-y-2 bg-slate-50 rounded-xl border border-slate-100 p-4">
+                    <div className="flex-1 flex flex-col items-center justify-center space-y-2 bg-slate-50 rounded-xl border border-slate-100 p-4 text-center">
                       <Clock className="h-8 w-8 text-[#94A3B8] mx-auto" />
                       <p className="text-xs text-[#64748B] font-bold">No Activity Logs Found</p>
                       <p className="text-[10px] text-slate-400">Historical state changes and audit events will render here.</p>
                     </div>
                   ) : (
-                    <div className="space-y-4 max-h-[220px] overflow-y-auto pr-1">
+                    <div className="space-y-4 flex-1 overflow-y-auto pr-1">
                       <div className="relative pl-4 border-l border-slate-100 space-y-4">
                         {selectedPermit.audit_logs.map((log) => (
                           <div key={log.id} className="relative space-y-1">

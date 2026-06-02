@@ -108,7 +108,7 @@ const PermitApprovals = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         {/* Permits Queue Table */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card space-y-4 h-[650px] overflow-y-auto">
+        <div className="lg:col-span-2 min-w-0 bg-[#0F766E]/[0.03] rounded-2xl p-6 border border-[#0F766E]/20 shadow-card backdrop-blur-sm space-y-4 h-[650px] overflow-y-auto">
           {/* Tab Switcher */}
           <div className="flex border-b border-[#E2E8F0] mb-2">
             <button
@@ -149,7 +149,7 @@ const PermitApprovals = () => {
                 })
                 .map((permit) => (
                   <div key={permit.id} onClick={() => handleSelectPermit(permit)}
-                    className={`rounded-xl border p-4 space-y-2 cursor-pointer transition-all duration-200 ${
+                      className={`rounded-xl border p-4 space-y-2 cursor-pointer transition-all duration-200 ${
                       selectedPermit?.id === permit.id ? 'bg-[#F0FDFA] border-[#0F766E] shadow-sm' : 'bg-white border-[#E2E8F0] hover:border-[#CBD5E1] hover:shadow-sm'
                     }`}
                   >
@@ -173,7 +173,7 @@ const PermitApprovals = () => {
         {/* Detail Panel */}
         <div className="space-y-4">
           {!selectedPermit ? (
-            <div className="bg-white rounded-2xl p-8 border border-[#E2E8F0] shadow-card text-center h-[650px] flex flex-col items-center justify-center">
+            <div className="bg-[#0F766E]/[0.03] rounded-2xl p-8 border border-[#0F766E]/20 shadow-card backdrop-blur-sm text-center h-[650px] flex flex-col items-center justify-center">
               <Info className="h-12 w-12 text-[#0F766E] mb-3" />
               <h3 className="text-[#0F172A] font-bold text-base">Select Permit to Inspect</h3>
               <p className="text-xs text-[#94A3B8] max-w-xs mt-1.5 leading-relaxed">
@@ -181,7 +181,7 @@ const PermitApprovals = () => {
               </p>
             </div>
           ) : (
-            <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card h-[650px] overflow-y-auto space-y-4 flex flex-col justify-between">
+            <div className="bg-[#0F766E]/[0.03] rounded-2xl p-6 border border-[#0F766E]/20 shadow-card backdrop-blur-sm h-[650px] overflow-y-auto space-y-4 flex flex-col justify-between">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-[9px] uppercase font-bold text-[#0F766E] font-mono">ref #{selectedPermit.id}</span>

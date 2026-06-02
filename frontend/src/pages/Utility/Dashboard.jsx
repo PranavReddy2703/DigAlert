@@ -74,7 +74,7 @@ const UtilityDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Header Info */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-6">
         <div>
           <h2 className="text-xl font-bold text-[#0F172A] tracking-tight">{user.agency_name} Excavation Hub</h2>
           <p className="text-[#64748B] text-xs mt-1">Manage network excavations, draw new permits, resolve spatial clashes, and clear citizen reports.</p>
@@ -92,12 +92,12 @@ const UtilityDashboard = () => {
 
       {/* Stats Counter Row */}
       {loading ? (
-        <div className="flex h-32 items-center justify-center bg-white border border-[#E2E8F0] shadow-sm rounded-2xl">
+        <div className="flex h-32 items-center justify-center bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#E2E8F0] border-t-[#0F766E]"></div>
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
+          <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-xl backdrop-blur-sm p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
             <div>
               <p className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider">Awaiting Auth</p>
               <h3 className="text-2xl font-bold text-[#0F766E] mt-1">{awaitingAuthorization}</h3>
@@ -107,7 +107,7 @@ const UtilityDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
+          <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-xl backdrop-blur-sm p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
             <div>
               <p className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider">Ready To Start</p>
               <h3 className="text-2xl font-bold text-purple-700 mt-1">{readyToStart}</h3>
@@ -117,7 +117,7 @@ const UtilityDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
+          <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-xl backdrop-blur-sm p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
             <div>
               <p className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider">Active Digs</p>
               <h3 className="text-2xl font-bold text-amber-700 mt-1">{activeWorks}</h3>
@@ -127,7 +127,7 @@ const UtilityDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
+          <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-xl backdrop-blur-sm p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
             <div>
               <p className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider">Completed</p>
               <h3 className="text-2xl font-bold text-yellow-700 mt-1">{completedWorks}</h3>
@@ -137,7 +137,7 @@ const UtilityDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
+          <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-xl backdrop-blur-sm p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
             <div>
               <p className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider">Restored</p>
               <h3 className="text-2xl font-bold text-green-700 mt-1">{verifiedRestorations}</h3>
@@ -147,7 +147,7 @@ const UtilityDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-xl p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
+          <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-xl backdrop-blur-sm p-4 flex items-center justify-between transition-all duration-200 hover:shadow-md hover:border-[#CBD5E1]">
             <div>
               <p className="text-[10px] uppercase font-bold text-[#64748B] tracking-wider">Closed</p>
               <h3 className="text-2xl font-bold text-slate-700 mt-1">{closedProjects}</h3>
@@ -161,7 +161,7 @@ const UtilityDashboard = () => {
 
       {/* 1. READY FOR ACTIVATION */}
       {!loading && permits.filter(p => p.status === 'AUTHORIZED_EXCAVATION').length > 0 && (
-        <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 border-l-4 border-l-purple-500 space-y-4">
+        <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-6 border-l-4 border-l-purple-500 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-2">
               <span className="flex h-2 w-2 rounded-full bg-purple-500"></span>
@@ -199,7 +199,7 @@ const UtilityDashboard = () => {
 
       {/* 2. ACTIVE EXCAVATIONS */}
       {!loading && permits.filter(p => p.status === 'IN_PROGRESS').length > 0 && (
-        <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 border-l-4 border-l-amber-500 space-y-4">
+        <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-6 border-l-4 border-l-amber-500 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-2">
               <span className="flex h-2 w-2 rounded-full bg-amber-550"></span>
@@ -253,7 +253,7 @@ const UtilityDashboard = () => {
 
       {/* 3 & 4. COMPLETED EXCAVATIONS & AWAITING GHMC VERIFICATION */}
       {!loading && permits.filter(p => p.status === 'EXCAVATION_COMPLETED').length > 0 && (
-        <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 border-l-4 border-l-yellow-500 space-y-4">
+        <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-6 border-l-4 border-l-yellow-500 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider flex items-center gap-2">
               <Clock className="h-4 w-4 text-yellow-600" />
@@ -284,7 +284,7 @@ const UtilityDashboard = () => {
       {/* Main Grid: Permits Table & Complaints allocation */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Permits Table */}
-        <div className="lg:col-span-2 bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 space-y-4">
+        <div className="lg:col-span-2 min-w-0 bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-6 space-y-4">
           <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider">Our Excavation Submissions</h3>
           
           {loading ? (
@@ -345,7 +345,7 @@ const UtilityDashboard = () => {
         </div>
 
         {/* Complaints allocation list */}
-        <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 space-y-4">
+        <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-6 space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-xs font-bold text-[#0F172A] uppercase tracking-wider">Citizen Safety Hazards</h3>
             <span className="text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-100 px-2 py-0.5 rounded">

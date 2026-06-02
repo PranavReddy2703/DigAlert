@@ -100,11 +100,11 @@ const ComplaintsList = () => {
 
       {/* Grid List */}
       {loading ? (
-        <div className="flex h-40 items-center justify-center bg-white rounded-2xl border border-[#E2E8F0]">
+        <div className="flex h-40 items-center justify-center bg-[#0F766E]/[0.03] rounded-2xl border border-[#0F766E]/20 backdrop-blur-sm">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#E2E8F0] border-t-[#0F766E]"></div>
         </div>
       ) : complaints.length === 0 ? (
-        <div className="bg-white rounded-2xl p-12 border border-[#E2E8F0] shadow-card text-center space-y-3">
+        <div className="bg-[#0F766E]/[0.03] rounded-2xl p-12 border border-[#0F766E]/20 shadow-card backdrop-blur-sm text-center space-y-3">
           <CheckCircle className="h-12 w-12 text-[#16A34A] mx-auto" />
           <h3 className="text-[#0F172A] font-bold text-lg">No Active Citizen Safety Tickets</h3>
           <p className="text-xs text-[#94A3B8] max-w-sm mx-auto leading-relaxed">
@@ -114,7 +114,7 @@ const ComplaintsList = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {complaints.map((complaint) => (
-            <div key={complaint.id} className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card flex flex-col justify-between space-y-6">
+            <div key={complaint.id} className="bg-[#0F766E]/[0.03] rounded-2xl p-6 border border-[#0F766E]/20 shadow-card backdrop-blur-sm flex flex-col justify-between space-y-6">
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-[10px] uppercase font-bold text-[#DC2626] font-mono">Ticket Ref #{complaint.id}</span>

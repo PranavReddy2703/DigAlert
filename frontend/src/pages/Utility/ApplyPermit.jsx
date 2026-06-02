@@ -187,7 +187,7 @@ const ApplyPermit = () => {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       {/* Wizard Step Timeline */}
-      <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4 flex justify-between items-center gap-4">
+      <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-4 flex justify-between items-center gap-4">
         {[
           { num: 1, label: 'Specifics' },
           { num: 2, label: 'Plot Path' },
@@ -233,7 +233,7 @@ const ApplyPermit = () => {
 
       {/* STEP 1: Details */}
       {step === 1 && (
-        <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 space-y-4">
+        <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-6 space-y-4">
           <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider">Step 1: Enter Project Details</h3>
           
           <div className="space-y-4">
@@ -305,7 +305,7 @@ const ApplyPermit = () => {
       {/* STEP 2: Map Route Drawing */}
       {step === 2 && (
         <div className="space-y-4">
-          <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-4 flex justify-between items-center">
+          <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-4 flex justify-between items-center">
             <div className="flex items-center gap-2">
               <MapPin className="h-4.5 w-4.5 text-[#0F766E]" />
               <p className="text-xs text-[#64748B] font-medium">
@@ -347,7 +347,7 @@ const ApplyPermit = () => {
 
       {/* STEP 3: Dates */}
       {step === 3 && (
-        <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 space-y-4">
+        <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-6 space-y-4">
           <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wider">Step 3: Schedule Project Window</h3>
           
           <div className="grid grid-cols-2 gap-4">
@@ -402,7 +402,7 @@ const ApplyPermit = () => {
         <div className="space-y-6">
           {/* Clash check loader */}
           {checking && (
-            <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-10 flex flex-col items-center justify-center space-y-4">
+            <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-10 flex flex-col items-center justify-center space-y-4">
               <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-[#0F766E]"></div>
               <h4 className="text-[#0F172A] font-bold">Scanning GHMC Geospatial Registry...</h4>
               <p className="text-xs text-[#64748B] text-center">Checking spatial buffers, temporal overlaps, depths, and resurfaced locked segments.</p>
@@ -414,7 +414,7 @@ const ApplyPermit = () => {
             <div className="space-y-6">
               {precheckClashes.length === 0 ? (
                 /* 4A: NO CLASHES FOUND */
-                <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-8 text-center space-y-4 border-l-4 border-l-[#16A34A]">
+                <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-8 text-center space-y-4 border-l-4 border-l-[#16A34A]">
                   <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-green-50 text-green-600 border border-green-100">
                     <CheckCircle className="h-8 w-8" />
                   </div>
@@ -428,7 +428,7 @@ const ApplyPermit = () => {
               ) : (
                 /* 4B: CLASHES DETECTED */
                 <div className="space-y-4">
-                  <div className="bg-white border border-[#E2E8F0] shadow-sm rounded-2xl p-6 border-l-4 border-l-[#DC2626] flex items-start gap-4">
+                  <div className="bg-[#0F766E]/[0.03] border border-[#0F766E]/20 shadow-sm rounded-2xl backdrop-blur-sm p-6 border-l-4 border-l-[#DC2626] flex items-start gap-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-50 text-[#DC2626] border border-red-100 shrink-0">
                       <ShieldAlert className="h-6 w-6" />
                     </div>
@@ -445,7 +445,7 @@ const ApplyPermit = () => {
                     {precheckClashes.map((clash, idx) => {
                       const isRoadLock = clash.conflicting_permit_id < 0;
                       return (
-                        <div key={idx} className={`rounded-xl border p-5 space-y-3 bg-white shadow-sm ${
+                        <div key={idx} className={`rounded-xl border p-5 space-y-3 bg-[#0F766E]/[0.03] backdrop-blur-sm shadow-sm ${
                           isRoadLock 
                             ? 'border-red-200' 
                             : 'border-amber-200'

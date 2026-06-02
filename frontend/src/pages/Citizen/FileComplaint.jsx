@@ -102,7 +102,7 @@ const FileComplaint = () => {
 
   if (isSuccess) {
     return (
-      <div className="max-w-xl mx-auto bg-white rounded-2xl p-8 border border-[#E2E8F0] shadow-card text-center space-y-6 my-12">
+      <div className="max-w-xl mx-auto bg-[#0F766E]/[0.03] rounded-2xl p-8 border border-[#0F766E]/20 shadow-card backdrop-blur-sm text-center space-y-6 my-12">
         <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#F0FDF4] text-[#16A34A] border border-[#BBF7D0]">
           <CheckCircle className="h-8 w-8" />
         </div>
@@ -153,8 +153,8 @@ const FileComplaint = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
         {/* Step 1: Map Picker */}
-        <div className="lg:col-span-3 space-y-3">
-          <div className="flex items-center justify-between bg-white rounded-xl px-4 py-3 border border-[#E2E8F0] shadow-sm">
+        <div className="lg:col-span-3 min-w-0 space-y-3">
+          <div className="flex items-center justify-between bg-[#0F766E]/[0.03] rounded-xl px-4 py-3 border border-[#0F766E]/20 shadow-sm backdrop-blur-sm">
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4 text-[#0F766E]" />
               <span className="text-xs font-bold text-[#0F172A] uppercase tracking-wide">Step 1: Pinpoint Site Location on Map</span>
@@ -179,7 +179,7 @@ const FileComplaint = () => {
         </div>
 
         {/* Step 2: Form submission */}
-        <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card space-y-4">
+        <div className="lg:col-span-2 min-w-0 bg-[#0F766E]/[0.03] rounded-2xl p-6 border border-[#0F766E]/20 shadow-card backdrop-blur-sm space-y-4">
           <span className="text-[10px] font-bold text-[#0F766E] uppercase tracking-widest">Step 2: Enter Complaint Details</span>
           
           {error && (

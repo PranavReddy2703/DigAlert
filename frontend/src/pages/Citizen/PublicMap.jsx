@@ -81,9 +81,9 @@ const PublicMap = () => {
       {/* Filters & Map Container Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Map Component */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 min-w-0 space-y-4">
           {/* Filtering bar */}
-          <div className="flex flex-wrap gap-3 items-center justify-between bg-white rounded-xl p-3 border border-[#E2E8F0] shadow-sm">
+          <div className="flex flex-wrap gap-3 items-center justify-between bg-[#0F766E]/[0.03] rounded-xl p-3 border border-[#0F766E]/20 shadow-sm backdrop-blur-sm">
             <div className="flex flex-wrap items-center gap-3">
               <div>
                 <select
@@ -121,7 +121,7 @@ const PublicMap = () => {
 
           {/* Hyderabad Leaflet Map */}
           {loading ? (
-            <div className="h-[500px] flex items-center justify-center bg-white rounded-xl border border-[#E2E8F0]">
+            <div className="h-[500px] flex items-center justify-center bg-[#0F766E]/[0.03] rounded-xl border border-[#0F766E]/20 backdrop-blur-sm">
               <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#E2E8F0] border-t-[#0F766E]"></div>
             </div>
           ) : (
@@ -137,7 +137,7 @@ const PublicMap = () => {
         {/* Dynamic Detail Card Drawer (Right hand sidebar panel) */}
         <div className="space-y-4">
           {!selectedPermit && !selectedComplaint ? (
-            <div className="bg-white rounded-2xl p-8 border border-[#E2E8F0] shadow-card text-center h-[560px] flex flex-col items-center justify-center">
+            <div className="bg-[#0F766E]/[0.03] rounded-2xl p-8 border border-[#0F766E]/20 shadow-card backdrop-blur-sm text-center h-[560px] flex flex-col items-center justify-center">
               <MapPin className="h-12 w-12 text-[#0F766E] mb-3" />
               <h3 className="text-[#0F172A] font-bold text-lg">Interactive Inspector</h3>
               <p className="text-xs text-[#94A3B8] max-w-xs mt-1.5 leading-relaxed">
@@ -145,7 +145,7 @@ const PublicMap = () => {
               </p>
             </div>
           ) : selectedPermit ? (
-            <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card h-[560px] overflow-y-auto space-y-4 flex flex-col justify-between">
+            <div className="bg-[#0F766E]/[0.03] rounded-2xl p-6 border border-[#0F766E]/20 shadow-card backdrop-blur-sm h-[560px] overflow-y-auto space-y-4 flex flex-col justify-between">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-full bg-[#F0FDFA] text-[#0F766E] border border-[#CCFBF1]">
@@ -211,7 +211,7 @@ const PublicMap = () => {
               </div>
             </div>
           ) : (
-            <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-card h-[560px] overflow-y-auto space-y-4 flex flex-col justify-between">
+            <div className="bg-[#0F766E]/[0.03] rounded-2xl p-6 border border-[#0F766E]/20 shadow-card backdrop-blur-sm h-[560px] overflow-y-auto space-y-4 flex flex-col justify-between">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 rounded-full bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA]">
