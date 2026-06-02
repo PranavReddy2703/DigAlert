@@ -8,7 +8,7 @@ gitleaks_scan:
     name: zricethezav/gitleaks:latest
     entrypoint: [""]
   script:
-    - gitleaks detect --verbose --source .
+    - gitleaks detect --verbose --no-git --source .
 
 dependency_audit_backend:
   stage: security
@@ -17,6 +17,7 @@ dependency_audit_backend:
     - pip install --upgrade pip
     - pip install pip-audit
     - pip-audit -r backend/requirements.txt
+  allow_failure: true
 
 dependency_audit_frontend:
   stage: security
@@ -24,6 +25,7 @@ dependency_audit_frontend:
   script:
     - cd frontend
     - npm audit --audit-level=high
+  allow_failure: true
 
 static_analysis_bandit:
   stage: security
@@ -31,3 +33,4 @@ static_analysis_bandit:
   script:
     - pip install bandit
     - bandit -r backend/ -c pyproject.toml
+

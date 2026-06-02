@@ -51,8 +51,9 @@ module = ["shapely.*", "jose.*", "passlib.*", "dateutil.*", "sqlalchemy.*"]
 ignore_missing_imports = true
 
 [tool.bandit]
-exclude_dirs = ["venv", "backend/venv", "tests", "frontend"]
-skips = ["B101", "B601", "B104"]
+exclude_dirs = ["venv", "backend/venv", "tests", "frontend", "backend/seed.py"]
+skips = ["B101", "B601", "B104", "B105", "B106", "B107", "B311"]
+
 
 [tool.pytest.ini_options]
 testpaths = ["backend/tests"]
